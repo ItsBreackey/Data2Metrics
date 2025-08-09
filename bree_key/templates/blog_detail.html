@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }} | Insights | Data2Metrics{% endblock %}
+
+{% block content %}
+<section class="blog-detail py-12 px-4 md:px-20">
+  <div class="container mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      
+      <!-- Blog Content -->
+      <div class="lg:col-span-2">
+        <h1 class="text-3xl font-bold mb-2">{{ post.title }}</h1>
+        <p class="text-gray-500 text-sm mb-6">Published: {{ post.date_published }}</p>
+
+        {% if post.image %}
+          <div class="mb-8">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}"
+                 class="mx-auto rounded-lg shadow-md"
+                 style="max-height: 350px; width: auto;">
+          </div>
+        {% endif %}
+
+        <div class="prose max-w-none">
+          {{ post.content|safe }}
+        </div>
+
+        <div class="mt-10">
+          <a href="{% url 'blog' %}" class="text-pink-600 hover:underline">
+            ← Back to all blogs
+          </a>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="space-y-12">
+        <!-- Recent Stories -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4 border-b pb-2">Recent Stories</h3>
+          <ul class="space-y-3">
+            {% for recent in recent_posts %}
+              <li>
+                <a href="{% url 'blog_detail' recent.slug %}" class="text-sm text-blue-600 hover:underline">
+                  {{ recent.title }}
+                </a>
+                <p class="text-xs text-gray-500">{{ recent.date_published }}</p>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Featured Posts -->
+        <div>
+          <h3 class="text-xl font-semibold mb-4 border-b pb-2">Featured Posts</h3>
+          <ul class="space-y-3">
+            {% for featured in featured_posts %}
+              <li>
+                <a href="{% url 'blog_detail' featured.slug %}" class="text-sm text-blue-600 hover:underline">
+                  {{ featured.title }}
+                </a>
+                <p class="text-xs text-gray-500">{{ featured.date_published }}</p>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

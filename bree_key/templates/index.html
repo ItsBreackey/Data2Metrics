@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home | Data2Metrics{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <h1>Bringing Balance to the Data Force</h1>
+    <p>Turning your raw data into measurable business value.</p>
+    <a href="#contact" class="cta-button">Let’s Collaborate</a>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="services" class="section">
+  <h2 class="section-title">Our Expertise</h2>
+  <div class="services-container">
+    <div class="service fade-in">
+      <i class="fas fa-chart-pie fa-3x"></i>
+      <h3>Power BI Dashboards</h3>
+      <p>Real-time data visualizations to help you track KPIs, forecast trends, and make better decisions.</p>
+    </div>
+    <div class="service fade-in">
+      <i class="fas fa-database fa-3x"></i>
+      <h3>Data Analysis & Forecasting</h3>
+      <p>We clean, analyze, and model data using Python, SQL, and Excel to uncover insights and trends.</p>
+    </div>
+    <div class="service fade-in">
+      <i class="fas fa-project-diagram fa-3x"></i>
+      <h3>ETL & Data Pipelines</h3>
+      <p>We build automated, scalable pipelines for seamless data flow and integration.</p>
+    </div>
+    <div class="service fade-in">
+      <i class="fas fa-server fa-3x"></i>
+      <h3>Database Design & Management</h3>
+      <p>Optimized relational and cloud database solutions tailored to your business needs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Portfolio -->
+<section id="portfolio" class="section">
+  <h2 class="section-title">Our Work</h2>
+  <div class="blog-grid fade-in">
+    {% if projects %}
+      {% for projects in projects|slice:":4" %}
+        <div class="blog-post">
+          {% if projects.image %}
+            <img src="{{ projects.image.url }}" alt="{{ projects.title }}">
+          {% endif %}
+          <div class="card-content">
+            <h4>{{ projects.title }}</h4>
+            <p>{{ projects.short_description|striptags }}</p>
+            <a href="{% url 'project_detail' projects.slug %}" class="read-more">Read More</a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No projects available.</p>
+    {% endif %}
+  </div>
+  <div class="view-all-container">
+    <a href="{% url 'projects' %}" class="btn-view-all">View All Our Work</a>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about" class="section">
+  <h2 class="section-title">Why Choose Data2Metrics?</h2>
+  <div class="about-content">
+    <p>We are a data analytics and engineering company built to deliver actionable insights through clean, connected, and reliable data.</p>
+    <ul>
+      <li>4+ years of experience in data analysis, business intelligence, and engineering</li>
+      <li>Expertise in Power BI, Python, SQL, and cloud technologies (AWS, Snowflake)</li>
+      <li>End-to-end project delivery for NGOs, startups, and growing enterprises</li>
+      <li>Certified in AWS Cloud, ITIL, and Data Visualization tools</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Methodology -->
+<section id="methodology" class="section">
+  <h2 class="section-title">Our Process</h2>
+  <div class="process-flow">
+    <div class="process-step">
+      <div class="step-icon"><i class="fas fa-search"></i></div>
+      <h3>Discover</h3>
+      <p>We analyze your current data workflows and align with your business goals and KPIs.</p>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="process-step">
+      <div class="step-icon"><i class="fas fa-pencil-ruler"></i></div>
+      <h3>Design</h3>
+      <p>We model your data, design pipelines, and prototype dashboard solutions that reflect your needs.</p>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="process-step">
+      <div class="step-icon"><i class="fas fa-cogs"></i></div>
+      <h3>Develop</h3>
+      <p>We build robust solutions with version control, automated pipelines, and data quality checks.</p>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="process-step">
+      <div class="step-icon"><i class="fas fa-rocket"></i></div>
+      <h3>Deploy & Empower</h3>
+      <p>We deploy your solution and train your team to unlock its full value with confidence.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials" class="section">
+  <h2 class="section-title">What Clients Say</h2>
+  <div class="testimonial-grid">
+    {% if testimonials %}
+      {% for testimonial in testimonials %}
+        <div class="testimonial-card">
+          {% if testimonial.image %}
+            <img src="{{ testimonial.image.url }}" alt="{{ testimonial.client_name }}">
+          {% endif %}
+          <blockquote>"{{ testimonial.quote }}"</blockquote>
+          <p class="name">{{ testimonial.name }}</p>
+          <p class="role">{{ testimonial.role }}{% if testimonial.company %} at {{ testimonial.company }}{% endif %}</p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No testimonials available yet.</p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Blog -->
+<section id="blog" class="section">
+  <h2 class="section-title">Latest Insights</h2>
+  <div class="blog-grid fade-in">
+    {% if posts %}
+      {% for post in posts|slice:":4" %}
+        <div class="blog-post">
+          {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}">
+          {% endif %}
+          <div class="card-content">
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.excerpt|striptags }}</p>
+            <a href="{% url 'blog_detail' post.slug %}" class="read-more">Read More</a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No blog posts available.</p>
+    {% endif %}
+  </div>
+  <div class="view-all-container">
+    <a href="{% url 'blog' %}" class="btn-view-all">Catch Up With All Our Insights</a>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="section contact-section">
+  <h2 class="section-title">Let’s Talk</h2>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert success" style="padding: 10px; background: #d1fae5; color: #065f46; border: 1px solid #10b981; border-radius: 4px; margin-bottom: 1rem;">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+  <form action="/contact/" method="POST" class="contact-form">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" placeholder="How can we help you?" required></textarea>
+    <button type="submit" class="cta-button">Send Message</button>
+  </form>
+</section>
+
+
+
+{% endblock %}

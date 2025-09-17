@@ -1,4 +1,6 @@
 /* === GENERAL RESET === */
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@600;700&display=swap');
+
 html {
   scroll-behavior: smooth;
 }
@@ -6,12 +8,12 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 body {
-  background-color: #111;
-  color: #fff;
+  background-color: #111827; /* Brand Background Dark */
+  color: #F9FAFB; /* Brand Text Light */
   line-height: 1.6;
   scroll-behavior: smooth;
   padding-top: 72px; /* Adjust to navbar height so content not hidden behind sticky nav */
@@ -22,9 +24,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 32px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
+  padding: 8px 24px; /* reduced padding to trim space */
+  background-color: rgba(31, 41, 55, 0.9); /* Slightly lighter dark */
+  color: #F9FAFB;
   position: fixed;
   top: 0;
   width: 100%;
@@ -34,7 +36,7 @@ body {
 }
 
 .navbar.shadow {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(181, 126, 220, 0.25); /* Lavender shadow */
 }
 
 .navbar.hidden {
@@ -45,35 +47,49 @@ body {
   top: 0;
 }
 
-.brand {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
+/* Logo image spacing */
+.logo-img {
+  height: 60px;   /* adjust size to fit navbar */
+  width: auto;    /* keep aspect ratio */
+  display: block;
+  margin-right: 12px; /* trims big gap between logo and brand/menu */
 }
 
+/* Brand text */
+.brand {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25rem; /* slightly smaller */
+  font-weight: 700;
+  color: #B57EDC; /* Lavender */
+  margin: 0 8px;  /* reduced spacing around brand */
+}
+
+/* Nav links */
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 24px;
+  gap: 20px; /* reduced gap between items */
   align-items: center;
   margin: 0;
   padding: 0;
 }
 
 .nav-links li a {
-  color: white;
+  color: #B57EDC; /* Lavender */
   text-decoration: none;
   transition: color 0.3s ease;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
 }
 
 .nav-links li a:hover {
-  color: #f472b6; /* Tailwind pink-400 */
+  color: #F472B6; /* Pink hover */
 }
 
 .nav-links li i {
   font-size: 1.1rem;
 }
+
 
 /* === SECTION BASE === */
 .section {
@@ -83,9 +99,10 @@ body {
 }
 
 .section-title {
+  font-family: 'Poppins', sans-serif;
   font-size: 2.5rem;
   margin-bottom: 2rem;
-  color: #fff;
+  color: #F9FAFB;
   text-transform: uppercase;
   letter-spacing: 1px;
   position: relative;
@@ -97,44 +114,99 @@ body {
   width: 60px;
   height: 4px;
   margin: 1rem auto;
-  background: #fff;
+  background: #B57EDC; /* Lavender underline */
 }
 
 /* === HERO === */
 .hero {
-  background-color: #000;
-  color: #fff;
+  background-color: #1F2937; /* Slightly lighter dark */
+  color: #F9FAFB;
   padding: 6rem 2rem;
   text-align: center;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  width: 100%;
+  height: 750px; /* Adjust height as needed */
+  overflow: hidden;
 }
 
+/* Swiper images fill the hero */
+.heroSwiper .swiper-slide img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Ensure text is above slideshow */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent overlay */
+  z-index: 1;
+}
+
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2; /* above overlay */
+}
+
+
+.hero-content h1 {
+  font-size: 3rem;
+  font-family: 'Poppins', sans-serif;
+  color: #B57EDC;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  opacity: 0.85;
+  margin: 1rem 0;
+}
+
+.hero-content .cta-button {
+  margin-top: 1.5rem;
+}
+
+
 .hero h1 {
+  font-family: 'Poppins', sans-serif;
   font-size: 3rem;
   margin-bottom: 1rem;
+  color: #B57EDC; /* Lavender */
 }
 
 .hero p {
   font-size: 1.2rem;
-  opacity: 0.9;
+  opacity: 0.85;
 }
 
 .cta-button {
   display: inline-block;
-  background: #fff;
-  color: #000;
+  background: #B57EDC; /* Lavender */
+  color: #F9FAFB;
   padding: 0.75rem 2rem;
   margin-top: 1.5rem;
   border-radius: 2rem;
-  border: 2px solid #000;
-  font-weight: 600;
+  border: 2px solid #B57EDC;
+  font-weight: 700;
   text-decoration: none;
+  font-family: 'Poppins', sans-serif;
   transition: all 0.3s ease-in-out;
 }
 
 .cta-button:hover {
-  background: #000;
-  color: #fff;
-  border: 1px solid #fff;
+  background: #F472B6; /* Pink */
+  border-color: #F472B6;
+  color: #111827; /* Dark text on hover */
 }
 
 /* === SERVICES === */
@@ -146,22 +218,24 @@ body {
 
 .service {
   padding: 1.5rem;
-  border: 1px solid #333;
+  border: 1px solid #374151; /* Dark slate border */
   border-radius: 1rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background-color: #222;
+  background-color: #27272A; /* Dark background */
   width: 100%;
+  font-family: 'Inter', sans-serif;
+  color: #F9FAFB;
 }
 
 .service:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px #333;
+  box-shadow: 0 10px 20px #B57EDC; /* Lavender glow */
   opacity: 100%;
 }
 
 .service i {
   margin-bottom: 1rem;
-  color: #fff;
+  color: #B57EDC; /* Lavender */
 }
 
 /* === PORTFOLIO === */
@@ -174,10 +248,10 @@ body {
 }
 
 .portfolio-item {
-  background-color: #222;
+  background-color: #27272A;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(181, 126, 220, 0.1); /* Lavender tint */
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease;
@@ -185,7 +259,7 @@ body {
 
 .portfolio-item:hover {
   transform: translateY(-6px);
-  box-shadow: 0 10px 20px #333;
+  box-shadow: 0 10px 20px #B57EDC;
 }
 
 .portfolio-item img {
@@ -200,6 +274,8 @@ body {
   margin: auto;
   text-align: left;
   line-height: 1.8;
+  color: #F9FAFB;
+  font-family: 'Inter', sans-serif;
 }
 
 .about-content ul {
@@ -219,18 +295,20 @@ body {
 
 .process-step {
   width: 220px;
+  color: #F9FAFB;
+  font-family: 'Inter', sans-serif;
 }
 
 .step-icon i {
   font-size: 2.5rem;
-  color: #fff;
+  color: #B57EDC;
   margin-bottom: 0.5rem;
 }
 
 .arrow {
   font-size: 2rem;
   align-self: center;
-  color: #888;
+  color: #9CA3AF; /* Gray-400 */
 }
 
 /* === TESTIMONIALS === */
@@ -241,18 +319,20 @@ body {
 }
 
 .testimonial-card {
-  border: 1px solid #555;
+  border: 1px solid #4B5563; /* Gray-600 */
   padding: 2rem;
   border-radius: 1rem;
-  background: #1a1a1a;
+  background: #1F2937;
   font-style: italic;
   position: relative;
+  color: #F9FAFB;
+  font-family: 'Inter', sans-serif;
 }
 
 .testimonial-card h4 {
   margin-top: 1rem;
-  font-weight: bold;
-  color: #fff;
+  font-weight: 700;
+  color: #B57EDC; /* Lavender */
 }
 
 .testimonial-card img {
@@ -272,18 +352,20 @@ body {
 }
 
 .blog-post {
-  background-color: #222;
+  background-color: #27272A;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(181, 126, 220, 0.1);
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease;
+  color: #F9FAFB;
+  font-family: 'Inter', sans-serif;
 }
 
 .blog-post:hover {
   transform: translateY(-6px);
-  box-shadow: 0 10px 20px #333;
+  box-shadow: 0 10px 20px #B57EDC;
 }
 
 .blog-post img {
@@ -302,20 +384,23 @@ body {
 .card-content h4 {
   margin: 0 0 0.5rem;
   font-size: 1.1rem;
-  color: #fff;
+  color: #B57EDC;
+  font-family: 'Poppins', sans-serif;
 }
 
 .card-content p {
   font-size: 0.95rem;
-  color: #fff;
+  color: #F9FAFB;
   flex-grow: 1;
+  font-family: 'Inter', sans-serif;
 }
 
 .card-content .read-more {
   margin-top: 0.75rem;
-  color: #fff;
-  font-weight: bold;
+  color: #F472B6; /* Pink */
+  font-weight: 700;
   text-decoration: none;
+  font-family: 'Poppins', sans-serif;
 }
 
 .view-all-container {
@@ -324,19 +409,20 @@ body {
 }
 
 .btn-view-all {
-  background: #fff;
-  color: #000;
+  background: #B57EDC; /* Lavender */
+  color: #F9FAFB;
   padding: 0.75rem 1.5rem;
   border-radius: 2rem;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
   transition: background 0.3s ease;
 }
 
 .btn-view-all:hover {
-  background: #111;
-  border: 1px solid #fff;
-  color: #fff;
+  background: #F472B6;
+  border: 1px solid #F472B6;
+  color: #111827;
 }
 
 /* === CONTACT === */
@@ -352,36 +438,40 @@ body {
 .contact-form textarea {
   padding: 1rem;
   border-radius: 0.5rem;
-  border: 1px solid #444;
+  border: 1px solid #374151;
   font-size: 1rem;
-  background: #333;
-  color: #fff;
+  background: #1F2937;
+  color: #F9FAFB;
   width: 100%;
+  font-family: 'Inter', sans-serif;
 }
 
 .contact-form button {
-  background: #fff;
-  color: #000;
+  background: #B57EDC;
+  color: #F9FAFB;
   padding: 0.75rem;
   border: none;
   border-radius: 2rem;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
   transition: background 0.3s;
 }
 
 .contact-form button:hover {
-  background: #111;
-  border: 1px solid #fff;
+  background: #F472B6;
+  border: 1px solid #F472B6;
+  color: #111827;
 }
 
 /* === FOOTER 3 COLUMNS === */
 footer {
-  background-color: #000000;
+  background-color: #111827;
   backdrop-filter: blur(6px);
-  color: white;
+  color: #F9FAFB;
   padding: 3rem 1.5rem 2rem;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'Inter', sans-serif;
 }
 
 footer > div {
@@ -397,17 +487,18 @@ footer > div {
 footer h3,
 footer h4 {
   margin-bottom: 0.75rem;
-  color: white;
+  color: #B57EDC; /* Lavender */
+  font-family: 'Poppins', sans-serif;
 }
 
 footer a {
-  color: #ccc;
+  color: #9CA3AF;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 footer a:hover {
-  color: #f472b6;
+  color: #F472B6; /* Pink */
 }
 
 footer input[type="email"] {
@@ -417,32 +508,36 @@ footer input[type="email"] {
   border-radius: 9999px;
   width: 200px;
   font-size: 0.875rem;
+  font-family: 'Inter', sans-serif;
 }
 
 footer button {
   cursor: pointer;
   border-radius: 9999px;
-  font-weight: 600;
+  font-weight: 700;
   padding: 0.5rem 1rem;
-  background-color: #fff;
+  background-color: #B57EDC;
   border: none;
-  color: white;
+  color: #F9FAFB;
+  font-family: 'Poppins', sans-serif;
   transition: background-color 0.3s ease;
 }
 
 footer button:hover {
-  background-color: #111;
+  background-color: #F472B6;
+  color: #111827;
 }
 
 footer .bottom-footer {
   text-align: center;
   margin-top: 2rem;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 1rem;
   font-size: 0.75rem;
-  color: #aaa;
+  color: #9CA3AF;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
 }
 
 /* === RESPONSIVE === */
@@ -500,8 +595,8 @@ footer .bottom-footer {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  background-color: #222;
-  color: white;
+  background-color: #27272A;
+  color: #F9FAFB;
   border: none;
   padding: 12px 15px;
   border-radius: 50%;
@@ -512,5 +607,168 @@ footer .bottom-footer {
 }
 
 .scroll-to-top:hover {
-  background-color: #444;
+  background-color: #B57EDC; /* Lavender */
+  color: #111827;
+}
+/* === BLOG DETAIL PAGE INTEGRATION === */
+.text-lavender { color: #B57EDC; }
+.shadow-lavender { box-shadow: 0 4px 12px rgba(181, 126, 220, 0.25); }
+.hover\:text-pink-500:hover { color: #F472B6; }
+
+.prose {
+  line-height: 1.8;
+  font-size: 1rem;
+  color: #E5E7EB;
+}
+
+.prose h2 {
+  color: #B57EDC;
+  font-family: 'Poppins', sans-serif;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.prose h3 {
+  color: #B57EDC;
+  font-family: 'Poppins', sans-serif;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose p {
+  color: #E5E7EB;
+}
+
+.prose a {
+  color: #B57EDC;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.prose a:hover {
+  color: #F472B6;
+}
+
+aside div {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+aside div:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(181, 126, 220, 0.35);
+}
+
+/* Sidebar sticky */
+aside {
+  position: sticky;
+  top: 100px; /* Adjust for navbar height */
+}
+
+/* === Blog detail layout (sidebar on right) === */
+.blog-detail {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.blog-content {
+  flex: 3;
+  max-width: 75%;
+}
+
+.blog-sidebar {
+  flex: 1;
+  max-width: 25%;
+}
+
+/* === Portfolio Swiper as Blog Grid === */
+#portfolio .swiper {
+  width: 100%;
+  padding: 2rem 0;
+}
+
+#portfolio .swiper-wrapper {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+#portfolio .swiper-slide {
+  display: flex;
+  justify-content: center;
+  width: auto !important; /* Let grid control width */
+}
+
+#portfolio .swiper-slide .blog-post {
+  width: 100%;
+  max-width: 100%;
+  background-color: #27272A;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(181, 126, 220, 0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#portfolio .swiper-slide .blog-post:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px #B57EDC;
+}
+
+#portfolio .swiper-slide .blog-post img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+#portfolio .swiper-slide .card-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+#portfolio .swiper-slide .card-content h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  color: #B57EDC;
+  font-family: 'Poppins', sans-serif;
+}
+
+#portfolio .swiper-slide .card-content p {
+  font-size: 0.95rem;
+  color: #F9FAFB;
+  flex-grow: 1;
+  font-family: 'Inter', sans-serif;
+}
+
+#portfolio .swiper-slide .card-content .read-more {
+  margin-top: 0.75rem;
+  color: #F472B6;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Navigation arrows */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #B57EDC;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #F472B6;
+}
+
+/* Pagination bullets (if used) */
+.swiper-pagination-bullet {
+  background: #B57EDC;
+  opacity: 0.7;
+}
+
+.swiper-pagination-bullet-active {
+  background: #F472B6;
+  opacity: 1;
 }

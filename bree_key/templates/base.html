@@ -13,21 +13,22 @@
   <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <!-- Swiper CSS -->
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
-/>
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+
 
 </head>
 <body>
   <!-- Navbar -->
   <header>
     <nav class="navbar" >
-       {% comment %}  <a href="{% url 'home' %}" class="logo">
-          <img src="{% static 'portfolio/images/logo.jpeg' %}" alt="Data2Metrics Logo" class="logo-img">
+       <a href="{% url 'home' %}" class="logo">
+          <img src="{% static 'portfolio/images/full_logo_light.png' %}" alt="Data2Metrics Logo" class="logo-img light-logo">
         </a>
- {% endcomment %}
-      <div class="brand">Data2Metrics</div>
+
+
+      {% comment %} <div class="brand">Data2Metrics</div> {% endcomment %}
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="#services">Expertise</a></li>
@@ -107,110 +108,12 @@
 </footer>
 
 
-
-  <script>
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      document.querySelector(this.getAttribute('href')).scrollIntoView({
-        behavior: 'smooth'
-      });
-    });
-  });
-</script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
-  <script src="{% static 'portfolio/js/script.js' %}"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-  <script>
-  let lastScrollTop = 0;
-  const navbar = document.querySelector('.navbar');
-
-  window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-    if (scrollTop > lastScrollTop && scrollTop > 100) {
-      // Scrolling down & scrolled past 100px - hide navbar
-      navbar.classList.add('hidden');
-      navbar.classList.remove('visible');
-    } else {
-      // Scrolling up - show navbar
-      navbar.classList.remove('hidden');
-      navbar.classList.add('visible');
-    }
-
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
-  });
-</script>
 <!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-<script>
-  // Initialize Swiper
-<script>
-  const swiper = new Swiper(".mySwiper", {
-    loop: true,
-    autoplay: {
-      delay: 3000,
-      disableOnInteraction: false,
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    slidesPerView: 1,
-    spaceBetween: 30,
-    breakpoints: {
-      768: {
-        slidesPerView: 2,
-      },
-      1024: {
-        slidesPerView: 3,
-      },
-    },
-  });
-</script>
-
-<!-- Scroll-to-Top Button -->
-<button id="scrollToTopBtn" class="scroll-to-top" title="Go to top">
-  <i class="fas fa-arrow-up"></i>
-</button>
-
-<script>
-  let lastScrollTop = 0;
-  const navbar = document.querySelector('.navbar');
-  const scrollToTopBtn = document.getElementById('scrollToTopBtn');
-
-  window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-    // Navbar hide/show on scroll
-    if (scrollTop > lastScrollTop && scrollTop > 100) {
-      navbar.classList.add('hidden');
-      navbar.classList.remove('visible');
-    } else {
-      navbar.classList.remove('hidden');
-      navbar.classList.add('visible');
-    }
-
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-
-    // Toggle visibility of scroll-to-top button
-    if (scrollTop > 300) {
-      scrollToTopBtn.style.display = 'block';
-    } else {
-      scrollToTopBtn.style.display = 'none';
-    }
-  });
-
-  // Smooth scroll to top
-  scrollToTopBtn.addEventListener('click', () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  });
-</script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="{% static 'portfolio/js/script.js' %}"></script>
 
 
+  {% block extra_js %}{% endblock %}
 </body>
 
 </html>

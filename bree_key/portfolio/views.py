@@ -6,7 +6,7 @@ from django.contrib import messages
 
 
 def home(request):
-    projects = Project.objects.all()[:3]  # for homepage preview
+    projects = Project.objects.all()[:4]  # for homepage preview
     posts = BlogPost.objects.all()[:3]
     testimonials = Testimonial.objects.all()
 

@@ -1,12 +1,17 @@
-# Ignore Python virtual environment
-venv/
+# Dependencies
+node_modules/
 
-# Ignore environment variables file
+# Environment variables
 .env
 
-# Ignore compiled Python files
-__pycache__/
-*.pyc
+# OS files
+.DS_Store
+Thumbs.db
 
-# Ignore database files
-*.sqlite3
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*

@@ -1,0 +1,662 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data2Metrics | Turning Data Into Decisions</title>
+    <meta name="description" content="Data2Metrics - Professional data analysis, dashboarding, and insights consultancy. Turning raw data into measurable business value.">
+    <meta name="keywords" content="data analysis, Power BI, dashboards, data analytics Kenya, data engineering, forecasting, ETL, Brenda Awino">
+    <meta name="author" content="Brenda Awino">
+    <meta property="og:title" content="Data2Metrics | Turning Data Into Decisions">
+    <meta property="og:description" content="We help businesses transform raw data into clear insights, accurate forecasts, and actionable strategies.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: #0B0B0F;
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+        }
+        .text-lavender { color: #B57EDC; }
+        .bg-lavender { background-color: #B57EDC; }
+        .text-pink { color: #F472B6; }
+        .bg-pink { background-color: #F472B6; }
+        .border-lavender { border-color: rgba(181, 126, 220, 0.3); }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(181, 126, 220, 0.2);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: #F472B6;
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(181, 126, 220, 0.15) 0%, rgba(11, 11, 15, 0) 70%);
+            z-index: -1;
+        }
+        .hero-glow-right {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(244, 114, 182, 0.1) 0%, rgba(11, 11, 15, 0) 70%);
+            z-index: -1;
+            right: 0;
+            top: 50%;
+        }
+
+        /* Fade-in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Methodology connector */
+        .step-connector { position: relative; }
+        .step-connector::after {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: calc(50% + 30px);
+            width: calc(100% - 60px);
+            height: 2px;
+            background: linear-gradient(90deg, #B57EDC, #F472B6);
+            opacity: 0.3;
+        }
+        .step-connector:last-child::after { display: none; }
+
+        /* Testimonial quote */
+        .quote-mark {
+            font-size: 4rem;
+            line-height: 1;
+            background: linear-gradient(135deg, #B57EDC, #F472B6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Navbar hide on scroll */
+        .main-nav {
+            transition: transform 0.35s ease;
+        }
+        .main-nav.nav-hidden {
+            transform: translateY(-100%);
+        }
+
+        /* Sliding carousel */
+        .slide-track {
+            display: flex;
+            gap: 2rem;
+            overflow-x: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding-bottom: 1rem;
+        }
+        .slide-track::-webkit-scrollbar { display: none; }
+        .slide-track > * {
+            scroll-snap-align: start;
+            flex-shrink: 0;
+        }
+        /* Slide nav buttons */
+        .slide-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(181, 126, 220, 0.3);
+            background: rgba(255,255,255,0.05);
+            color: #B57EDC;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .slide-btn:hover {
+            background: #F472B6;
+            color: #000;
+            border-color: #F472B6;
+        }
+
+        /* Carousel wrapper: arrows flanking cards */
+        .carousel-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .carousel-wrapper .slide-track {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* Pink hover for CTA buttons */
+        .btn-primary {
+            background-color: #B57EDC;
+            color: #000;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #F472B6;
+            transform: scale(1.05);
+        }
+        .btn-outline {
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+        .btn-outline:hover {
+            background-color: #F472B6;
+            border-color: #F472B6;
+            color: #000;
+        }
+
+        /* Dot navigation */
+        .dot-nav {
+            position: fixed;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .dot-nav a {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(181, 126, 220, 0.25);
+            border: 1px solid rgba(181, 126, 220, 0.4);
+            transition: all 0.3s ease;
+            display: block;
+        }
+        .dot-nav a:hover,
+        .dot-nav a.active {
+            background: #F472B6;
+            border-color: #F472B6;
+            transform: scale(1.4);
+        }
+        @media (max-width: 768px) {
+            .dot-nav { display: none; }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Dot Navigation -->
+    <nav class="dot-nav" aria-label="Section navigation">
+        <a href="#hero" title="Home"></a>
+        <a href="#services" title="Services"></a>
+        <a href="#methodology" title="Process"></a>
+        <a href="#portfolio" title="Work"></a>
+        <a href="#testimonials" title="Testimonials"></a>
+        <a href="#blog" title="Blog"></a>
+        <a href="#contact" title="Contact"></a>
+    </nav>
+
+    <!-- Fixed Navbar (hides on scroll down) -->
+    <nav id="main-nav" class="main-nav fixed top-0 w-full bg-[#0B0B0F]/80 backdrop-blur-md z-50 border-b border-gray-800/50">
+        <div class="flex justify-between items-center p-6 max-w-7xl mx-auto">
+            <a href="#hero" class="text-2xl font-bold tracking-tighter">Data<span class="text-lavender">2</span>Metrics</a>
+            <div class="space-x-8 hidden md:flex text-sm text-gray-400 items-center">
+                <a href="#services" class="hover:text-pink transition">Services</a>
+                <a href="#portfolio" class="hover:text-pink transition">Work</a>
+                <a href="#blog" class="hover:text-pink transition">Blog</a>
+                <a href="#contact" class="btn-primary px-5 py-2 rounded-full font-semibold">Contact</a>
+            </div>
+            <button class="md:hidden flex flex-col gap-1.5" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <span class="w-6 h-0.5 bg-lavender"></span>
+                <span class="w-6 h-0.5 bg-lavender"></span>
+                <span class="w-6 h-0.5 bg-lavender"></span>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-6 space-y-4 text-sm text-gray-400">
+            <a href="#services" class="block hover:text-pink transition">Services</a>
+            <a href="#portfolio" class="block hover:text-pink transition">Work</a>
+            <a href="#blog" class="block hover:text-pink transition">Blog</a>
+            <a href="#contact" class="block text-lavender font-semibold">Contact</a>
+        </div>
+    </nav>
+
+    <!-- 1. Hero -->
+    <header id="hero" class="relative max-w-7xl mx-auto px-6 pt-32 pb-32 flex flex-col md:flex-row items-center min-h-screen">
+        <div class="hero-glow top-0 left-0"></div>
+        <div class="hero-glow-right"></div>
+        <div class="md:w-1/2 fade-in">
+            <h1 class="text-5xl md:text-7xl font-bold leading-tight">
+                Turning <span class="text-lavender">Data</span> Into Decisions That Drive <span class="text-pink">Growth</span>
+            </h1>
+            <p class="mt-6 text-gray-400 text-lg max-w-lg">
+                Data2Metrics helps businesses transform raw data into clear insights, accurate forecasts, and actionable strategies.
+            </p>
+            <div class="mt-10 flex flex-col sm:flex-row gap-4">
+                <a href="#portfolio" class="btn-primary px-8 py-4 rounded-lg font-bold text-center">View My Work</a>
+                <a href="#contact" class="btn-outline px-8 py-4 rounded-lg font-bold text-center">Book a Consultation</a>
+            </div>
+        </div>
+        <div class="md:w-1/2 mt-16 md:mt-0 relative fade-in">
+            <div class="glass-card p-4 rounded-2xl">
+                <div class="h-64 bg-gray-900 rounded-xl flex items-end p-6 space-x-2">
+                    <div class="w-1/4 bg-lavender h-3/4 rounded-t opacity-80"></div>
+                    <div class="w-1/4 bg-pink h-full rounded-t opacity-80"></div>
+                    <div class="w-1/4 bg-lavender h-1/2 rounded-t opacity-80"></div>
+                    <div class="w-1/4 bg-pink h-2/3 rounded-t opacity-80"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. Value Strip -->
+    <section class="border-y border-gray-900 bg-opacity-50 py-10">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Strategy</p>
+                <p class="font-semibold">Data-Driven Decisions</p>
+            </div>
+            <div>
+                <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Growth</p>
+                <p class="font-semibold">Forecasting Insights</p>
+            </div>
+            <div>
+                <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Systems</p>
+                <p class="font-semibold">Dashboard Reporting</p>
+            </div>
+            <div>
+                <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Efficiency</p>
+                <p class="font-semibold">Process Automation</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Our Expertise -->
+    <section id="services" class="max-w-7xl mx-auto px-6 py-24 scroll-mt-24">
+        <h2 class="text-3xl font-bold mb-2 fade-in">Our Expertise</h2>
+        <p class="text-gray-400 mb-12 fade-in">We help businesses understand their data and build systems for smarter decisions.</p>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="glass-card p-8 rounded-2xl fade-in">
+                <div class="text-lavender mb-4 text-3xl"><i class="fas fa-chart-pie"></i></div>
+                <h3 class="text-xl font-bold mb-3">Power BI Dashboards</h3>
+                <p class="text-gray-400 text-sm">Real-time data visualizations to help you track KPIs, forecast trends, and make better decisions.</p>
+            </div>
+            <div class="glass-card p-8 rounded-2xl fade-in">
+                <div class="text-pink mb-4 text-3xl"><i class="fas fa-database"></i></div>
+                <h3 class="text-xl font-bold mb-3">Data Analysis &amp; Forecasting</h3>
+                <p class="text-gray-400 text-sm">We clean, analyze, and model data using Python, SQL, and Excel to uncover insights and trends.</p>
+            </div>
+            <div class="glass-card p-8 rounded-2xl fade-in">
+                <div class="text-lavender mb-4 text-3xl"><i class="fas fa-project-diagram"></i></div>
+                <h3 class="text-xl font-bold mb-3">ETL &amp; Data Pipelines</h3>
+                <p class="text-gray-400 text-sm">We build automated, scalable pipelines for seamless data flow and integration.</p>
+            </div>
+            <div class="glass-card p-8 rounded-2xl fade-in">
+                <div class="text-pink mb-4 text-3xl"><i class="fas fa-server"></i></div>
+                <h3 class="text-xl font-bold mb-3">Database Design &amp; Management</h3>
+                <p class="text-gray-400 text-sm">Optimized relational and cloud database solutions tailored to your business needs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Our Process -->
+    <section id="methodology" class="bg-[#0f0f15] py-24 scroll-mt-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-16 fade-in">Our Process</h2>
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center step-connector fade-in">
+                    <div class="w-14 h-14 bg-lavender rounded-full flex items-center justify-center mx-auto mb-4 text-black text-xl"><i class="fas fa-search"></i></div>
+                    <h4 class="font-bold mb-2">Discover</h4>
+                    <p class="text-gray-400 text-sm">We analyze your current data workflows and align with your business goals and KPIs.</p>
+                </div>
+                <div class="text-center step-connector fade-in">
+                    <div class="w-14 h-14 bg-pink rounded-full flex items-center justify-center mx-auto mb-4 text-black text-xl"><i class="fas fa-pencil-ruler"></i></div>
+                    <h4 class="font-bold mb-2">Design</h4>
+                    <p class="text-gray-400 text-sm">We model your data, design pipelines, and prototype dashboard solutions that reflect your needs.</p>
+                </div>
+                <div class="text-center step-connector fade-in">
+                    <div class="w-14 h-14 bg-lavender rounded-full flex items-center justify-center mx-auto mb-4 text-black text-xl"><i class="fas fa-cogs"></i></div>
+                    <h4 class="font-bold mb-2">Develop</h4>
+                    <p class="text-gray-400 text-sm">We build robust solutions with version control, automated pipelines, and data quality checks.</p>
+                </div>
+                <div class="text-center step-connector fade-in">
+                    <div class="w-14 h-14 bg-pink rounded-full flex items-center justify-center mx-auto mb-4 text-black text-xl"><i class="fas fa-rocket"></i></div>
+                    <h4 class="font-bold mb-2">Deploy &amp; Empower</h4>
+                    <p class="text-gray-400 text-sm">We deploy your solution and train your team to unlock its full value with confidence.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Selected Work (sliding) -->
+    <section id="portfolio" class="py-24 scroll-mt-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold mb-2 fade-in">Selected Work</h2>
+                <p class="text-gray-400 fade-in">Real projects. Real impact.</p>
+            </div>
+
+            <div class="carousel-wrapper">
+                <button class="slide-btn hidden md:flex" onclick="slideScroll('portfolio-track', -1)"><i class="fas fa-chevron-left"></i></button>
+
+                <div id="portfolio-track" class="slide-track" data-auto-slide>
+                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
+                        <div class="h-48 bg-gradient-to-br from-[#B57EDC]/20 to-[#F472B6]/10 flex items-center justify-center">
+                            <i class="fas fa-chart-line text-5xl text-lavender opacity-40"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold mb-2">Sales Forecasting Dashboard</h3>
+                            <p class="text-gray-400 text-sm mb-4">Built a Power BI dashboard that reduced forecast error by 30% for a retail client, enabling smarter inventory decisions.</p>
+                            <span class="text-xs uppercase tracking-widest text-lavender">Power BI &middot; Python &middot; SQL</span>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
+                        <div class="h-48 bg-gradient-to-br from-[#F472B6]/20 to-[#B57EDC]/10 flex items-center justify-center">
+                            <i class="fas fa-sitemap text-5xl text-pink opacity-40"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold mb-2">NGO Data Pipeline</h3>
+                            <p class="text-gray-400 text-sm mb-4">Automated data collection and reporting for a health NGO, cutting manual processing time by 80%.</p>
+                            <span class="text-xs uppercase tracking-widest text-lavender">Python &middot; ETL &middot; AWS</span>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
+                        <div class="h-48 bg-gradient-to-br from-[#B57EDC]/20 to-[#F472B6]/10 flex items-center justify-center">
+                            <i class="fas fa-broom text-5xl text-lavender opacity-40"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold mb-2">Customer Data Cleanup</h3>
+                            <p class="text-gray-400 text-sm mb-4">Cleaned and unified 50k+ records across 4 systems for a startup, improving marketing ROI by 25%.</p>
+                            <span class="text-xs uppercase tracking-widest text-lavender">Python &middot; SQL &middot; Excel</span>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
+                        <div class="h-48 bg-gradient-to-br from-[#F472B6]/20 to-[#B57EDC]/10 flex items-center justify-center">
+                            <i class="fas fa-cloud-upload-alt text-5xl text-pink opacity-40"></i>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold mb-2">Cloud Data Migration</h3>
+                            <p class="text-gray-400 text-sm mb-4">Migrated on-prem databases to AWS for a fintech company, improving query performance by 60%.</p>
+                            <span class="text-xs uppercase tracking-widest text-lavender">AWS &middot; Snowflake &middot; Python</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="slide-btn hidden md:flex" onclick="slideScroll('portfolio-track', 1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Testimonials -->
+    <section id="testimonials" class="bg-[#0f0f15] py-24 scroll-mt-24">
+        <div class="max-w-5xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-16 fade-in">What Clients Say</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glass-card p-8 rounded-2xl fade-in">
+                    <div class="quote-mark mb-2">&ldquo;</div>
+                    <p class="text-gray-300 mb-6">Data2Metrics transformed how we understand our numbers. The dashboards are clear, fast, and exactly what we needed to make real decisions.</p>
+                    <div>
+                        <p class="font-semibold">Sarah K.</p>
+                        <p class="text-gray-500 text-sm">Operations Manager, Nairobi</p>
+                    </div>
+                </div>
+                <div class="glass-card p-8 rounded-2xl fade-in">
+                    <div class="quote-mark mb-2">&ldquo;</div>
+                    <p class="text-gray-300 mb-6">Professional, detail-oriented, and genuinely invested in our success. The forecasting model she built saved us months of guesswork.</p>
+                    <div>
+                        <p class="font-semibold">James M.</p>
+                        <p class="text-gray-500 text-sm">Founder, AgriTech Startup</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Latest Insights (sliding) -->
+    <section id="blog" class="py-24 scroll-mt-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold mb-2 fade-in">Latest Insights</h2>
+                <p class="text-gray-400 fade-in">Thinking out loud about data, analytics, and building smarter businesses.</p>
+            </div>
+
+            <div class="carousel-wrapper">
+                <button class="slide-btn hidden md:flex" onclick="slideScroll('blog-track', -1)"><i class="fas fa-chevron-left"></i></button>
+
+                <div id="blog-track" class="slide-track" data-auto-slide>
+                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
+                        <div class="h-40 bg-gradient-to-br from-[#B57EDC]/10 to-[#0B0B0F] flex items-end p-6">
+                            <span class="text-xs uppercase tracking-widest text-lavender">Data Strategy</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold mb-2">Why Your Dashboard Isn't Working</h3>
+                            <p class="text-gray-400 text-sm mb-4">Most dashboards fail because they answer the wrong questions. Here's how to fix that.</p>
+                            <a href="#" class="text-pink text-sm font-semibold hover:underline">Read More &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
+                        <div class="h-40 bg-gradient-to-br from-[#F472B6]/10 to-[#0B0B0F] flex items-end p-6">
+                            <span class="text-xs uppercase tracking-widest text-lavender">Forecasting</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold mb-2">Forecasting for Small Businesses</h3>
+                            <p class="text-gray-400 text-sm mb-4">You don't need a data science team. Here's a practical approach to smarter planning.</p>
+                            <a href="#" class="text-pink text-sm font-semibold hover:underline">Read More &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
+                        <div class="h-40 bg-gradient-to-br from-[#B57EDC]/10 to-[#0B0B0F] flex items-end p-6">
+                            <span class="text-xs uppercase tracking-widest text-lavender">Data Quality</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold mb-2">The Hidden Cost of Dirty Data</h3>
+                            <p class="text-gray-400 text-sm mb-4">Bad data is expensive. Learn how cleaning your data first saves time, money, and trust.</p>
+                            <a href="#" class="text-pink text-sm font-semibold hover:underline">Read More &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
+                        <div class="h-40 bg-gradient-to-br from-[#F472B6]/10 to-[#0B0B0F] flex items-end p-6">
+                            <span class="text-xs uppercase tracking-widest text-lavender">Automation</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-bold mb-2">Automate Your Reports, Free Your Time</h3>
+                            <p class="text-gray-400 text-sm mb-4">Stop building the same report every Monday. Here's how to automate and reclaim your week.</p>
+                            <a href="#" class="text-pink text-sm font-semibold hover:underline">Read More &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="slide-btn hidden md:flex" onclick="slideScroll('blog-track', 1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Contact -->
+    <section id="contact" class="max-w-4xl mx-auto px-6 py-32 text-center scroll-mt-24">
+        <h2 class="text-4xl font-bold mb-6 fade-in">Let's Work Together</h2>
+        <p class="text-gray-400 mb-10 fade-in">Have a project in mind or need help making sense of your data? Let's talk.</p>
+        <form class="glass-card p-8 rounded-2xl text-left fade-in" onsubmit="event.preventDefault(); handleContact(this);">
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Name</label>
+                    <input type="text" name="name" required class="w-full bg-transparent border-b border-gray-700 py-2 focus:border-pink outline-none transition text-white">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Email</label>
+                    <input type="email" name="email" required class="w-full bg-transparent border-b border-gray-700 py-2 focus:border-pink outline-none transition text-white">
+                </div>
+            </div>
+            <div class="mb-6">
+                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Message</label>
+                <textarea name="message" rows="4" required class="w-full bg-transparent border-b border-gray-700 py-2 focus:border-pink outline-none transition text-white resize-none"></textarea>
+            </div>
+            <button class="w-full btn-primary font-bold py-4 rounded-lg">Get in Touch</button>
+            <p id="contact-msg" class="mt-4 text-sm text-lavender text-center hidden"></p>
+        </form>
+    </section>
+
+    <!-- 9. Footer -->
+    <footer class="border-t border-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+                <div class="text-xl font-bold tracking-tighter mb-3">Data<span class="text-lavender">2</span>Metrics</div>
+                <p class="text-gray-500 text-sm">Turning raw data into real insight. Helping you see the story behind every number.</p>
+            </div>
+            <div>
+                <p class="font-semibold mb-3 text-sm">Quick Links</p>
+                <div class="space-y-2 text-sm text-gray-500">
+                    <a href="#services" class="block hover:text-pink transition">Services</a>
+                    <a href="#portfolio" class="block hover:text-pink transition">Work</a>
+                    <a href="#blog" class="block hover:text-pink transition">Blog</a>
+                    <a href="#contact" class="block hover:text-pink transition">Contact</a>
+                </div>
+            </div>
+            <div>
+                <p class="font-semibold mb-3 text-sm">Connect</p>
+                <p class="text-gray-600 text-sm">brenda@data2metrics.com</p>
+                <p class="text-gray-600 text-sm">+254 703 462 665</p>
+                <p class="text-gray-600 text-sm">Nairobi, Kenya</p>
+
+                <!-- Subscribe -->
+                <div class="mt-5">
+                    <p class="text-gray-500 text-sm mb-2">Subscribe for updates &amp; insights:</p>
+                    <form class="flex gap-2" onsubmit="event.preventDefault(); handleSubscribe(this);">
+                        <input type="email" name="email" placeholder="Your email" required class="flex-1 bg-transparent border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-pink outline-none transition">
+                        <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold">Subscribe</button>
+                    </form>
+                    <p id="subscribe-msg" class="mt-2 text-xs text-lavender hidden"></p>
+                </div>
+
+                <!-- Social links -->
+                <div class="flex gap-4 mt-5 text-lg text-gray-500">
+                    <a href="#" aria-label="Twitter" class="hover:text-pink transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn" class="hover:text-pink transition"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" aria-label="Instagram" class="hover:text-pink transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="GitHub" class="hover:text-pink transition"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-gray-600 text-sm border-t border-gray-900 pt-8">
+            <p>&copy; 2026 Data2Metrics. Precision in every pixel.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Fade-in on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Close mobile menu on link click
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // Navbar hide on scroll down, show on scroll up
+        let lastScroll = 0;
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+            if (currentScroll > lastScroll && currentScroll > 80) {
+                nav.classList.add('nav-hidden');
+            } else {
+                nav.classList.remove('nav-hidden');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // Sliding carousel scroll — one full card at a time
+        function slideScroll(trackId, direction) {
+            const track = document.getElementById(trackId);
+            const card = track.querySelector('.glass-card');
+            const gap = 32; // 2rem gap
+            const cardWidth = card.offsetWidth + gap;
+            // Calculate nearest card-aligned position
+            const currentIndex = Math.round(track.scrollLeft / cardWidth);
+            const nextIndex = Math.max(0, currentIndex + direction);
+            track.scrollTo({ left: nextIndex * cardWidth, behavior: 'smooth' });
+        }
+
+        // Auto-slide carousels — one card at a time, smooth
+        document.querySelectorAll('[data-auto-slide]').forEach(track => {
+            let interval;
+            const gap = 32;
+            function getCardWidth() {
+                const card = track.querySelector('.glass-card');
+                return card ? card.offsetWidth + gap : 400;
+            }
+            function startAuto() {
+                interval = setInterval(() => {
+                    const cardWidth = getCardWidth();
+                    const maxScroll = track.scrollWidth - track.clientWidth;
+                    const currentIndex = Math.round(track.scrollLeft / cardWidth);
+                    if (track.scrollLeft >= maxScroll - 5) {
+                        track.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        track.scrollTo({ left: (currentIndex + 1) * cardWidth, behavior: 'smooth' });
+                    }
+                }, 4000);
+            }
+            startAuto();
+            // Pause on hover
+            track.addEventListener('mouseenter', () => clearInterval(interval));
+            track.addEventListener('mouseleave', () => startAuto());
+            // Pause on touch
+            track.addEventListener('touchstart', () => clearInterval(interval), { passive: true });
+            track.addEventListener('touchend', () => startAuto());
+        });
+
+        // Contact form handler
+        function handleContact(form) {
+            const msg = document.getElementById('contact-msg');
+            msg.textContent = "Thanks! I'll get back to you soon.";
+            msg.classList.remove('hidden');
+            form.reset();
+        }
+
+        // Subscribe form handler
+        function handleSubscribe(form) {
+            const msg = document.getElementById('subscribe-msg');
+            msg.textContent = "You're subscribed! Stay tuned.";
+            msg.classList.remove('hidden');
+            form.reset();
+        }
+
+        // Dot navigation active state
+        const dots = document.querySelectorAll('.dot-nav a');
+        const sections = Array.from(dots).map(d => document.querySelector(d.getAttribute('href')));
+        const dotObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    dots.forEach(d => d.classList.remove('active'));
+                    const active = document.querySelector('.dot-nav a[href="#' + entry.target.id + '"]');
+                    if (active) active.classList.add('active');
+                }
+            });
+        }, { threshold: 0.35 });
+        sections.forEach(s => { if (s) dotObserver.observe(s); });
+    </script>
+
+</body>
+</html>

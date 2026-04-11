@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= project.title %> | Data2Metrics</title>
+    <meta name="description" content="<%= project.description %>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #0B0B0F; color: #FFFFFF; font-family: 'Inter', sans-serif; }
+        .text-lavender { color: #B57EDC; }
+        .bg-lavender { background-color: #B57EDC; }
+        .text-pink { color: #F472B6; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(181, 126, 220, 0.2);
+        }
+        .btn-primary { background-color: #B57EDC; color: #000; transition: all 0.3s ease; }
+        .btn-primary:hover { background-color: #F472B6; transform: scale(1.05); }
+        .btn-outline { border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease; }
+        .btn-outline:hover { background-color: #F472B6; border-color: #F472B6; color: #000; }
+        .tag { background: rgba(181, 126, 220, 0.15); border: 1px solid rgba(181, 126, 220, 0.3); }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full bg-[#0B0B0F]/80 backdrop-blur-md z-50 border-b border-gray-800/50">
+        <div class="flex justify-between items-center p-6 max-w-7xl mx-auto">
+            <a href="/" class="text-2xl font-bold tracking-tighter">Data<span class="text-lavender">2</span>Metrics</a>
+            <div class="space-x-8 hidden md:flex text-sm text-gray-400 items-center">
+                <a href="/#services" class="hover:text-pink transition">Services</a>
+                <a href="/#portfolio" class="hover:text-pink transition">Work</a>
+                <a href="/#blog" class="hover:text-pink transition">Blog</a>
+                <a href="/#contact" class="btn-primary px-5 py-2 rounded-full font-semibold">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <header class="pt-28 pb-16">
+        <div class="max-w-4xl mx-auto px-6">
+            <a href="/#portfolio" class="text-gray-500 text-sm hover:text-pink transition inline-flex items-center gap-2 mb-8">
+                <i class="fas fa-arrow-left"></i> Back to Projects
+            </a>
+            <div class="h-64 md:h-80 rounded-2xl bg-gradient-to-br <%= project.gradient %> flex items-center justify-center mb-10">
+                <i class="<%= project.icon %> text-7xl opacity-30" style="color: <%= project.iconColor %>"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4"><%= project.title %></h1>
+            <div class="flex flex-wrap gap-2 mb-6">
+                <% project.tags.forEach(tag => { %>
+                    <span class="tag px-3 py-1 rounded-full text-xs text-lavender"><%= tag %></span>
+                <% }) %>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <section class="max-w-4xl mx-auto px-6 pb-24">
+        <div class="glass-card rounded-2xl p-8 md:p-12 mb-12">
+            <h2 class="text-2xl font-bold mb-6">Overview</h2>
+            <p class="text-gray-400 leading-relaxed mb-8"><%= project.overview %></p>
+
+            <h2 class="text-2xl font-bold mb-6">The Challenge</h2>
+            <p class="text-gray-400 leading-relaxed mb-8"><%= project.challenge %></p>
+
+            <h2 class="text-2xl font-bold mb-6">The Solution</h2>
+            <p class="text-gray-400 leading-relaxed mb-8"><%= project.solution %></p>
+
+            <h2 class="text-2xl font-bold mb-6">Results</h2>
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <% project.results.forEach(result => { %>
+                    <div class="text-center p-6 rounded-xl bg-[#0B0B0F]">
+                        <p class="text-3xl font-bold text-lavender mb-2"><%= result.metric %></p>
+                        <p class="text-gray-400 text-sm"><%= result.label %></p>
+                    </div>
+                <% }) %>
+            </div>
+
+            <h2 class="text-2xl font-bold mb-6">Tools &amp; Technologies</h2>
+            <div class="flex flex-wrap gap-3">
+                <% project.tags.forEach(tag => { %>
+                    <span class="tag px-4 py-2 rounded-lg text-sm text-lavender"><%= tag %></span>
+                <% }) %>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center">
+            <p class="text-gray-400 mb-6">Interested in a similar solution for your business?</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/#contact" class="btn-primary px-8 py-4 rounded-lg font-bold">Let's Talk</a>
+                <a href="/#portfolio" class="btn-outline px-8 py-4 rounded-lg font-bold">View More Projects</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-900 py-8">
+        <div class="text-center text-gray-600 text-sm">
+            <p>&copy; 2026 Data2Metrics. Precision in every pixel.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

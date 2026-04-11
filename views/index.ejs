@@ -354,46 +354,18 @@
                 <button class="slide-btn hidden md:flex" onclick="slideScroll('portfolio-track', -1)"><i class="fas fa-chevron-left"></i></button>
 
                 <div id="portfolio-track" class="slide-track" data-auto-slide>
-                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
-                        <div class="h-48 bg-gradient-to-br from-[#B57EDC]/20 to-[#F472B6]/10 flex items-center justify-center">
-                            <i class="fas fa-chart-line text-5xl text-lavender opacity-40"></i>
+                    <% Object.keys(projects).forEach(slug => { const p = projects[slug]; %>
+                    <a href="/project/<%= slug %>" class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px] block hover:border-[#F472B6]/40 transition">
+                        <div class="h-48 bg-gradient-to-br <%= p.cardGradient %> flex items-center justify-center">
+                            <i class="<%= p.icon %> text-5xl <%= p.cardIconClass %> opacity-40"></i>
                         </div>
                         <div class="p-6">
-                            <h3 class="text-lg font-bold mb-2">Sales Forecasting Dashboard</h3>
-                            <p class="text-gray-400 text-sm mb-4">Built a Power BI dashboard that reduced forecast error by 30% for a retail client, enabling smarter inventory decisions.</p>
-                            <span class="text-xs uppercase tracking-widest text-lavender">Power BI &middot; Python &middot; SQL</span>
+                            <h3 class="text-lg font-bold mb-2"><%= p.title %></h3>
+                            <p class="text-gray-400 text-sm mb-4"><%= p.cardDescription %></p>
+                            <span class="text-xs uppercase tracking-widest text-lavender"><%- p.tags.join(' &middot; ') %></span>
                         </div>
-                    </div>
-                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
-                        <div class="h-48 bg-gradient-to-br from-[#F472B6]/20 to-[#B57EDC]/10 flex items-center justify-center">
-                            <i class="fas fa-sitemap text-5xl text-pink opacity-40"></i>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-lg font-bold mb-2">NGO Data Pipeline</h3>
-                            <p class="text-gray-400 text-sm mb-4">Automated data collection and reporting for a health NGO, cutting manual processing time by 80%.</p>
-                            <span class="text-xs uppercase tracking-widest text-lavender">Python &middot; ETL &middot; AWS</span>
-                        </div>
-                    </div>
-                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
-                        <div class="h-48 bg-gradient-to-br from-[#B57EDC]/20 to-[#F472B6]/10 flex items-center justify-center">
-                            <i class="fas fa-broom text-5xl text-lavender opacity-40"></i>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-lg font-bold mb-2">Customer Data Cleanup</h3>
-                            <p class="text-gray-400 text-sm mb-4">Cleaned and unified 50k+ records across 4 systems for a startup, improving marketing ROI by 25%.</p>
-                            <span class="text-xs uppercase tracking-widest text-lavender">Python &middot; SQL &middot; Excel</span>
-                        </div>
-                    </div>
-                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
-                        <div class="h-48 bg-gradient-to-br from-[#F472B6]/20 to-[#B57EDC]/10 flex items-center justify-center">
-                            <i class="fas fa-cloud-upload-alt text-5xl text-pink opacity-40"></i>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-lg font-bold mb-2">Cloud Data Migration</h3>
-                            <p class="text-gray-400 text-sm mb-4">Migrated on-prem databases to AWS for a fintech company, improving query performance by 60%.</p>
-                            <span class="text-xs uppercase tracking-widest text-lavender">AWS &middot; Snowflake &middot; Python</span>
-                        </div>
-                    </div>
+                    </a>
+                    <% }) %>
                 </div>
 
                 <button class="slide-btn hidden md:flex" onclick="slideScroll('portfolio-track', 1)"><i class="fas fa-chevron-right"></i></button>
@@ -438,46 +410,18 @@
                 <button class="slide-btn hidden md:flex" onclick="slideScroll('blog-track', -1)"><i class="fas fa-chevron-left"></i></button>
 
                 <div id="blog-track" class="slide-track" data-auto-slide>
+                    <% Object.keys(blogPosts).forEach(slug => { const b = blogPosts[slug]; %>
                     <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
-                        <div class="h-40 bg-gradient-to-br from-[#B57EDC]/10 to-[#0B0B0F] flex items-end p-6">
-                            <span class="text-xs uppercase tracking-widest text-lavender">Data Strategy</span>
+                        <div class="h-40 bg-gradient-to-br <%= b.cardGradient %> flex items-end p-6">
+                            <span class="text-xs uppercase tracking-widest text-lavender"><%= b.category %></span>
                         </div>
                         <div class="p-6">
-                            <h3 class="text-lg font-bold mb-2">Why Your Dashboard Isn't Working</h3>
-                            <p class="text-gray-400 text-sm mb-4">Most dashboards fail because they answer the wrong questions. Here's how to fix that.</p>
-                            <a href="#" class="text-pink text-sm font-semibold hover:underline">Read More &rarr;</a>
+                            <h3 class="text-lg font-bold mb-2"><%= b.title %></h3>
+                            <p class="text-gray-400 text-sm mb-4"><%= b.cardDescription %></p>
+                            <a href="/blog/<%= slug %>" class="text-pink text-sm font-semibold hover:underline">Read More &rarr;</a>
                         </div>
                     </div>
-                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
-                        <div class="h-40 bg-gradient-to-br from-[#F472B6]/10 to-[#0B0B0F] flex items-end p-6">
-                            <span class="text-xs uppercase tracking-widest text-lavender">Forecasting</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-lg font-bold mb-2">Forecasting for Small Businesses</h3>
-                            <p class="text-gray-400 text-sm mb-4">You don't need a data science team. Here's a practical approach to smarter planning.</p>
-                            <a href="#" class="text-pink text-sm font-semibold hover:underline">Read More &rarr;</a>
-                        </div>
-                    </div>
-                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
-                        <div class="h-40 bg-gradient-to-br from-[#B57EDC]/10 to-[#0B0B0F] flex items-end p-6">
-                            <span class="text-xs uppercase tracking-widest text-lavender">Data Quality</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-lg font-bold mb-2">The Hidden Cost of Dirty Data</h3>
-                            <p class="text-gray-400 text-sm mb-4">Bad data is expensive. Learn how cleaning your data first saves time, money, and trust.</p>
-                            <a href="#" class="text-pink text-sm font-semibold hover:underline">Read More &rarr;</a>
-                        </div>
-                    </div>
-                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
-                        <div class="h-40 bg-gradient-to-br from-[#F472B6]/10 to-[#0B0B0F] flex items-end p-6">
-                            <span class="text-xs uppercase tracking-widest text-lavender">Automation</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-lg font-bold mb-2">Automate Your Reports, Free Your Time</h3>
-                            <p class="text-gray-400 text-sm mb-4">Stop building the same report every Monday. Here's how to automate and reclaim your week.</p>
-                            <a href="#" class="text-pink text-sm font-semibold hover:underline">Read More &rarr;</a>
-                        </div>
-                    </div>
+                    <% }) %>
                 </div>
 
                 <button class="slide-btn hidden md:flex" onclick="slideScroll('blog-track', 1)"><i class="fas fa-chevron-right"></i></button>

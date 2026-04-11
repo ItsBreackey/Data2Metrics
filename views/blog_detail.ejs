@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= post.title %> | Data2Metrics Blog</title>
+    <meta name="description" content="<%= post.excerpt %>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #0B0B0F; color: #FFFFFF; font-family: 'Inter', sans-serif; }
+        .text-lavender { color: #B57EDC; }
+        .bg-lavender { background-color: #B57EDC; }
+        .text-pink { color: #F472B6; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(181, 126, 220, 0.2);
+        }
+        .btn-primary { background-color: #B57EDC; color: #000; transition: all 0.3s ease; }
+        .btn-primary:hover { background-color: #F472B6; transform: scale(1.05); }
+        .btn-outline { border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease; }
+        .btn-outline:hover { background-color: #F472B6; border-color: #F472B6; color: #000; }
+        .tag { background: rgba(181, 126, 220, 0.15); border: 1px solid rgba(181, 126, 220, 0.3); }
+        .blog-content h3 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: #FFFFFF; }
+        .blog-content p { color: #9CA3AF; line-height: 1.8; margin-bottom: 1.25rem; }
+        .blog-content ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; }
+        .blog-content ul li { color: #9CA3AF; line-height: 1.8; margin-bottom: 0.5rem; }
+        .blog-content blockquote { border-left: 3px solid #B57EDC; padding-left: 1.5rem; margin: 2rem 0; font-style: italic; color: #D1D5DB; }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full bg-[#0B0B0F]/80 backdrop-blur-md z-50 border-b border-gray-800/50">
+        <div class="flex justify-between items-center p-6 max-w-7xl mx-auto">
+            <a href="/" class="text-2xl font-bold tracking-tighter">Data<span class="text-lavender">2</span>Metrics</a>
+            <div class="space-x-8 hidden md:flex text-sm text-gray-400 items-center">
+                <a href="/#services" class="hover:text-pink transition">Services</a>
+                <a href="/#portfolio" class="hover:text-pink transition">Work</a>
+                <a href="/#blog" class="hover:text-pink transition">Blog</a>
+                <a href="/#contact" class="btn-primary px-5 py-2 rounded-full font-semibold">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article Header -->
+    <header class="pt-28 pb-8">
+        <div class="max-w-3xl mx-auto px-6">
+            <a href="/#blog" class="text-gray-500 text-sm hover:text-pink transition inline-flex items-center gap-2 mb-8">
+                <i class="fas fa-arrow-left"></i> Back to Blog
+            </a>
+            <span class="tag px-3 py-1 rounded-full text-xs text-lavender inline-block mb-4"><%= post.category %></span>
+            <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6"><%= post.title %></h1>
+            <div class="flex items-center gap-4 text-gray-500 text-sm">
+                <span><i class="far fa-calendar mr-1"></i> <%= post.date %></span>
+                <span><i class="far fa-clock mr-1"></i> <%= post.readTime %></span>
+                <span><i class="far fa-user mr-1"></i> <%= post.author %></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Article Content -->
+    <section class="max-w-3xl mx-auto px-6 pb-24">
+        <div class="glass-card rounded-2xl p-8 md:p-12 mb-12 blog-content">
+            <%- post.content %>
+        </div>
+
+        <!-- Author Box -->
+        <div class="glass-card rounded-2xl p-8 flex flex-col sm:flex-row items-center gap-6 mb-12">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-2xl font-bold shrink-0">BA</div>
+            <div>
+                <p class="font-bold mb-1"><%= post.author %></p>
+                <p class="text-gray-400 text-sm">Data Analytics Consultant at Data2Metrics. Passionate about turning messy data into clear, actionable insights for businesses across Africa and beyond.</p>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center">
+            <p class="text-gray-400 mb-6">Want expert help with your data challenges?</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/#contact" class="btn-primary px-8 py-4 rounded-lg font-bold">Get in Touch</a>
+                <a href="/#blog" class="btn-outline px-8 py-4 rounded-lg font-bold">Read More Articles</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-900 py-8">
+        <div class="text-center text-gray-600 text-sm">
+            <p>&copy; 2026 Data2Metrics. Precision in every pixel.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

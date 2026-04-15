@@ -1,0 +1,24 @@
+name: Deploy Data2Metrics
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/breackey/apps/Data2Metrics
+            git pull origin main
+            npm install
+            pm2 restart data2metrics || pm2 start index.js --name data2metrics
+            pm2 save

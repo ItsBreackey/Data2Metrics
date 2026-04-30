@@ -16,9 +16,12 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_KEY }}
+          port: 22
           script: |
             cd /home/breackey/apps/Data2Metrics
             git pull origin main
             npm install
             pm2 restart data2metrics || pm2 start index.js --name data2metrics
             pm2 save
+
+          debug: true

@@ -24,4 +24,4 @@ jobs:
             pm2 restart data2metrics || pm2 start index.js --name data2metrics
             pm2 save
 
-          debug: true
+          

@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿</body>
+<!-- Sticky WhatsApp Button -->
+<a href="https://wa.me/254703462665?text=Hi%20I%20want%20to%20learn%20more%20about%20Data2Metrics" target="_blank" aria-label="Chat on WhatsApp"
+   class="fixed bottom-6 right-6 bg-green-500 text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-2 hover:scale-105 transition z-50">
+    <i class="fab fa-whatsapp"></i>
+    <span class="text-sm font-semibold">Chat on WhatsApp</span>
+</a>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -199,27 +206,33 @@
 </head>
 <body class="overflow-x-hidden">
 
-    <!-- Dot Navigation -->
+    <!-- Quick section navigation dots for desktop -->
     <nav class="dot-nav" aria-label="Section navigation">
         <a href="#hero" title="Home"></a>
         <a href="#services" title="Services"></a>
         <a href="#methodology" title="Process"></a>
+        <a href="#business_compass" title="Business Compass"></a>
         <a href="#portfolio" title="Work"></a>
         <a href="#testimonials" title="Testimonials"></a>
         <a href="#blog" title="Blog"></a>
         <a href="#contact" title="Contact"></a>
     </nav>
 
-    <!-- Fixed Navbar (hides on scroll down) -->
+    <!-- Main navigation bar (hides on scroll down) -->
     <nav id="main-nav" class="main-nav fixed top-0 w-full bg-[#0B0B0F]/80 backdrop-blur-md z-50 border-b border-gray-800/50">
         <div class="flex justify-between items-center p-6 max-w-7xl mx-auto">
-            <a href="#hero" class="text-2xl font-bold tracking-tighter">Data<span class="text-lavender">2</span>Metrics</a>
+            <div class="flex items-center gap-3">
+                <a href="#hero">
+                    <img src="/logo/d2m_logo.png" alt="Data2Metrics Logo" class="h-14 w-auto" style="max-height:64px;" />
+                </a>
+                <a href="#hero" class="text-2xl font-bold tracking-tighter">Data<span class="text-lavender">2</span>Metrics</a>
+            </div>
             <div class="space-x-8 hidden md:flex text-sm text-gray-400 items-center">
+                <a href="/business_compass" class="hover:text-pink transition">Business Compass</a>
                 <a href="#services" class="hover:text-pink transition">Services</a>
                 <a href="#portfolio" class="hover:text-pink transition">Work</a>
                 <a href="#blog" class="hover:text-pink transition">Blog</a>
                 <a href="#contact" class="btn-primary px-5 py-2 rounded-full font-semibold">Contact</a>
-                <a href="#contact" class="btn-primary px-5 py-2 rounded-full font-semibold">Subscribe!!</a>
             </div>
             <button class="md:hidden flex flex-col gap-1.5" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
                 <span class="w-6 h-0.5 bg-lavender"></span>
@@ -228,6 +241,7 @@
             </button>
         </div>
         <div id="mobile-menu" class="hidden md:hidden px-6 pb-6 space-y-4 text-sm text-gray-400">
+            <a href="/business_compass" class="block hover:text-pink transition">Business Compass</a>
             <a href="#services" class="block hover:text-pink transition">Services</a>
             <a href="#portfolio" class="block hover:text-pink transition">Work</a>
             <a href="#blog" class="block hover:text-pink transition">Blog</a>
@@ -235,7 +249,8 @@
         </div>
     </nav>
 
-    <!-- 1. Hero -->
+
+    <!-- Hero section: headline, intro, and call-to-action -->
     <header id="hero" class="relative max-w-7xl mx-auto px-6 pt-32 pb-32 flex flex-col md:flex-row items-center min-h-screen">
         <div class="hero-glow top-0 left-0"></div>
         <div class="hero-glow-right"></div>
@@ -247,7 +262,7 @@
                 Data2Metrics helps businesses transform raw data into clear insights, accurate forecasts, and actionable strategies.
             </p>
             <div class="mt-10 flex flex-col sm:flex-row gap-4">
-                <a href="#portfolio" class="btn-primary px-8 py-4 rounded-lg font-bold text-center">View My Work</a>
+                <a href="/business_compass" class="btn-primary px-8 py-4 rounded-lg font-bold text-center">Unlock My Business Growth</a>
                 <a href="#contact" class="btn-outline px-8 py-4 rounded-lg font-bold text-center">Book a Consultation</a>
             </div>
         </div>
@@ -263,207 +278,236 @@
         </div>
     </header>
 
-    <!-- 2. Value Strip -->
-    <section class="border-y border-gray-900 bg-opacity-50 py-10">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-                <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Strategy</p>
-                <p class="font-semibold">Data-Driven Decisions</p>
-            </div>
-            <div>
-                <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Growth</p>
-                <p class="font-semibold">Forecasting Insights</p>
-            </div>
-            <div>
-                <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Systems</p>
-                <p class="font-semibold">Dashboard Reporting</p>
-            </div>
-            <div>
-                <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Efficiency</p>
-                <p class="font-semibold">Process Automation</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 3. Our Expertise -->
-    <section id="services" class="max-w-7xl mx-auto px-6 py-24 scroll-mt-24">
-        <h2 class="text-3xl font-bold mb-2 fade-in">Our Expertise</h2>
-        <p class="text-gray-400 mb-12 fade-in">We help businesses understand their data and build systems for smarter decisions.</p>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="glass-card p-8 rounded-2xl fade-in">
+    <!-- What We Do: core services and expertise -->
+    <section id="services" class="max-w-7xl mx-auto px-6 py-20 scroll-mt-24">
+        <h2 class="text-3xl font-bold mb-10 text-center fade-in">What We Do</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+            <div class="glass-card p-8 rounded-2xl flex flex-col items-center fade-in">
                 <div class="text-lavender mb-4 text-3xl"><i class="fas fa-chart-pie"></i></div>
-                <h3 class="text-xl font-bold mb-3">Power BI Dashboards</h3>
-                <p class="text-gray-400 text-sm">Real-time data visualizations to help you track KPIs, forecast trends, and make better decisions.</p>
+                <h3 class="text-lg font-bold mb-2">Dashboards</h3>
+                <p class="text-gray-400 text-sm text-center">Track KPIs and visualize your business in real time using PowerBI, Google Sheets, and more.</p>
             </div>
-            <div class="glass-card p-8 rounded-2xl fade-in">
+            <div class="glass-card p-8 rounded-2xl flex flex-col items-center fade-in">
                 <div class="text-pink mb-4 text-3xl"><i class="fas fa-database"></i></div>
-                <h3 class="text-xl font-bold mb-3">Data Analysis &amp; Forecasting</h3>
-                <p class="text-gray-400 text-sm">We clean, analyze, and model data using Python, SQL, and Excel to uncover insights and trends.</p>
+                <h3 class="text-lg font-bold mb-2">Analysis & Forecasting</h3>
+                <p class="text-gray-400 text-sm text-center">We clean, analyze, model data, and predict trends to help you make smarter decisions.</p>
             </div>
-            <div class="glass-card p-8 rounded-2xl fade-in">
-                <div class="text-lavender mb-4 text-3xl"><i class="fas fa-project-diagram"></i></div>
-                <h3 class="text-xl font-bold mb-3">ETL &amp; Data Pipelines</h3>
-                <p class="text-gray-400 text-sm">We build automated, scalable pipelines for seamless data flow and integration.</p>
+            <div class="glass-card p-8 rounded-2xl flex flex-col items-center fade-in">
+                <div class="text-lavender mb-4 text-3xl"><i class="fas fa-cogs"></i></div>
+                <h3 class="text-lg font-bold mb-2">Automation</h3>
+                <p class="text-gray-400 text-sm text-center">Automate reporting and save time every month.</p>
             </div>
-            <div class="glass-card p-8 rounded-2xl fade-in">
-                <div class="text-pink mb-4 text-3xl"><i class="fas fa-server"></i></div>
-                <h3 class="text-xl font-bold mb-3">Database Design &amp; Management</h3>
-                <p class="text-gray-400 text-sm">Optimized relational and cloud database solutions tailored to your business needs.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 4. Our Process -->
-    <section id="methodology" class="bg-[#0f0f15] py-24 scroll-mt-24">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-16 fade-in">Our Process</h2>
-            <div class="grid md:grid-cols-4 gap-8">
-                <div class="text-center step-connector fade-in">
-                    <div class="w-14 h-14 bg-lavender rounded-full flex items-center justify-center mx-auto mb-4 text-black text-xl"><i class="fas fa-search"></i></div>
-                    <h4 class="font-bold mb-2">Discover</h4>
-                    <p class="text-gray-400 text-sm">We analyze your current data workflows and align with your business goals and KPIs.</p>
-                </div>
-                <div class="text-center step-connector fade-in">
-                    <div class="w-14 h-14 bg-pink rounded-full flex items-center justify-center mx-auto mb-4 text-black text-xl"><i class="fas fa-pencil-ruler"></i></div>
-                    <h4 class="font-bold mb-2">Design</h4>
-                    <p class="text-gray-400 text-sm">We model your data, design pipelines, and prototype dashboard solutions that reflect your needs.</p>
-                </div>
-                <div class="text-center step-connector fade-in">
-                    <div class="w-14 h-14 bg-lavender rounded-full flex items-center justify-center mx-auto mb-4 text-black text-xl"><i class="fas fa-cogs"></i></div>
-                    <h4 class="font-bold mb-2">Develop</h4>
-                    <p class="text-gray-400 text-sm">We build robust solutions with version control, automated pipelines, and data quality checks.</p>
-                </div>
-                <div class="text-center step-connector fade-in">
-                    <div class="w-14 h-14 bg-pink rounded-full flex items-center justify-center mx-auto mb-4 text-black text-xl"><i class="fas fa-rocket"></i></div>
-                    <h4 class="font-bold mb-2">Deploy &amp; Empower</h4>
-                    <p class="text-gray-400 text-sm">We deploy your solution and train your team to unlock its full value with confidence.</p>
-                </div>
+            <div class="glass-card p-8 rounded-2xl flex flex-col items-center fade-in">
+                <div class="text-pink mb-4 text-3xl"><i class="fas fa-comments"></i></div>
+                <h3 class="text-lg font-bold mb-2">Consulting & Support</h3>
+                <p class="text-gray-400 text-sm text-center">Get expert help on your business strategy and operations.</p>
             </div>
         </div>
     </section>
 
-    <!-- 5. Selected Work (sliding) -->
-    <section id="portfolio" class="py-24 scroll-mt-24">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="mb-12">
+    <!-- Business Compass: feature highlight and demo -->
+    <section id="business_compass" class="py-20 bg-[#0f0f15] scroll-mt-24">
+        <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+            <div class="flex-1 text-center md:text-left fade-in">
+                <h2 class="text-4xl font-bold mb-4">Business <span class="text-lavender">Compass</span></h2>
+                <p class="text-gray-400 mb-6 max-w-md">Track profit, control expenses, and get instant insights—no spreadsheets, no stress.</p>
+                <div class="flex flex-col sm:flex-row gap-4 mt-8 justify-center md:justify-start">
+                    <button onclick="openDemo()" class="btn-primary px-8 py-4 rounded-lg font-bold text-lg shadow-lg">
+                        <i class="fas fa-desktop mr-2"></i> Live Demo
+                    </button>
+                    <a href="/business_compass#report-section" class="btn-outline px-8 py-4 rounded-lg font-bold text-lg border-2 border-pink text-pink hover:bg-pink hover:text-black transition">
+                        <i class="fas fa-tags mr-2"></i> See Pricing
+                    </a>
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col gap-6 fade-in">
+                <div class="glass-card p-6 rounded-2xl flex flex-col items-center">
+                    <i class="fas fa-chart-line text-4xl text-lavender mb-2"></i>
+                    <p class="text-gray-300 text-center text-sm">See your business at a glance with a clean, intuitive dashboard.</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl flex flex-col items-center">
+                    <i class="fas fa-bolt text-4xl text-pink mb-2"></i>
+                    <p class="text-gray-300 text-center text-sm">Get actionable recommendations sent directly via WhatsApp.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Modal: preview of the dashboard demo -->
+        <div id="demoModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+            <div class="bg-[#111] p-6 rounded-xl max-w-5xl w-full relative min-w-[340px] md:min-w-[900px]">
+                <button onclick="closeDemo()" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl">✕</button>
+                <h3 class="text-xl mb-6 font-bold">Live Business Compass Dashboard</h3>
+                <div class="w-full h-[600px] rounded overflow-hidden bg-gray-900 flex items-center justify-center">
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT9jV_89ZmxEAx8hV6_sCbSCa7wMPQskir1tqEXbvEMs3GnVDyp0gTXtqiDWttL8AfwRLZ5blWLDUZg/pubhtml?gid=607905396&single=true" width="100%" height="600" frameborder="0" style="border:0;" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+        <!-- Button: direct link to full Business Compass page -->
+        <div class="text-center mt-12 fade-in">
+            <a href="/business_compass" class="btn-primary px-10 py-4 rounded-lg font-bold text-lg shadow-lg inline-block">
+                <i class="fas fa-arrow-right mr-2"></i> Go to Business Compass
+            </a>
+        </div>
+    </section>
+
+
+    <!-- How We Work: our process, step by step -->
+    <section id="methodology" class="bg-[#0f0f15] py-20 scroll-mt-24">
+        <div class="max-w-5xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12 fade-in">How We Work</h2>
+            <div class="grid md:grid-cols-4 gap-10">
+                <div class="text-center step-connector fade-in">
+                    <div class="w-14 h-14 bg-lavender rounded-full flex items-center justify-center mx-auto mb-3 text-black text-xl"><i class="fas fa-search"></i></div>
+                    <h4 class="font-bold mb-1">Discover</h4>
+                    <p class="text-gray-400 text-xs">We analyze your data and goals.</p>
+                </div>
+                <div class="text-center step-connector fade-in">
+                    <div class="w-14 h-14 bg-pink rounded-full flex items-center justify-center mx-auto mb-3 text-black text-xl"><i class="fas fa-pencil-ruler"></i></div>
+                    <h4 class="font-bold mb-1">Design</h4>
+                    <p class="text-gray-400 text-xs">We model, design, and prototype solutions.</p>
+                </div>
+                <div class="text-center step-connector fade-in">
+                    <div class="w-14 h-14 bg-lavender rounded-full flex items-center justify-center mx-auto mb-3 text-black text-xl"><i class="fas fa-cogs"></i></div>
+                    <h4 class="font-bold mb-1">Develop</h4>
+                    <p class="text-gray-400 text-xs">We build and automate robust systems.</p>
+                </div>
+                <div class="text-center step-connector fade-in">
+                    <div class="w-14 h-14 bg-pink rounded-full flex items-center justify-center mx-auto mb-3 text-black text-xl"><i class="fas fa-rocket"></i></div>
+                    <h4 class="font-bold mb-1">Deploy</h4>
+                    <p class="text-gray-400 text-xs">We launch and empower your team.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Selected Work: portfolio carousel -->
+    <section id="portfolio" class="py-20 scroll-mt-24">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="mb-10 text-center">
                 <h2 class="text-3xl font-bold mb-2 fade-in">Selected Work</h2>
                 <p class="text-gray-400 fade-in">Real projects. Real impact.</p>
             </div>
-
             <div class="carousel-wrapper">
                 <button class="slide-btn hidden md:flex" onclick="slideScroll('portfolio-track', -1)"><i class="fas fa-chevron-left"></i></button>
-
                 <div id="portfolio-track" class="slide-track" data-auto-slide>
+                    
                     <% Object.keys(projects).forEach(slug => { const p = projects[slug]; %>
-                    <a href="/project/<%= slug %>" class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px] block hover:border-[#F472B6]/40 transition">
-                        <div class="h-48 bg-gradient-to-br <%= p.cardGradient %> flex items-center justify-center">
-                            <i class="<%= p.icon %> text-5xl <%= p.cardIconClass %> opacity-40"></i>
+                    <a href="/project/<%= slug %>" class="glass-card rounded-2xl overflow-hidden fade-in w-[320px] md:w-[360px] block hover:border-[#F472B6]/40 transition">
+                        <div class="h-40 bg-gradient-to-br <%= p.cardGradient %> flex items-center justify-center relative">
+                            <% if (slug === 'business_compass') { %>
+                                <img src="/logo/d2m_compass.png" alt="Business Compass" class="absolute inset-0 w-full h-full object-cover opacity-90" />
+
+                            <% } else if (slug === 'impactrack-dashboard') { %>
+                                <img src="/logo/ImpactTrack.png" alt="ImpacTrack" class="absolute inset-0 w-full h-full object-cover opacity-90" />
+
+                            <% } else if (slug === 'sales-forecasting-dashboard') { %>
+                                <img src="/logo/Forecast360.png" alt="Forecast360" class="absolute inset-0 w-full h-full object-cover opacity-90" />
+
+                            <% } else { %>
+                                <i class="<%= p.icon %> text-4xl <%= p.cardIconClass %> opacity-40"></i>
+                            <% } %>
+                            
                         </div>
-                        <div class="p-6">
-                            <h3 class="text-lg font-bold mb-2"><%= p.title %></h3>
-                            <p class="text-gray-400 text-sm mb-4"><%= p.cardDescription %></p>
+                        <div class="p-5">
+                            <h3 class="text-base font-bold mb-1"><%= p.title %></h3>
+                            <p class="text-gray-400 text-xs mb-2"><%= p.cardDescription %></p>
                             <span class="text-xs uppercase tracking-widest text-lavender"><%- p.tags.join(' &middot; ') %></span>
                         </div>
                     </a>
                     <% }) %>
                 </div>
-
                 <button class="slide-btn hidden md:flex" onclick="slideScroll('portfolio-track', 1)"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </section>
 
-    <!-- 6. Testimonials -->
-    <section id="testimonials" class="bg-[#0f0f15] py-24 scroll-mt-24">
-        <div class="max-w-5xl mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-16 fade-in">What Clients Say</h2>
+    <!-- Testimonials: what clients say -->
+    <section id="testimonials" class="bg-[#0f0f15] py-16 scroll-mt-24">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-10 fade-in">What Clients Say</h2>
             <div class="grid md:grid-cols-2 gap-8">
-                <div class="glass-card p-8 rounded-2xl fade-in">
+                <div class="glass-card p-6 rounded-2xl fade-in">
                     <div class="quote-mark mb-2">&ldquo;</div>
-                    <p class="text-gray-300 mb-6">Data2Metrics transformed how we understand our numbers. The dashboards are clear, fast, and exactly what we needed to make real decisions.</p>
+                    <p class="text-gray-300 mb-4">Data2Metrics transformed how we understand our numbers. The dashboards are clear, fast, and exactly what we needed to make real decisions.</p>
                     <div>
                         <p class="font-semibold">Sarah K.</p>
-                        <p class="text-gray-500 text-sm">Operations Manager, Nairobi</p>
+                        <p class="text-gray-500 text-xs">Operations Manager, Nairobi</p>
                     </div>
                 </div>
-                <div class="glass-card p-8 rounded-2xl fade-in">
+                <div class="glass-card p-6 rounded-2xl fade-in">
                     <div class="quote-mark mb-2">&ldquo;</div>
-                    <p class="text-gray-300 mb-6">Professional, detail-oriented, and genuinely invested in our success. The forecasting model she built saved us months of guesswork.</p>
+                    <p class="text-gray-300 mb-4">Professional, detail-oriented, and genuinely invested in our success. The forecasting model she built saved us months of guesswork.</p>
                     <div>
                         <p class="font-semibold">James M.</p>
-                        <p class="text-gray-500 text-sm">Founder, AgriTech Startup</p>
+                        <p class="text-gray-500 text-xs">Founder, AgriTech Startup</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 7. Latest Insights (sliding) -->
-    <section id="blog" class="py-24 scroll-mt-24">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="mb-12">
+    <!-- Latest Insights: blog carousel -->
+    <section id="blog" class="py-20 scroll-mt-24">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="mb-10 text-center">
                 <h2 class="text-3xl font-bold mb-2 fade-in">Latest Insights</h2>
                 <p class="text-gray-400 fade-in">Thinking out loud about data, analytics, and building smarter businesses.</p>
             </div>
-
             <div class="carousel-wrapper">
                 <button class="slide-btn hidden md:flex" onclick="slideScroll('blog-track', -1)"><i class="fas fa-chevron-left"></i></button>
-
                 <div id="blog-track" class="slide-track" data-auto-slide>
                     <% Object.keys(blogPosts).forEach(slug => { const b = blogPosts[slug]; %>
-                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[340px] md:w-[380px]">
-                        <div class="h-40 bg-gradient-to-br <%= b.cardGradient %> flex items-end p-6">
+                    <div class="glass-card rounded-2xl overflow-hidden fade-in w-[320px] md:w-[360px]">
+                        <div class="h-32 bg-gradient-to-br <%= b.cardGradient %> flex items-end p-5">
                             <span class="text-xs uppercase tracking-widest text-lavender"><%= b.category %></span>
                         </div>
-                        <div class="p-6">
-                            <h3 class="text-lg font-bold mb-2"><%= b.title %></h3>
-                            <p class="text-gray-400 text-sm mb-4"><%= b.cardDescription %></p>
-                            <a href="/blog/<%= slug %>" class="text-pink text-sm font-semibold hover:underline">Read More &rarr;</a>
+                        <div class="p-5">
+                            <h3 class="text-base font-bold mb-1"><%= b.title %></h3>
+                            <p class="text-gray-400 text-xs mb-2"><%= b.cardDescription %></p>
+                            <a href="/blog/<%= slug %>" class="text-pink text-xs font-semibold hover:underline">Read More &rarr;</a>
                         </div>
                     </div>
                     <% }) %>
                 </div>
-
                 <button class="slide-btn hidden md:flex" onclick="slideScroll('blog-track', 1)"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </section>
 
-    <!-- 8. Contact -->
-    <section id="contact" class="max-w-4xl mx-auto px-6 py-32 text-center scroll-mt-24">
-        <h2 class="text-4xl font-bold mb-6 fade-in">Let's Work Together</h2>
-        <p class="text-gray-400 mb-10 fade-in">Have a project in mind or need help making sense of your data? Let's talk.</p>
-        <form class="glass-card p-8 rounded-2xl text-left fade-in" onsubmit="event.preventDefault(); handleContact(this);">
-            <div class="grid md:grid-cols-2 gap-6 mb-6">
+    <!-- Contact: get in touch form -->
+    <section id="contact" class="max-w-3xl mx-auto px-6 py-20 text-center scroll-mt-24">
+        <h2 class="text-3xl font-bold mb-4 fade-in">Get In Touch</h2>
+        <p class="text-gray-400 mb-8 fade-in">See your profit, expenses, and growth opportunities in minutes.</p>
+        <form class="glass-card p-6 rounded-2xl text-left fade-in" onsubmit="event.preventDefault(); handleContact(this);">
+            <div class="grid md:grid-cols-2 gap-6 mb-4">
                 <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Name</label>
+                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Name</label>
                     <input type="text" name="name" required class="w-full bg-transparent border-b border-gray-700 py-2 focus:border-pink outline-none transition text-white">
                 </div>
                 <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Email</label>
+                    <label class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Email</label>
                     <input type="email" name="email" required class="w-full bg-transparent border-b border-gray-700 py-2 focus:border-pink outline-none transition text-white">
                 </div>
             </div>
-            <div class="mb-6">
-                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Message</label>
-                <textarea name="message" rows="4" required class="w-full bg-transparent border-b border-gray-700 py-2 focus:border-pink outline-none transition text-white resize-none"></textarea>
+            <div class="mb-4">
+                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Message</label>
+                <textarea name="message" rows="3" required class="w-full bg-transparent border-b border-gray-700 py-2 focus:border-pink outline-none transition text-white resize-none"></textarea>
             </div>
-            <button class="w-full btn-primary font-bold py-4 rounded-lg">Get in Touch</button>
-            <p id="contact-msg" class="mt-4 text-sm text-lavender text-center hidden"></p>
+            <button class="w-full btn-primary font-bold py-3 rounded-lg">Get in Touch</button>
+            <p id="contact-msg" class="mt-3 text-xs text-lavender text-center hidden"></p>
         </form>
     </section>
 
-    <!-- 9. Footer -->
-    <footer class="border-t border-gray-900 py-12">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+    <!-- Footer: quick links and contact info -->
+    <footer class="border-t border-gray-900 py-8">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
             <div>
-                <div class="text-xl font-bold tracking-tighter mb-3">Data<span class="text-lavender">2</span>Metrics</div>
-                <p class="text-gray-500 text-sm">Turning raw data into real insight. Helping you see the story behind every number.</p>
+                <div class="text-lg font-bold tracking-tighter mb-2">Data<span class="text-lavender">2</span>Metrics</div>
+                <p class="text-gray-500 text-xs">Turning raw data into real insight. Helping you see the story behind every number.</p>
             </div>
             <div>
-                <p class="font-semibold mb-3 text-sm">Quick Links</p>
-                <div class="space-y-2 text-sm text-gray-500">
+                <p class="font-semibold mb-2 text-xs">Quick Links</p>
+                <div class="space-y-1 text-xs text-gray-500">
                     <a href="#services" class="block hover:text-pink transition">Services</a>
                     <a href="#portfolio" class="block hover:text-pink transition">Work</a>
                     <a href="#blog" class="block hover:text-pink transition">Blog</a>
@@ -471,23 +515,12 @@
                 </div>
             </div>
             <div>
-                <p class="font-semibold mb-3 text-sm">Connect</p>
-                <p class="text-gray-600 text-sm">brenda@data2metrics.com</p>
-                <p class="text-gray-600 text-sm">+254 703 462 665</p>
-                <p class="text-gray-600 text-sm">Nairobi, Kenya</p>
-
-                <!-- Subscribe -->
-                <div class="mt-5">
-                    <p class="text-gray-500 text-sm mb-2">Subscribe for updates &amp; insights:</p>
-                    <form class="flex gap-2" onsubmit="event.preventDefault(); handleSubscribe(this);">
-                        <input type="email" name="email" placeholder="Your email" required class="flex-1 bg-transparent border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-pink outline-none transition">
-                        <button class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold">Subscribe</button>
-                    </form>
-                    <p id="subscribe-msg" class="mt-2 text-xs text-lavender hidden"></p>
-                </div>
-
+                <p class="font-semibold mb-2 text-xs">Connect</p>
+                <p class="text-gray-600 text-xs">brenda@data2metrics.com</p>
+                <p class="text-gray-600 text-xs">+254 703 462 665</p>
+                <p class="text-gray-600 text-xs">Nairobi, Kenya</p>
                 <!-- Social links -->
-                <div class="flex gap-4 mt-5 text-lg text-gray-500">
+                <div class="flex gap-4 mt-4 text-lg text-gray-500">
                     <a href="#" aria-label="Twitter" class="hover:text-pink transition"><i class="fab fa-twitter"></i></a>
                     <a href="#" aria-label="LinkedIn" class="hover:text-pink transition"><i class="fab fa-linkedin"></i></a>
                     <a href="#" aria-label="Instagram" class="hover:text-pink transition"><i class="fab fa-instagram"></i></a>
@@ -495,13 +528,13 @@
                 </div>
             </div>
         </div>
-        <div class="text-center text-gray-600 text-sm border-t border-gray-900 pt-8">
+        <div class="text-center text-gray-600 text-xs border-t border-gray-900 pt-6">
             <p>&copy; 2026 Data2Metrics. Precision in every pixel.</p>
         </div>
     </footer>
 
     <script>
-        // Fade-in on scroll
+        // Fade-in animation for elements as they enter the viewport
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -511,14 +544,14 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Close mobile menu on link click
+        // Hide mobile menu after clicking a link
         document.querySelectorAll('#mobile-menu a').forEach(link => {
             link.addEventListener('click', () => {
                 document.getElementById('mobile-menu').classList.add('hidden');
             });
         });
 
-        // Navbar hide on scroll down, show on scroll up
+        // Hide navbar when scrolling down, show when scrolling up
         let lastScroll = 0;
         const nav = document.getElementById('main-nav');
         window.addEventListener('scroll', () => {
@@ -531,7 +564,7 @@
             lastScroll = currentScroll;
         });
 
-        // Sliding carousel scroll — one full card at a time
+        // Carousel: scrolls one card at a time when arrow is clicked
         function slideScroll(trackId, direction) {
             const track = document.getElementById(trackId);
             const card = track.querySelector('.glass-card');
@@ -543,7 +576,7 @@
             track.scrollTo({ left: nextIndex * cardWidth, behavior: 'smooth' });
         }
 
-        // Auto-slide carousels — one card at a time, smooth
+        // Carousel: auto-slide cards every few seconds, pause on hover/touch
         document.querySelectorAll('[data-auto-slide]').forEach(track => {
             let interval;
             const gap = 32;
@@ -572,7 +605,7 @@
             track.addEventListener('touchend', () => startAuto());
         });
 
-        // Contact form handler
+        // Show a thank you message after contact form is submitted
         function handleContact(form) {
             const msg = document.getElementById('contact-msg');
             msg.textContent = "Thanks! I'll get back to you soon.";
@@ -580,7 +613,7 @@
             form.reset();
         }
 
-        // Subscribe form handler
+        // Show a thank you message after subscribing
         function handleSubscribe(form) {
             const msg = document.getElementById('subscribe-msg');
             msg.textContent = "You're subscribed! Stay tuned.";
@@ -601,7 +634,55 @@
             });
         }, { threshold: 0.35 });
         sections.forEach(s => { if (s) dotObserver.observe(s); });
+
+        // Fake live metrics animation
+        setInterval(() => {
+            document.getElementById('metric-users').textContent = 120 + Math.floor(Math.random() * 10);
+            document.getElementById('metric-insights').textContent = 300 + Math.floor(Math.random() * 50);
+            document.getElementById('metric-growth').textContent = 15 + Math.floor(Math.random() * 10);
+        }, 3000);
+
+        function unlockPricing(e) {
+            e.preventDefault();
+            document.getElementById('pricing-section').classList.remove('hidden');
+
+            // scroll to pricing
+            document.getElementById('pricing-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openDemo() {
+            document.getElementById('demoModal').classList.remove('hidden');
+            document.getElementById('demoModal').classList.add('flex');
+        }
+
+        function closeDemo() {
+            document.getElementById('demoModal').classList.add('hidden');
+            document.getElementById('demoModal').classList.remove('flex');
+        }
+
     </script>
+
+        <div id="demoModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+            <div class="bg-[#0B0B0F] p-6 rounded-2xl max-w-3xl w-full relative">
+                <button onclick="closeDemo()" class="absolute top-4 right-4 text-gray-400">✕</button>
+
+                <h3 class="text-xl font-bold mb-4">Business Compass Dashboard</h3>
+
+                <div class="h-64 bg-gray-900 rounded-xl flex items-end p-6 space-x-2">
+                    <div class="w-1/4 bg-lavender h-3/4"></div>
+                    <div class="w-1/4 bg-pink h-full"></div>
+                    <div class="w-1/4 bg-lavender h-1/2"></div>
+                    <div class="w-1/4 bg-pink h-2/3"></div>
+                </div>
+            </div>
+        </div>
+
+    <a href="https://wa.me/254703462665?text=Hi%20I%20want%20to%20set%20up%20Business%20Compass"
+    class="fixed bottom-6 right-6 bg-green-500 text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-2 hover:scale-105 transition z-50">
+
+        <i class="fab fa-whatsapp"></i>
+        <span class="text-sm font-semibold">Chat on WhatsApp</span>
+    </a>
 
 </body>
 </html>

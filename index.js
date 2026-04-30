@@ -4,11 +4,50 @@ const PORT = 3000;
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+app.use('/logo', express.static('public/logo'));
 
 // --- Project Data ---
 const projects = {
+  'business_compass': {
+    title: 'Business Compass (SME Analytics System)',
+    tags: ['Google Sheets', 'Analytics', 'SME Growth'],
+    icon: 'fas fa-compass',
+    iconColor: '#B57EDC',
+    gradient: 'from-purple-900/40 to-indigo-900/40',
+    cardGradient: 'from-purple-500/20 to-pink-500/20',
+    cardIconClass: 'text-lavender',
+    cardDescription: 'A plug-and-play analytics system helping Kenyan SMEs track profit, control expenses, and grow smarter.',
+    overview: 'Built an interactive sales forecasting dashboard for a mid-size retail company, enabling their leadership team to visualise revenue trends, seasonal patterns, and growth projections across multiple product lines.',
+    challenge: 'The client relied on static Excel spreadsheets updated manually each month. Forecasts were inconsistent, time-consuming to produce, and often arrived too late for strategic planning. Management needed real-time visibility into sales performance and reliable forward-looking projections.',
+    solution: 'We designed a Power BI dashboard connected to the company\'s SQL Server database. Python scripts automated the data extraction and cleaning pipeline, while a Prophet-based forecasting model generated 90-day rolling predictions refreshed daily. Interactive filters let stakeholders slice data by region, product category, and time period.',
+    results: [
+      { metric: '35%', label: 'Faster decision-making' },
+      { metric: '92%', label: 'Forecast accuracy' },
+      { metric: '10hrs', label: 'Saved per week on reporting' }
+    ]
+  },
+
+  'impactrack-dashboard': {
+      title: 'ImpacTrack: NGO Project Tracking Dashboard',
+      tags: ['Power BI', 'Python', 'MongoDB'],
+      icon: 'fas fa-chart-line',
+      iconColor: '#B57EDC',
+      gradient: 'from-purple-900/40 to-indigo-900/40',
+      cardGradient: 'from-[#B57EDC]/20 to-[#F472B6]/10',
+      cardIconClass: 'text-lavender',
+      cardDescription: 'Developed a Power BI dashboard for a Nairobi-based NGO, improving project visibility and donor reporting across 20+ projects.',
+      overview: 'Organizations were managing multiple donor-funded projects across scattered spreadsheets and reports, making it difficult to track progress, monitor budgets, and ensure accountability. Visibility into project performance and fund utilization was limited and often delayed.',
+      challenge: 'The client relied on static Excel spreadsheets updated manually each month. Forecasts were inconsistent, time-consuming to produce, and often arrived too late for strategic planning. Management needed real-time visibility into sales performance and reliable forward-looking projections.',
+      solution: 'We developed a dynamic Power BI dashboard that consolidates all project data into a single source of truth. The solution visualizes project status, budget vs actual costs, donor contributions, deliverables tracking, and consultant assignments, with real-time updates and interactive filtering. Python scripts automate data extraction and cleaning from the client\'s MongoDB database, ensuring that the dashboard always reflects the latest information. The dashboard also includes drill-down capabilities for detailed analysis and automated alerts for budget overruns or delayed milestones.',
+      results: [
+        { metric: '35%', label: 'Faster decision-making' },
+        { metric: '92%', label: 'Forecast accuracy' },
+        { metric: '10hrs', label: 'Saved per week on reporting' }
+      ]
+    },
+
   'sales-forecasting-dashboard': {
-    title: 'Sales Forecasting Dashboard',
+    title: 'Forecast360: Sales Forecasting Dashboard',
     tags: ['Power BI', 'Python', 'SQL'],
     icon: 'fas fa-chart-line',
     iconColor: '#B57EDC',
@@ -26,7 +65,7 @@ const projects = {
     ]
   },
   'ngo-data-pipeline': {
-    title: 'NGO Data Pipeline',
+    title: 'ETLFlow: NGO Data Pipeline',
     tags: ['Python', 'ETL', 'AWS'],
     icon: 'fas fa-database',
     iconColor: '#F472B6',
@@ -209,14 +248,46 @@ app.get('/', (req, res) => {
 app.get('/project/:slug', (req, res) => {
   const project = projects[req.params.slug];
   if (!project) return res.status(404).send('Project not found');
-  res.render('project_detail', { project });
+
+  // Find related projects (sharing at least one tag, not self)
+  const relatedProjects = Object.entries(projects)
+    .filter(([slug, p]) => slug !== req.params.slug && p.tags && project.tags && p.tags.some(tag => project.tags.includes(tag)))
+    .map(([slug, p]) => ({
+      slug,
+      title: p.title,
+      category: p.tags[0] || '',
+      icon: p.icon,
+      excerpt: p.overview || '',
+      date: '', // Add date if available
+    }));
+
+  res.render('project_detail', { project, relatedProjects });
 });
 
 app.get('/blog/:slug', (req, res) => {
   const post = blogPosts[req.params.slug];
   if (!post) return res.status(404).send('Post not found');
-  res.render('blog_detail', { post });
+
+  // Find related posts (same category, not self)
+  const relatedPosts = Object.entries(blogPosts)
+    .filter(([slug, p]) => slug !== req.params.slug && (p.category === post.category))
+    .map(([slug, p]) => ({
+      slug,
+      title: p.title,
+      category: p.category,
+      excerpt: p.excerpt,
+      date: p.date,
+      author: p.author
+    }));
+
+  res.render('blog_detail', { post, relatedPosts });
 });
+
+app.get('/business_compass', (req, res) => {
+    res.render('business_compass');
+});
+
+
 
 app.listen(PORT, () => {
   console.log(`Data2Metrics live at http://localhost:${PORT}`);

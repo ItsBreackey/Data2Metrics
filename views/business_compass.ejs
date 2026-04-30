@@ -1,0 +1,916 @@
+    </style>
+<!-- ...existing code... (all main content goes here) ... -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Compass | Data2Metrics</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: #0B0B0F;
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+        }
+        .text-lavender { color: #B57EDC; }
+        .bg-lavender { background-color: #B57EDC; }
+        .text-pink { color: #F472B6; }
+        .bg-pink { background-color: #F472B6; }
+        .border-lavender { border-color: rgba(181, 126, 220, 0.3); }
+
+        .glass {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(181,126,220,0.2);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(181, 126, 220, 0.2);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: #F472B6;
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.2);
+            transform: translateY(-5px);
+        }
+
+        /* Navbar hide on scroll */
+        .main-nav {
+            transition: transform 0.35s ease;
+        }
+        .main-nav.nav-hidden {
+            transform: translateY(-100%);
+        }
+
+        /* Pink hover for CTA buttons */
+        .btn-primary {
+            background-color: #B57EDC;
+            color: #000;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #F472B6;
+            transform: scale(1.05);
+        }
+        .btn-outline {
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+        .btn-outline:hover {
+            background-color: #F472B6;
+            border-color: #F472B6;
+            color: #000;
+        }
+
+        .btn {
+            background: #B57EDC;
+            color: #000;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #F472B6;
+            transform: scale(1.05);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Dot navigation */
+        .dot-nav {
+            position: fixed;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .dot-nav a {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(181, 126, 220, 0.25);
+            border: 1px solid rgba(181, 126, 220, 0.4);
+            transition: all 0.3s ease;
+            display: block;
+        }
+        .dot-nav a:hover,
+        .dot-nav a.active {
+            background: #F472B6;
+            border-color: #F472B6;
+            transform: scale(1.4);
+        }
+        @media (max-width: 768px) {
+            .dot-nav { display: none; }
+        }
+
+        a:hover {
+            transform: scale(1.03);
+            transition: transform 0.2s;
+        }
+    </style>
+</head>
+
+
+<!-- Main navigation bar -->
+<nav id="main-nav" class="main-nav w-full bg-[#0B0B0F]/80 backdrop-blur-md z-50 border-b border-gray-800/50 sticky top-0">
+    <div class="flex justify-between items-center p-6 max-w-6xl mx-auto">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2">
+                <img src="/logo/d2m_logo.png" alt="Data2Metrics Logo" class="h-10 w-auto" style="max-height:40px;" />
+                <span class="text-2xl font-bold tracking-tighter">Data<span class="text-lavender">2</span>Metrics</span>
+            </a>
+        </div>
+        <div class="space-x-8 hidden md:flex text-sm text-gray-400 items-center">
+            <a href="/" class="hover:text-pink transition">Home</a>
+            <a href="#how-it-works-section" class="hover:text-pink transition">How it Works</a>
+            <a href="#report-section" class="hover:text-pink transition">Pricing</a>
+            <a href="#faq" class="hover:text-pink transition">FAQ</a>
+            <a href="#contact" class="btn-primary px-5 py-2 rounded-full font-semibold">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<body class="overflow-x-hidden">
+
+<!-- Quick section navigation dots for desktop -->
+<nav class="dot-nav" aria-label="Section navigation">
+    <a href="#hero" title="Home"></a>
+    <a href="#how-it-works-section" title="How it Works"></a>
+    <a href="#report-section" title="Pricing"></a>
+    <a href="#faq" title="FAQ"></a>
+    <a href="#contact" title="Contact"></a>
+</nav>
+
+<!-- Hero section: headline, intro, and demo button -->
+<section id="hero" class="max-w-6xl mx-auto px-6 py-24 text-center scroll-mt-24">
+    <h1 class="text-5xl font-bold mb-6">
+        Stop Guessing. Start <span class="text-lavender">Growing</span>.
+    </h1>
+    <p class="text-gray-400 max-w-xl mx-auto mb-10">
+        Business Compass shows you exactly where your money is going, what’s working, and what to fix.
+    </p>
+
+
+    <button onclick="openModal()" class="btn px-8 py-4 rounded-lg font-bold">
+        View Live Demo Dashboard
+    </button>
+</section>
+
+<!-- Live metrics: animated revenue, expenses, and profit -->
+<section class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-6 mb-24 scroll-mt-24">
+    <div class="glass p-6 rounded-xl text-center">
+        <p class="text-gray-400">Revenue</p>
+        <p id="rev" class="text-3xl font-bold text-lavender">KES 0</p>
+    </div>
+    <div class="glass p-6 rounded-xl text-center">
+        <p class="text-gray-400">Expenses</p>
+        <p id="exp" class="text-3xl font-bold text-pink">KES 0</p>
+    </div>
+    <div class="glass p-6 rounded-xl text-center">
+        <p class="text-gray-400">Profit</p>
+        <p id="profit" class="text-3xl font-bold">KES 0</p>
+    </div>
+</section>
+
+
+<!-- Why Business Compass: features and benefits -->
+<section class="max-w-6xl mx-auto px-6 mb-24 fade-in">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+        <!-- Feature Cards -->
+        <div class="space-y-6">
+            <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
+                <div class="text-lavender text-3xl"><i class="fas fa-chart-line"></i></div>
+                <div>
+                    <h3 class="font-bold mb-1">Live Dashboard</h3>
+                    <p class="text-gray-400 text-sm">Track revenue, expenses, and profit in real-time with a clean, intuitive dashboard.</p>
+                </div>
+            </div>
+            <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
+                <div class="text-pink text-3xl"><i class="fas fa-wallet"></i></div>
+                <div>
+                    <h3 class="font-bold mb-1">Expense Control</h3>
+                    <p class="text-gray-400 text-sm">Identify where money is leaking and optimize your spending.</p>
+                </div>
+            </div>
+            <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
+                <div class="text-lavender text-3xl"><i class="fas fa-bolt"></i></div>
+                <div>
+                    <h3 class="font-bold mb-1">Weekly Insights</h3>
+                    <p class="text-gray-400 text-sm">Get actionable recommendations sent directly via WhatsApp.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Checklist Benefits -->
+        <div class="glass-card p-8 rounded-2xl h-full flex flex-col justify-center">
+            <h3 class="text-2xl font-bold mb-6 text-center">Why Choose Business Compass?</h3>
+            <ul class="space-y-4 text-base">
+                <li class="flex items-center gap-3"><span class="text-pink text-xl"><i class="fas fa-check-circle"></i></span> Instantly see where your money goes</li>
+                <li class="flex items-center gap-3"><span class="text-pink text-xl"><i class="fas fa-check-circle"></i></span> Get weekly actionable insights, not just raw numbers</li>
+                <li class="flex items-center gap-3"><span class="text-pink text-xl"><i class="fas fa-check-circle"></i></span> Designed for Kenyan SMEs—no technical skills needed</li>
+                <li class="flex items-center gap-3"><span class="text-pink text-xl"><i class="fas fa-check-circle"></i></span> WhatsApp support and onboarding</li>
+                <li class="flex items-center gap-3"><span class="text-pink text-xl"><i class="fas fa-check-circle"></i></span> Affordable, transparent pricing</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- How It Works: step-by-step process -->
+<section id="how-it-works-section" class="max-w-6xl mx-auto px-6 mb-24 scroll-mt-24">
+                
+    <h2 class="text-3xl font-bold mb-12 text-center">How It Works</h2>
+
+    <div class="grid md:grid-cols-3 gap-6 text-center">
+
+        <div class="glass p-6 rounded-xl">
+            <h3 class="font-bold mb-2">1. Submit Data</h3>
+            <p class="text-gray-400 text-sm">Share your sales & expenses</p>
+        </div>
+
+        <div class="glass p-6 rounded-xl">
+            <h3 class="font-bold mb-2">2. We Clean It</h3>
+            <p class="text-gray-400 text-sm">We structure your data properly</p>
+        </div>
+
+        <div class="glass p-6 rounded-xl">
+            <h3 class="font-bold mb-2">3. Dashboard Built</h3>
+            <p class="text-gray-400 text-sm">Your live dashboard is created</p>
+        </div>
+
+        <div class="glass p-6 rounded-xl">
+            <h3 class="font-bold mb-2">4. Insights Generated</h3>
+            <p class="text-gray-400 text-sm">We analyze your numbers weekly</p>
+        </div>
+
+        <div class="glass p-6 rounded-xl">
+            <h3 class="font-bold mb-2">5. Recommendations</h3>
+            <p class="text-gray-400 text-sm">You get clear action steps</p>
+        </div>
+
+        <div class="glass p-6 rounded-xl">
+            <h3 class="font-bold mb-2">6. Grow Smarter</h3>
+            <p class="text-gray-400 text-sm">Make confident business decisions</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Lead Capture: generate a business report -->
+<section id="report-section" class="max-w-xl mx-auto px-6 mb-24 text-center">
+    <h2 class="text-2xl font-bold mb-4">
+        Generate Your Business Decision Report
+    </h2>
+    <p class="text-gray-400 mb-6">
+        Enter your numbers and we’ll analyze your business instantly 
+        and discover the best plan and pricing for your business.
+    </p>
+
+    <div class="glass p-6 rounded-xl space-y-4">
+
+        <input id="revenue" type="number"
+            placeholder="Monthly Revenue (KES)"
+            class="w-full p-3 bg-transparent border border-gray-700 rounded">
+
+        <input id="expenses" type="number"
+            placeholder="Monthly Expenses (KES)"
+            class="w-full p-3 bg-transparent border border-gray-700 rounded">
+
+        <input id="customers" type="number"
+            placeholder="Number of Customers"
+            class="w-full p-3 bg-transparent border border-gray-700 rounded">
+
+        <button onclick="runAnalysis()"
+            class="btn w-full py-3 rounded font-bold">
+            Generate Report
+        </button>
+
+    </div>
+</section>
+
+<div id="activityFeed" class="fixed bottom-6 left-6 space-y-2 text-sm z-50"></div>
+
+<!-- Overlay: shows while analyzing data -->
+<div id="thinking" class="hidden text-center text-lavender mb-10">
+    Analyzing your business data...
+</div>
+
+<div id="report" class="max-w-3xl mx-auto px-6"></div>
+
+<!-- Pricing: choose your plan -->
+<section id="pricing" class="max-w-6xl mx-auto px-6 mb-24 hidden">
+    <h2 class="text-3xl font-bold text-center mb-10">Choose Your Plan</h2>
+
+    <div class="grid md:grid-cols-3 gap-6" id="planCards">
+        <!-- Basic -->
+        <div class="glass-card p-8 rounded-2xl fade-in" data-plan="Basic">
+            <h3 class="text-xl font-bold mb-2">Basic</h3>
+            <p class="text-2xl font-bold text-lavender mb-4">KES 5,000</p>
+            <ul class="text-gray-400 text-sm space-y-2 mb-6">
+                <li>✔ Monthly dashboard</li>
+                <li>✔ Track revenue & expenses</li>
+                <li>✔ Basic insights</li>
+            </ul>
+            <button class="choose-plan-btn btn w-full py-3 rounded font-bold mb-2">Choose This Plan</button>
+        </div>
+        <!-- Growth (Featured) -->
+        <div class="glass-card p-8 rounded-2xl fade-in relative border border-pink" data-plan="Growth">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-pink text-black text-xs px-3 py-1 rounded-full font-bold">
+                MOST POPULAR
+            </div>
+            <h3 class="text-xl font-bold mb-2">Growth</h3>
+            <p class="text-2xl font-bold text-pink mb-4">KES 10,000</p>
+            <ul class="text-gray-400 text-sm space-y-2 mb-6">
+                <li>✔ Weekly insights</li>
+                <li>✔ Profit optimization</li>
+                <li>✔ 10+ KPIs</li>
+                <li>✔ WhatsApp support</li>
+            </ul>
+            <button class="choose-plan-btn btn w-full py-3 rounded font-bold mb-2">Choose This Plan</button>
+        </div>
+        <!-- Premium -->
+        <div class="glass-card p-8 rounded-2xl fade-in" data-plan="Premium">
+            <h3 class="text-xl font-bold mb-2">Premium</h3>
+            <p class="text-2xl font-bold text-lavender mb-4">KES 20,000</p>
+            <ul class="text-gray-400 text-sm space-y-2 mb-6">
+                <li>✔ Real-time dashboards</li>
+                <li>✔ Forecasting</li>
+                <li>✔ Strategy support</li>
+                <li>✔ Priority access</li>
+            </ul>
+            <button class="choose-plan-btn btn w-full py-3 rounded font-bold mb-2">Choose This Plan</button>
+        </div>
+
+    </div>
+
+    <div class="text-center mt-10">
+        <a href="#contact" class="btn-primary px-10 py-4 rounded-lg font-bold text-lg">Book a Demo / Contact Us</a>
+    </div>
+
+</section>
+
+<!-- Success Stories: real client results -->
+<section class="max-w-6xl mx-auto px-6 mb-24">
+    <h2 class="text-3xl font-bold text-center mb-10">Success Stories</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+        <div class="glass-card p-6 rounded-2xl">
+            <h3 class="font-bold mb-2 text-lavender">Retail Shop Turnaround</h3>
+            <p class="text-gray-400 text-sm mb-2">"We never knew how much we were losing to small expenses. After using Business Compass, we cut costs by 15% and grew our profit margin in 3 months."</p>
+            <p class="text-pink text-xs">— Mary, Nairobi</p>
+        </div>
+        <div class="glass-card p-6 rounded-2xl">
+            <h3 class="font-bold mb-2 text-pink">Salon Owner's Growth</h3>
+            <p class="text-gray-400 text-sm mb-2">"The weekly WhatsApp insights are a game changer. I finally understand my numbers and can plan for growth."</p>
+            <p class="text-lavender text-xs">— Kevin, Kisumu</p>
+        </div>
+        <div class="glass-card p-6 rounded-2xl">
+            <h3 class="font-bold mb-2 text-lavender">Consultancy Clarity</h3>
+            <p class="text-gray-400 text-sm mb-2">"Business Compass helped me see which services were most profitable. I now focus on what works and my revenue is up 22%."</p>
+            <p class="text-pink text-xs">— Brenda, Mombasa</p>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ: common questions answered -->
+<section id="faq" class="max-w-4xl mx-auto px-6 mb-24">
+    <h2 class="text-3xl font-bold text-center mb-10">Frequently Asked Questions</h2>
+    <div class="space-y-6">
+        <div class="glass-card p-6 rounded-2xl">
+            <h3 class="font-bold mb-2 text-lavender">Do I need accounting or tech skills?</h3>
+            <p class="text-gray-400 text-sm">No! Business Compass is designed for business owners, not accountants. If you can use WhatsApp, you can use Compass.</p>
+        </div>
+        <div class="glass-card p-6 rounded-2xl">
+            <h3 class="font-bold mb-2 text-pink">How do I get my data into the dashboard?</h3>
+            <p class="text-gray-400 text-sm">You can send your sales and expenses via WhatsApp, Google Sheets, or even a simple Excel file. We handle the rest.</p>
+        </div>
+        <div class="glass-card p-6 rounded-2xl">
+            <h3 class="font-bold mb-2 text-lavender">How fast do I get insights?</h3>
+            <p class="text-gray-400 text-sm">You get your first dashboard and insights within 48 hours of submitting your data. Weekly updates follow automatically.</p>
+        </div>
+        <div class="glass-card p-6 rounded-2xl">
+            <h3 class="font-bold mb-2 text-pink">Is my data private?</h3>
+            <p class="text-gray-400 text-sm">Absolutely. Your data is never shared and is protected with strict privacy controls.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact: book a demo or send a message -->
+<section id="contact" class="max-w-2xl mx-auto px-6 mb-24 text-center scroll-mt-24">
+    <h2 class="text-2xl font-bold mb-4">Contact Us / Book a Demo</h2>
+    <p class="text-gray-400 mb-6">Ready to see your business numbers clearly? Book a free demo or ask us anything below.</p>
+    <div class="glass-card p-8 rounded-2xl mt-4 text-left fade-in">
+        <form action="mailto:info@data2metrics.com" method="POST" enctype="text/plain" class="grid gap-6">
+            <div>
+                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Name</label>
+                <input type="text" name="name" required class="w-full bg-transparent border-b border-gray-700 py-2 focus:border-pink outline-none transition text-white">
+            </div>
+            <div>
+                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Email</label>
+                <input type="email" name="email" required class="w-full bg-transparent border-b border-gray-700 py-2 focus:border-pink outline-none transition text-white">
+            </div>
+            <div>
+                <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Message</label>
+                <textarea name="message" rows="4" required class="w-full bg-transparent border-b border-gray-700 py-2 focus:border-pink outline-none transition text-white resize-none"></textarea>
+            </div>
+                    <button class="btn w-full py-3 rounded font-bold">Send Message</button>
+        </form>
+    </div>
+</section>
+
+
+<style>
+    .dot-nav {
+        position: fixed;
+        right: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 40;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    .dot-nav a {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(181, 126, 220, 0.25);
+        border: 1px solid rgba(181, 126, 220, 0.4);
+        transition: all 0.3s ease;
+        display: block;
+    }
+    .dot-nav a:hover,
+    .dot-nav a.active {
+        background: #F472B6;
+        border-color: #F472B6;
+        transform: scale(1.4);
+    }
+    @media (max-width: 768px) {
+        .dot-nav { display: none; }
+    }
+</style>
+
+<!-- Modal: preview of the dashboard demo -->
+<div id="demoModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+    <div class="bg-[#111] p-6 rounded-xl max-w-5xl w-full relative min-w-[340px] md:min-w-[900px]">
+        <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-white">✕</button>
+        <h3 class="text-xl mb-6 font-bold">Live Business Compass Dashboard</h3>
+        <div class="w-full h-[600px] rounded overflow-hidden bg-gray-900 flex items-center justify-center">
+            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT9jV_89ZmxEAx8hV6_sCbSCa7wMPQskir1tqEXbvEMs3GnVDyp0gTXtqiDWttL8AfwRLZ5blWLDUZg/pubhtml?gid=607905396&single=true" width="100%" height="600" frameborder="0" style="border:0;" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+<div id="thinkingOverlay" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
+    
+    <div class="glass p-8 rounded-2xl text-center max-w-md w-full">
+
+        <div class="text-lavender text-2xl font-bold mb-4">
+            Analyzing Your Business...
+        </div>
+
+        <p id="thinkingText" class="text-gray-400 mb-6">
+            Reading financial patterns
+        </p>
+
+        <!-- Progress bar: visual feedback during analysis -->
+        <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+            <div id="progressBar" class="h-full bg-gradient-to-r from-lavender to-pink w-0 transition-all duration-300"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    function updateDashboard(rev, exp, profit) {
+        document.getElementById("rev").innerHTML = "KES " + rev.toLocaleString();
+        document.getElementById("exp").innerHTML = "KES " + exp.toLocaleString();
+        document.getElementById("profit").innerHTML = "KES " + profit.toLocaleString();
+    }
+
+    // Animate demo numbers on page load
+
+    function animateDashboardDemo() {
+        // More realistic demo values
+        const demoRev = 120000;
+        const demoExp = 83000;
+        const demoProfit = demoRev - demoExp;
+        let rev = 0, exp = 0, profit = 0;
+        const steps = 60; // slower animation
+        let i = 0;
+        const interval = setInterval(() => {
+            i++;
+            rev = Math.floor(demoRev * i / steps);
+            exp = Math.floor(demoExp * i / steps);
+            profit = rev - exp;
+            updateDashboard(rev, exp, profit);
+            if (i >= steps) {
+                updateDashboard(demoRev, demoExp, demoProfit);
+                clearInterval(interval);
+            }
+        }, 40);
+    }
+
+    window.addEventListener('DOMContentLoaded', animateDashboardDemo);
+
+    function openModal() {
+    const modal = document.getElementById('demoModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex'); // IMPORTANT
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('demoModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    // Fade-in
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    /* function unlockPricing(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const revenue = parseFloat(document.getElementById('revenue').value);
+    const expenses = parseFloat(document.getElementById('expenses').value);
+
+    const profit = revenue - expenses;
+    const margin = (profit / revenue) * 100;
+
+// STEP 1: RUN THINKING SEQUENCE
+    runThinkingSequence(() => {
+
+        // STEP 2: compute logic AFTER thinking
+        let plan = "Growth";
+        let index = 1;
+
+        if (revenue < 50000 || profit < 10000) {
+            plan = "Basic";
+            index = 0;
+        } else if (revenue > 150000 && profit > 40000) {
+            plan = "Premium";
+            index = 2;
+        }
+
+        // STEP 3: update UI
+        updateDashboard(revenue, expenses, profit);
+        showPricing(index);
+        highlightPlan(index);
+
+        // STEP 4: WhatsApp link
+        createWhatsAppLink(name, phone, revenue, expenses, profit, plan);
+    });
+
+    function createWhatsAppLink(name, phone, revenue, expenses, profit, plan) {
+
+            const message = `Hi Brenda, I'm ${name}.
+            
+        My business summary:
+        Revenue: KES ${revenue}
+        Expenses: KES ${expenses}
+        Profit: KES ${profit}
+
+        The system recommended the ${plan} plan.
+        I'd like to get started.`;
+
+            const encoded = encodeURIComponent(message);
+            const link = `https://wa.me/254703462665?text=${encoded}`;
+
+            document.querySelectorAll('#pricing a').forEach(btn => {
+                btn.href = link;
+            });
+        }
+}
+ */
+
+/*    /*  function showPricing(index) { 
+        const pricing = document.getElementById('pricing');
+        pricing.classList.remove('hidden');
+        pricing.scrollIntoView({ behavior: 'smooth' });
+     */
+
+    /* function highlightPlan(index) {
+        const cards = document.querySelectorAll('#pricing .glass-card');
+
+        cards.forEach(card => {
+            card.style.border = "1px solid rgba(255,255,255,0.1)";
+            card.style.boxShadow = "none";
+            card.style.transform = "scale(1)";
+        });
+
+        const chosen = cards[index];
+
+        chosen.style.border = "2px solid #F472B6";
+        chosen.style.boxShadow = "0 0 30px rgba(244,114,182,0.4)";
+        chosen.style.transform = "scale(1.05)";
+
+        // subtle pulse animation
+        chosen.animate([
+            { transform: "scale(1.05)" },
+            { transform: "scale(1.08)" },
+            { transform: "scale(1.05)" }
+        ], {
+            duration: 600,
+            iterations: 1
+        });
+    }
+         */
+
+    const activities = [
+    "Someone in Nairobi just started Growth plan",
+    "New business tracked KES 120,000 revenue",
+    "Retail shop increased profit by 18%",
+    "Another user unlocked Premium insights",
+];
+
+    function runActivityFeed() {
+        const feed = document.getElementById("activityFeed");
+
+        setInterval(() => {
+            const item = document.createElement("div");
+            item.className = "glass px-4 py-2 rounded-lg text-gray-300";
+
+            item.innerText = activities[Math.floor(Math.random() * activities.length)];
+
+            feed.appendChild(item);
+
+            setTimeout(() => item.remove(), 5000);
+
+        }, 4000);
+    }
+
+    runActivityFeed();
+
+    function runThinkingSequence(callback) {
+    const overlay = document.getElementById("thinkingOverlay");
+    const text = document.getElementById("thinkingText");
+    const bar = document.getElementById("progressBar");
+
+    overlay.classList.remove("hidden");
+
+    const steps = [
+        "Reading financial patterns...",
+        "Calculating profit margins...",
+        "Detecting spending leaks...",
+        "Comparing industry benchmarks...",
+        "Generating best plan..."
+    ];
+
+    let i = 0;
+    let progress = 0;
+
+    const interval = setInterval(() => {
+        text.innerText = steps[i] || steps[steps.length - 1];
+
+        progress += 20;
+        bar.style.width = progress + "%";
+
+        i++;
+
+        if (i >= steps.length) {
+            clearInterval(interval);
+
+            setTimeout(() => {
+                overlay.classList.add("hidden");
+                callback(); // reveal results AFTER thinking
+            }, 500);
+        }
+    }, 600);
+}
+
+    function generateReport() {
+    const revenue = Number(document.getElementById("revenue").value);
+    const expenses = Number(document.getElementById("expenses").value);
+    const customers = Number(document.getElementById("customers").value);
+
+    const profit = revenue - expenses;
+    const margin = (profit / revenue) * 100;
+
+    let plan = "Basic";
+    let insight = "";
+    let risk = "";
+
+    if (revenue < 50000) plan = "Basic";
+    else if (revenue < 120000) plan = "Growth";
+    else plan = "Premium";
+
+    if (margin < 10) {
+        insight = "Your profit margin is very low. Expenses are consuming growth.";
+        risk = "High";
+    } else if (margin < 25) {
+        insight = "Decent revenue, but there’s room to optimize efficiency.";
+        risk = "Medium";
+    } else {
+        insight = "Strong profitability. You're in a scaling position.";
+        risk = "Low";
+    }
+
+    return { revenue, expenses, customers, profit, margin, plan, insight, risk };
+}
+
+    function runAnalysis() {
+    const thinking = document.getElementById("thinking");
+    const report = document.getElementById("report");
+
+    report.innerHTML = "";
+    thinking.classList.remove("hidden");
+
+    const steps = [
+        "Scanning financial data...",
+        "Calculating profit margins...",
+        "Benchmarking performance...",
+        "Generating recommendation..."
+    ];
+
+    let i = 0;
+
+    const interval = setInterval(() => {
+        thinking.innerText = steps[i];
+        i++;
+
+        if (i === steps.length) {
+            clearInterval(interval);
+
+            setTimeout(() => {
+                thinking.classList.add("hidden");
+                const data = generateReport();
+                showReport(data);
+            }, 500);
+        }
+    }, 700);
+}
+
+let selectedPlan = null;
+function showReport(r) {
+    selectedPlan = r.plan; // default to recommended
+    document.getElementById("report").innerHTML = `
+        <div class="glass-card p-6 rounded-xl">
+            <h2 class="text-xl font-bold text-lavender mb-4">
+                📊 Business Decision Report
+            </h2>
+            <p><b>Revenue:</b> KES ${r.revenue.toLocaleString()}</p>
+            <p><b>Expenses:</b> KES ${r.expenses.toLocaleString()}</p>
+            <p><b>Profit:</b> KES ${r.profit.toLocaleString()}</p>
+            <p><b>Margin:</b> ${r.margin.toFixed(1)}%</p>
+            <hr class="my-4 border-gray-700">
+            <p><b>Risk Level:</b> ${r.risk}</p>
+            <p class="text-gray-300 mt-2">${r.insight}</p>
+            <hr class="my-4 border-gray-700">
+            <p><b>Recommended Plan:</b> 
+                <span class="text-pink font-bold" id="selectedPlanName">${r.plan}</span>
+            </p>
+            <button onclick="sendWhatsApp(${r.revenue}, selectedPlan)"
+                class="btn-primary mt-6 w-full py-3 rounded-lg continue-whatsapp-btn">
+                <b>Continue on WhatsApp</b>
+            </button>
+       
+
+        <style>
+            .continue-whatsapp-btn:hover {
+                background-color: #F472B6 !important;
+                color: #000 !important;
+                transition: background 0.2s, color 0.2s;
+            }
+        </style>
+        </div>
+    `;
+    // Always show pricing section after report
+    const pricing = document.getElementById('pricing');
+    pricing.classList.remove('hidden');
+    // Highlight recommended plan
+    highlightPlanCard(r.plan);
+    // Set up plan selection
+    setupPlanSelection(r);
+}
+
+function setupPlanSelection(r) {
+    const planCards = document.querySelectorAll('#planCards .glass-card');
+    planCards.forEach(card => {
+        card.classList.remove('ring-4', 'ring-pink-400');
+    });
+    document.querySelectorAll('.choose-plan-btn').forEach(btn => {
+        btn.onclick = function() {
+            const plan = btn.closest('.glass-card').getAttribute('data-plan');
+            selectedPlan = plan;
+            // Update highlight
+            highlightPlanCard(plan);
+            // Update plan name in report
+            const planName = document.getElementById('selectedPlanName');
+            if (planName) planName.textContent = plan;
+            // Update WhatsApp links
+            updateWhatsAppLinks(r.revenue, plan);
+        };
+    });
+    // Set WhatsApp links for all plans
+    updateWhatsAppLinks(r.revenue, selectedPlan);
+}
+
+function highlightPlanCard(plan) {
+    const planCards = document.querySelectorAll('#planCards .glass-card');
+    planCards.forEach(card => {
+        if (card.getAttribute('data-plan') === plan) {
+            card.classList.add('ring-4', 'ring-pink-400');
+        } else {
+            card.classList.remove('ring-4', 'ring-pink-400');
+        }
+    });
+}
+
+function updateWhatsAppLinks(revenue, plan) {
+    const msg = encodeURIComponent(
+`Hi Data2Metrics 👋\n\nI just generated my Business Decision Report.\n\nRevenue: ${revenue}\nSelected Plan: ${plan}\n\nI want help setting this up.`
+    );
+    document.querySelectorAll('.get-started-link').forEach(link => {
+        link.href = `https://wa.me/254703462665?text=${msg}`;
+    });
+}
+
+function sendWhatsApp(revenue, plan) {
+    const msg = encodeURIComponent(
+`Hi Data2Metrics 👋
+
+I just generated my Business Decision Report.
+
+Revenue: ${revenue}
+Recommended Plan: ${plan}
+
+I want help setting this up.`
+    );
+
+    window.open(`https://wa.me/254703462665?text=${msg}`, "_blank");
+}
+
+</script>
+
+
+<!-- Sticky WhatsApp Button -->
+<a href="https://wa.me/254703462665?text=Hi%20I%20want%20to%20learn%20more%20about%20Data2Metrics" target="_blank" aria-label="Chat on WhatsApp"
+   class="fixed bottom-6 right-6 bg-green-500 text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-2 hover:scale-105 transition z-50">
+    <i class="fab fa-whatsapp"></i>
+    <span class="text-sm font-semibold">Chat on WhatsApp</span>
+</a>
+
+</div>
+  <!-- Footer: quick links and contact info -->
+    <footer class="border-t border-gray-900 py-8">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+            <div>
+                <div class="text-lg font-bold tracking-tighter mb-2">Data<span class="text-lavender">2</span>Metrics</div>
+                <p class="text-gray-500 text-xs">Turning raw data into real insight. Helping you see the story behind every number.</p>
+            </div>
+            <div>
+                <p class="font-semibold mb-2 text-xs">Quick Links</p>
+                <div class="space-y-1 text-xs text-gray-500">
+                    <a href="#services" class="block hover:text-pink transition">Services</a>
+                    <a href="#portfolio" class="block hover:text-pink transition">Work</a>
+                    <a href="#blog" class="block hover:text-pink transition">Blog</a>
+                    <a href="#contact" class="block hover:text-pink transition">Contact</a>
+                </div>
+            </div>
+            <div>
+                <p class="font-semibold mb-2 text-xs">Connect</p>
+                <p class="text-gray-600 text-xs">brenda@data2metrics.com</p>
+                <p class="text-gray-600 text-xs">+254 703 462 665</p>
+                <p class="text-gray-600 text-xs">Nairobi, Kenya</p>
+                <!-- Social links -->
+                <div class="flex gap-4 mt-4 text-lg text-gray-500">
+                    <a href="#" aria-label="Twitter" class="hover:text-pink transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn" class="hover:text-pink transition"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" aria-label="Instagram" class="hover:text-pink transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="GitHub" class="hover:text-pink transition"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-gray-600 text-xs border-t border-gray-900 pt-6">
+            <p>&copy; 2026 Data2Metrics. Precision in every pixel.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

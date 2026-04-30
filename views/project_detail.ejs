@@ -1,14 +1,79 @@
+</body>
+<!-- Sticky WhatsApp Button -->
+<a href="https://wa.me/254703462665?text=Hi%20I%20want%20to%20learn%20more%20about%20Data2Metrics" target="_blank" aria-label="Chat on WhatsApp"
+   class="fixed bottom-6 right-6 bg-green-500 text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-2 hover:scale-105 transition z-50">
+    <i class="fab fa-whatsapp"></i>
+    <span class="text-sm font-semibold">Chat on WhatsApp</span>
+</a>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= project.title %> | Data2Metrics</title>
-    <meta name="description" content="<%= project.description %>">
+    <meta name="description" content="<%= project.description || project.overview %>">
+    <meta name="keywords" content="data analytics, project, <%= project.tags ? project.tags.join(', ') : '' %>, Data2Metrics, Brenda Awino">
+    <meta name="author" content="Brenda Awino">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="<%= project.title %> | Data2Metrics">
+    <meta property="og:description" content="<%= project.description || project.overview %>">
+    <meta property="og:url" content="https://data2metrics.com/project/<%= project.slug %>">
+    <meta property="og:site_name" content="Data2Metrics">
+    <!-- Optionally add og:image if available -->
+    <meta property="og:image" content="https://data2metrics.com/logo/d2m_social.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%= project.title %> | Data2Metrics">
+    <meta name="twitter:description" content="<%= project.description || project.overview %>">
+    <meta name="twitter:site" content="@data2metrics">
+    <!-- Optionally add twitter:image if available -->
+        <meta name="twitter:image" content="https://data2metrics.com/logo/d2m_social.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+                /* Carousel styles for related projects */
+                .carousel-wrapper {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                }
+                .slide-track {
+                    display: flex;
+                    gap: 2rem;
+                    overflow-x: auto;
+                    scroll-snap-type: x mandatory;
+                    scroll-behavior: smooth;
+                    -webkit-overflow-scrolling: touch;
+                    scrollbar-width: none;
+                    padding-bottom: 1rem;
+                }
+                .slide-track::-webkit-scrollbar { display: none; }
+                .slide-track > * {
+                    scroll-snap-align: start;
+                    flex-shrink: 0;
+                    width: 320px;
+                    max-width: 90vw;
+                }
+                @media (min-width: 768px) {
+                    .slide-track {
+                        min-width: 0;
+                    }
+                    .slide-track > * {
+                        width: 320px;
+                    }
+                }
+                @media (min-width: 1024px) {
+                    .slide-track {
+                        min-width: 0;
+                    }
+                    .slide-track > * {
+                        width: 340px;
+                    }
+                }
         html { scroll-behavior: smooth; }
         body { background-color: #0B0B0F; color: #FFFFFF; font-family: 'Inter', sans-serif; }
         .text-lavender { color: #B57EDC; }
@@ -48,7 +113,42 @@
                 <i class="fas fa-arrow-left"></i> Back to Projects
             </a>
             <div class="h-64 md:h-80 rounded-2xl bg-gradient-to-br <%= project.gradient %> flex items-center justify-center mb-10">
-                <i class="<%= project.icon %> text-7xl opacity-30" style="color: <%= project.iconColor %>"></i>
+    
+                <% if (
+                    project.slug === 'business_compass' ||
+                    (project.title && project.title.toLowerCase().includes('business compass'))
+                ) { %>
+
+                    <div class="relative w-full h-full">
+                        <img src="/logo/d2m_compass.png" alt="Business Compass" class="absolute inset-0 w-full h-full object-cover opacity-90" />
+                    </div>
+
+                <% } else if (
+                    project.slug === 'impactrack-dashboard' ||
+                    (project.title && project.title.toLowerCase().includes('impactrack'))
+                ) { %>
+
+                    <div class="relative w-full h-full">
+                        <img src="/logo/ImpactTrack.png" alt="ImpacTrack" class="absolute inset-0 w-full h-full object-cover opacity-90" />
+                    </div>
+
+                <% } else if (
+                    project.slug === 'sales-forecasting-dashboard' ||
+                    (project.title && project.title.toLowerCase().includes('forecast360') || project.title.toLowerCase().includes('forecast'))
+                ) { %>
+
+                    <div class="relative w-full h-full">
+                        <img src="/logo/Forecast360.png" alt="Forecast360" class="absolute inset-0 w-full h-full object-cover opacity-90" />
+                    </div>
+
+                <% } else { %>
+
+                    <i class="<%= project.icon %> text-7xl opacity-30"
+                    <% if (project.iconColor) { %> style="color: <%= project.iconColor %>" <% } %>>
+                    </i>
+
+                <% } %>
+
             </div>
             <h1 class="text-4xl md:text-5xl font-bold mb-4"><%= project.title %></h1>
             <div class="flex flex-wrap gap-2 mb-6">
@@ -99,12 +199,105 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Related Projects -->
+    <section class="max-w-4xl mx-auto px-6 pb-24">
+        <h2 class="text-2xl font-bold mb-8">Related Projects</h2>
+        <div class="carousel-wrapper">
+            <button class="slide-btn hidden md:flex" onclick="slideScroll('related-projects-track', -1)"><i class="fas fa-chevron-left"></i></button>
+            <div id="related-projects-track" class="slide-track" data-auto-slide>
+                <% relatedProjects.forEach(rp => { %>
+                    <a href="/project/<%= rp.slug %>" class="glass-card rounded-2xl p-6 flex flex-col gap-2 hover:border-pink hover:shadow-lg transition w-[320px] md:w-[360px]">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="<%= rp.icon %> text-2xl text-lavender"></i>
+                            <span class="tag px-3 py-1 rounded-full text-xs text-lavender w-max"><%= rp.category %></span>
+                        </div>
+                        <h3 class="font-bold text-lg mb-1"><%= rp.title %></h3>
+                        <p class="text-gray-400 text-sm mb-2"><%= rp.excerpt %></p>
+                        <div class="flex items-center gap-2 text-xs text-gray-500">
+                            <span><i class="far fa-calendar mr-1"></i> <%= rp.date %></span>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+            <button class="slide-btn hidden md:flex" onclick="slideScroll('related-projects-track', 1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+      <!-- Footer: quick links and contact info -->
     <footer class="border-t border-gray-900 py-8">
-        <div class="text-center text-gray-600 text-sm">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+            <div>
+                <div class="text-lg font-bold tracking-tighter mb-2">Data<span class="text-lavender">2</span>Metrics</div>
+                <p class="text-gray-500 text-xs">Turning raw data into real insight. Helping you see the story behind every number.</p>
+            </div>
+            <div>
+                <p class="font-semibold mb-2 text-xs">Quick Links</p>
+                <div class="space-y-1 text-xs text-gray-500">
+                    <a href="#services" class="block hover:text-pink transition">Services</a>
+                    <a href="#portfolio" class="block hover:text-pink transition">Work</a>
+                    <a href="#blog" class="block hover:text-pink transition">Blog</a>
+                    <a href="#contact" class="block hover:text-pink transition">Contact</a>
+                </div>
+            </div>
+            <div>
+                <p class="font-semibold mb-2 text-xs">Connect</p>
+                <p class="text-gray-600 text-xs">brenda@data2metrics.com</p>
+                <p class="text-gray-600 text-xs">+254 703 462 665</p>
+                <p class="text-gray-600 text-xs">Nairobi, Kenya</p>
+                <!-- Social links -->
+                <div class="flex gap-4 mt-4 text-lg text-gray-500">
+                    <a href="#" aria-label="Twitter" class="hover:text-pink transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn" class="hover:text-pink transition"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" aria-label="Instagram" class="hover:text-pink transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="GitHub" class="hover:text-pink transition"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-gray-600 text-xs border-t border-gray-900 pt-6">
             <p>&copy; 2026 Data2Metrics. Precision in every pixel.</p>
         </div>
     </footer>
 
+<script>
+// Carousel: scrolls one card at a time when arrow is clicked
+function slideScroll(trackId, direction) {
+    const track = document.getElementById(trackId);
+    const card = track.querySelector('.glass-card');
+    const gap = 32; // 2rem gap
+    const cardWidth = card.offsetWidth + gap;
+    // Calculate nearest card-aligned position
+    const currentIndex = Math.round(track.scrollLeft / cardWidth);
+    const nextIndex = Math.max(0, currentIndex + direction);
+    track.scrollTo({ left: nextIndex * cardWidth, behavior: 'smooth' });
+}
+// Carousel: auto-slide cards every few seconds, pause on hover/touch
+document.querySelectorAll('[data-auto-slide]').forEach(track => {
+    let interval;
+    const gap = 32;
+    function getCardWidth() {
+        const card = track.querySelector('.glass-card');
+        return card ? card.offsetWidth + gap : 400;
+    }
+    function startAuto() {
+        interval = setInterval(() => {
+            const cardWidth = getCardWidth();
+            const maxScroll = track.scrollWidth - track.clientWidth;
+            const currentIndex = Math.round(track.scrollLeft / cardWidth);
+            if (track.scrollLeft >= maxScroll - 5) {
+                track.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                track.scrollTo({ left: (currentIndex + 1) * cardWidth, behavior: 'smooth' });
+            }
+        }, 4000);
+    }
+    startAuto();
+    // Pause on hover
+    track.addEventListener('mouseenter', () => clearInterval(interval));
+    track.addEventListener('mouseleave', () => startAuto());
+    // Pause on touch
+    track.addEventListener('touchstart', () => clearInterval(interval), { passive: true });
+    track.addEventListener('touchend', () => startAuto());
+});
+</script>
 </body>
 </html>

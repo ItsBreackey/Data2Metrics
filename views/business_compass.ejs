@@ -159,11 +159,13 @@
 </nav>
 
 <!-- Hero section: headline, intro, and demo button -->
-<section id="hero" class="max-w-6xl mx-auto px-6 py-24 text-center scroll-mt-24">
+<section id="hero" class="max-w-7xl mx-auto px-6 py-24 scroll-mt-24">
+    <div class="grid lg:grid-cols-[1fr_0.9fr] gap-12 items-center">
+    <div>
     <h1 class="text-5xl font-bold mb-6">
         Stop Guessing. Start <span class="text-lavender">Growing</span>.
     </h1>
-    <p class="text-gray-400 max-w-xl mx-auto mb-10">
+    <p class="text-gray-400 max-w-xl mb-10">
         Business Compass shows you exactly where your money is going, what’s working, and what to fix.
     </p>
 
@@ -171,10 +173,34 @@
     <button onclick="openModal()" class="btn px-8 py-4 rounded-lg font-bold">
         View Live Demo Dashboard
     </button>
+    </div>
+    <div class="glass-card rounded-2xl p-6">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="glass p-5 rounded-xl">
+                <p class="text-gray-400 text-sm">Profit Margin</p>
+                <p class="text-3xl font-bold text-lavender mt-2">31%</p>
+            </div>
+            <div class="glass p-5 rounded-xl">
+                <p class="text-gray-400 text-sm">Cost Leaks</p>
+                <p class="text-3xl font-bold text-lavender mt-2">4</p>
+            </div>
+            <div class="glass p-5 rounded-xl col-span-2">
+                <p class="text-gray-400 text-sm mb-4">Weekly Growth Snapshot</p>
+                <div class="flex items-end gap-3 h-32">
+                    <span class="bg-lavender rounded-t w-full h-1/2 opacity-80"></span>
+                    <span class="bg-pink rounded-t w-full h-3/4 opacity-80"></span>
+                    <span class="bg-lavender rounded-t w-full h-2/3 opacity-80"></span>
+                    <span class="bg-pink rounded-t w-full h-full opacity-80"></span>
+                    <span class="bg-lavender rounded-t w-full h-4/5 opacity-80"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
 </section>
 
 <!-- Live metrics: animated revenue, expenses, and profit -->
-<section class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-6 mb-24 scroll-mt-24">
+<section class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-6 mb-24 scroll-mt-24">
     <div class="glass p-6 rounded-xl text-center">
         <p class="text-gray-400">Revenue</p>
         <p id="rev" class="text-3xl font-bold text-lavender">KES 0</p>
@@ -191,8 +217,8 @@
 
 
 <!-- Why Business Compass: features and benefits -->
-<section class="max-w-6xl mx-auto px-6 mb-24 fade-in">
-    <div class="grid md:grid-cols-2 gap-12 items-center">
+<section class="max-w-7xl mx-auto px-6 mb-24 fade-in">
+    <div class="grid md:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
         <!-- Feature Cards -->
         <div class="space-y-6">
             <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
@@ -234,11 +260,14 @@
 
 
 <!-- How It Works: step-by-step process -->
-<section id="how-it-works-section" class="max-w-6xl mx-auto px-6 mb-24 scroll-mt-24">
+<section id="how-it-works-section" class="max-w-7xl mx-auto px-6 mb-24 scroll-mt-24">
                 
-    <h2 class="text-3xl font-bold mb-12 text-center">How It Works</h2>
+    <div class="md:flex md:items-end md:justify-between gap-8 mb-12">
+        <h2 class="text-3xl font-bold">How It Works</h2>
+        <p class="text-gray-400 max-w-md mt-3 md:mt-0">A practical setup flow designed to get from raw records to useful decisions quickly.</p>
+    </div>
 
-    <div class="grid md:grid-cols-3 gap-6 text-center">
+    <div class="grid md:grid-cols-3 gap-6">
 
         <div class="glass p-6 rounded-xl">
             <h3 class="font-bold mb-2">1. Submit Data</h3>
@@ -274,15 +303,18 @@
 </section>
 
 <!-- Lead Capture: generate a business report -->
-<section id="report-section" class="max-w-xl mx-auto px-6 mb-24 text-center">
+<section id="report-section" class="max-w-7xl mx-auto px-6 mb-24">
+    <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-start">
+    <div>
     <h2 class="text-2xl font-bold mb-4">
         Generate Your Business Decision Report
     </h2>
-    <p class="text-gray-400 mb-6">
+    <p class="text-gray-400 mb-6 max-w-md">
         Enter your numbers and we’ll analyze your business instantly 
         and discover the best plan and pricing for your business.
     </p>
 
+    </div>
     <div class="glass p-6 rounded-xl space-y-4">
 
         <input id="revenue" type="number"
@@ -303,6 +335,7 @@
         </button>
 
     </div>
+    </div>
 </section>
 
 <div id="activityFeed" class="fixed bottom-6 left-6 space-y-2 text-sm z-50"></div>
@@ -315,8 +348,11 @@
 <div id="report" class="max-w-3xl mx-auto px-6"></div>
 
 <!-- Pricing: choose your plan -->
-<section id="pricing" class="max-w-6xl mx-auto px-6 mb-24 hidden">
-    <h2 class="text-3xl font-bold text-center mb-10">Choose Your Plan</h2>
+<section id="pricing" class="max-w-7xl mx-auto px-6 mb-24 hidden">
+    <div class="md:flex md:items-end md:justify-between gap-8 mb-10">
+        <h2 class="text-3xl font-bold">Choose Your Plan</h2>
+        <p class="text-gray-400 max-w-md mt-3 md:mt-0">Pick the level of insight and support that matches how fast you want to move.</p>
+    </div>
 
     <div class="grid md:grid-cols-3 gap-6" id="planCards">
         <!-- Basic -->
@@ -367,8 +403,8 @@
 </section>
 
 <!-- Success Stories: real client results -->
-<section class="max-w-6xl mx-auto px-6 mb-24">
-    <h2 class="text-3xl font-bold text-center mb-10">Success Stories</h2>
+<section class="max-w-7xl mx-auto px-6 mb-24">
+    <h2 class="text-3xl font-bold mb-10">Success Stories</h2>
     <div class="grid md:grid-cols-3 gap-6">
         <div class="glass-card p-6 rounded-2xl">
             <h3 class="font-bold mb-2 text-lavender">Retail Shop Turnaround</h3>
@@ -389,9 +425,13 @@
 </section>
 
 <!-- FAQ: common questions answered -->
-<section id="faq" class="max-w-4xl mx-auto px-6 mb-24">
-    <h2 class="text-3xl font-bold text-center mb-10">Frequently Asked Questions</h2>
-    <div class="space-y-6">
+<section id="faq" class="max-w-7xl mx-auto px-6 mb-24">
+    <div class="grid lg:grid-cols-[0.8fr_1.2fr] gap-12 items-start">
+    <div>
+        <h2 class="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
+        <p class="text-gray-400">Straight answers for business owners who want clarity before getting started.</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
         <div class="glass-card p-6 rounded-2xl">
             <h3 class="font-bold mb-2 text-lavender">Do I need accounting or tech skills?</h3>
             <p class="text-gray-400 text-sm">No! Business Compass is designed for business owners, not accountants. If you can use WhatsApp, you can use Compass.</p>
@@ -409,12 +449,16 @@
             <p class="text-gray-400 text-sm">Absolutely. Your data is never shared and is protected with strict privacy controls.</p>
         </div>
     </div>
+    </div>
 </section>
 
 <!-- Contact: book a demo or send a message -->
-<section id="contact" class="max-w-2xl mx-auto px-6 mb-24 text-center scroll-mt-24">
+<section id="contact" class="max-w-7xl mx-auto px-6 mb-24 scroll-mt-24">
+    <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-start">
+    <div>
     <h2 class="text-2xl font-bold mb-4">Contact Us / Book a Demo</h2>
-    <p class="text-gray-400 mb-6">Ready to see your business numbers clearly? Book a free demo or ask us anything below.</p>
+    <p class="text-gray-400 mb-6 max-w-md">Ready to see your business numbers clearly? Book a free demo or ask us anything below.</p>
+    </div>
     <div class="glass-card p-8 rounded-2xl mt-4 text-left fade-in">
         <form action="mailto:info@data2metrics.com" method="POST" enctype="text/plain" class="grid gap-6">
             <div>
@@ -431,6 +475,7 @@
             </div>
                     <button class="btn w-full py-3 rounded font-bold">Send Message</button>
         </form>
+    </div>
     </div>
 </section>
 

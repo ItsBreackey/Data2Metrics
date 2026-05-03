@@ -280,34 +280,37 @@
 
     <!-- What We Do: core services and expertise -->
     <section id="services" class="max-w-7xl mx-auto px-6 py-20 scroll-mt-24">
-        <h2 class="text-3xl font-bold mb-10 text-center fade-in">What We Do</h2>
+        <div class="md:flex md:items-end md:justify-between gap-8 mb-10">
+            <h2 class="text-3xl font-bold fade-in">What We Do</h2>
+            <p class="text-gray-400 max-w-md mt-3 md:mt-0 fade-in">Focused analytics services that help teams move from raw numbers to decisions they can defend.</p>
+        </div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-            <div class="glass-card p-8 rounded-2xl flex flex-col items-center fade-in">
+            <div class="glass-card p-8 rounded-2xl flex flex-col items-start fade-in">
                 <div class="text-lavender mb-4 text-3xl"><i class="fas fa-chart-pie"></i></div>
                 <h3 class="text-lg font-bold mb-2">Dashboards</h3>
-                <p class="text-gray-400 text-sm text-center">Track KPIs and visualize your business in real time using PowerBI, Google Sheets, and more.</p>
+                <p class="text-gray-400 text-sm">Track KPIs and visualize your business in real time using PowerBI, Google Sheets, and more.</p>
             </div>
-            <div class="glass-card p-8 rounded-2xl flex flex-col items-center fade-in">
+            <div class="glass-card p-8 rounded-2xl flex flex-col items-start fade-in">
                 <div class="text-pink mb-4 text-3xl"><i class="fas fa-database"></i></div>
                 <h3 class="text-lg font-bold mb-2">Analysis & Forecasting</h3>
-                <p class="text-gray-400 text-sm text-center">We clean, analyze, model data, and predict trends to help you make smarter decisions.</p>
+                <p class="text-gray-400 text-sm">We clean, analyze, model data, and predict trends to help you make smarter decisions.</p>
             </div>
-            <div class="glass-card p-8 rounded-2xl flex flex-col items-center fade-in">
+            <div class="glass-card p-8 rounded-2xl flex flex-col items-start fade-in">
                 <div class="text-lavender mb-4 text-3xl"><i class="fas fa-cogs"></i></div>
                 <h3 class="text-lg font-bold mb-2">Automation</h3>
-                <p class="text-gray-400 text-sm text-center">Automate reporting and save time every month.</p>
+                <p class="text-gray-400 text-sm">Automate reporting and save time every month.</p>
             </div>
-            <div class="glass-card p-8 rounded-2xl flex flex-col items-center fade-in">
+            <div class="glass-card p-8 rounded-2xl flex flex-col items-start fade-in">
                 <div class="text-pink mb-4 text-3xl"><i class="fas fa-comments"></i></div>
                 <h3 class="text-lg font-bold mb-2">Consulting & Support</h3>
-                <p class="text-gray-400 text-sm text-center">Get expert help on your business strategy and operations.</p>
+                <p class="text-gray-400 text-sm">Get expert help on your business strategy and operations.</p>
             </div>
         </div>
     </section>
 
     <!-- Business Compass: feature highlight and demo -->
     <section id="business_compass" class="py-20 bg-[#0f0f15] scroll-mt-24">
-        <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-[1.05fr_1.35fr] items-center gap-16">
             <div class="flex-1 text-center md:text-left fade-in">
                 <h2 class="text-4xl font-bold mb-4">Business <span class="text-lavender">Compass</span></h2>
                 <p class="text-gray-400 mb-6 max-w-md">Track profit, control expenses, and get instant insights—no spreadsheets, no stress.</p>
@@ -320,14 +323,14 @@
                     </a>
                 </div>
             </div>
-            <div class="flex-1 flex flex-col gap-6 fade-in">
+             <div class="flex-1 flex flex-col gap-6 fade-in">
                 <div class="glass-card p-6 rounded-2xl flex flex-col items-center">
                     <i class="fas fa-chart-line text-4xl text-lavender mb-2"></i>
                     <p class="text-gray-300 text-center text-sm">See your business at a glance with a clean, intuitive dashboard.</p>
                 </div>
-                <div class="glass-card p-6 rounded-2xl flex flex-col items-center">
+                 <div class="glass-card p-6 rounded-2xl flex flex-col items-center">
                     <i class="fas fa-bolt text-4xl text-pink mb-2"></i>
-                    <p class="text-gray-300 text-center text-sm">Get actionable recommendations sent directly via WhatsApp.</p>
+                     <p class="text-gray-300 text-center text-sm">Get actionable recommendations sent directly via WhatsApp.</p>
                 </div>
             </div>
         </div>
@@ -352,28 +355,33 @@
 
     <!-- How We Work: our process, step by step -->
     <section id="methodology" class="bg-[#0f0f15] py-20 scroll-mt-24">
-        <div class="max-w-5xl mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12 fade-in">How We Work</h2>
-            <div class="grid md:grid-cols-4 gap-10">
-                <div class="text-center step-connector fade-in">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-[0.75fr_1.25fr] gap-12 items-start">
+                <div>
+                    <h2 class="text-3xl font-bold mb-4 fade-in">How We Work</h2>
+                    <p class="text-gray-400 max-w-sm fade-in">A focused process that moves from messy data to practical decisions your team can use.</p>
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-left step-connector fade-in">
                     <div class="w-14 h-14 bg-lavender rounded-full flex items-center justify-center mx-auto mb-3 text-black text-xl"><i class="fas fa-search"></i></div>
                     <h4 class="font-bold mb-1">Discover</h4>
                     <p class="text-gray-400 text-xs">We analyze your data and goals.</p>
                 </div>
-                <div class="text-center step-connector fade-in">
+                <div class="text-left step-connector fade-in">
                     <div class="w-14 h-14 bg-pink rounded-full flex items-center justify-center mx-auto mb-3 text-black text-xl"><i class="fas fa-pencil-ruler"></i></div>
                     <h4 class="font-bold mb-1">Design</h4>
                     <p class="text-gray-400 text-xs">We model, design, and prototype solutions.</p>
                 </div>
-                <div class="text-center step-connector fade-in">
+                <div class="text-left step-connector fade-in">
                     <div class="w-14 h-14 bg-lavender rounded-full flex items-center justify-center mx-auto mb-3 text-black text-xl"><i class="fas fa-cogs"></i></div>
                     <h4 class="font-bold mb-1">Develop</h4>
                     <p class="text-gray-400 text-xs">We build and automate robust systems.</p>
                 </div>
-                <div class="text-center step-connector fade-in">
+                <div class="text-left step-connector fade-in">
                     <div class="w-14 h-14 bg-pink rounded-full flex items-center justify-center mx-auto mb-3 text-black text-xl"><i class="fas fa-rocket"></i></div>
                     <h4 class="font-bold mb-1">Deploy</h4>
                     <p class="text-gray-400 text-xs">We launch and empower your team.</p>
+                </div>
                 </div>
             </div>
         </div>
@@ -382,10 +390,12 @@
 
     <!-- Selected Work: portfolio carousel -->
     <section id="portfolio" class="py-20 scroll-mt-24">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="mb-10 text-center">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-10 md:flex md:items-end md:justify-between md:text-left text-center gap-8">
+                <div>
                 <h2 class="text-3xl font-bold mb-2 fade-in">Selected Work</h2>
                 <p class="text-gray-400 fade-in">Real projects. Real impact.</p>
+                </div>
             </div>
             <div class="carousel-wrapper">
                 <button class="slide-btn hidden md:flex" onclick="slideScroll('portfolio-track', -1)"><i class="fas fa-chevron-left"></i></button>
@@ -423,8 +433,8 @@
 
     <!-- Testimonials: what clients say -->
     <section id="testimonials" class="bg-[#0f0f15] py-16 scroll-mt-24">
-        <div class="max-w-4xl mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-10 fade-in">What Clients Say</h2>
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-3xl font-bold mb-10 fade-in">What Clients Say</h2>
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="glass-card p-6 rounded-2xl fade-in">
                     <div class="quote-mark mb-2">&ldquo;</div>
@@ -448,10 +458,12 @@
 
     <!-- Latest Insights: blog carousel -->
     <section id="blog" class="py-20 scroll-mt-24">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="mb-10 text-center">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-10 md:flex md:items-end md:justify-between md:text-left text-center gap-8">
+                <div>
                 <h2 class="text-3xl font-bold mb-2 fade-in">Latest Insights</h2>
                 <p class="text-gray-400 fade-in">Thinking out loud about data, analytics, and building smarter businesses.</p>
+                </div>
             </div>
             <div class="carousel-wrapper">
                 <button class="slide-btn hidden md:flex" onclick="slideScroll('blog-track', -1)"><i class="fas fa-chevron-left"></i></button>
@@ -475,10 +487,13 @@
     </section>
 
     <!-- Contact: get in touch form -->
-    <section id="contact" class="max-w-3xl mx-auto px-6 py-20 text-center scroll-mt-24">
-        <h2 class="text-3xl font-bold mb-4 fade-in">Get In Touch</h2>
-        <p class="text-gray-400 mb-8 fade-in">See your profit, expenses, and growth opportunities in minutes.</p>
-        <form class="glass-card p-6 rounded-2xl text-left fade-in" onsubmit="event.preventDefault(); handleContact(this);">
+    <section id="contact" class="max-w-7xl mx-auto px-6 py-20 scroll-mt-24">
+        <div class="grid lg:grid-cols-[0.85fr_1.15fr] gap-12 items-start">
+        <div>
+            <h2 class="text-3xl font-bold mb-4 fade-in">Get In Touch</h2>
+            <p class="text-gray-400 mb-8 max-w-sm fade-in">See your profit, expenses, and growth opportunities in minutes.</p>
+        </div>
+        <form class="glass-card p-6 md:p-8 rounded-2xl text-left fade-in" onsubmit="event.preventDefault(); handleContact(this);">
             <div class="grid md:grid-cols-2 gap-6 mb-4">
                 <div>
                     <label class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Name</label>
@@ -496,6 +511,7 @@
             <button class="w-full btn-primary font-bold py-3 rounded-lg">Get in Touch</button>
             <p id="contact-msg" class="mt-3 text-xs text-lavender text-center hidden"></p>
         </form>
+        </div>
     </section>
 
     <!-- Footer: quick links and contact info -->

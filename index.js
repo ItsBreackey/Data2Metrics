@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 require('dotenv').config();
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const app = express();
@@ -15,6 +16,14 @@ function requireEnv(name) {
     throw new Error(`Missing required environment variable: ${name}`);
   }
   return String(value).trim();
+}
+
+function shortHash(value) {
+  return crypto
+    .createHash('sha256')
+    .update(String(value || ''))
+    .digest('hex')
+    .slice(0, 12);
 }
 
 const ADMIN_USERNAME = requireEnv('ADMIN_USERNAME');
@@ -190,6 +199,19 @@ adminRouter.get('/', requireAdminSession, (req, res) => {
 
 adminRouter.get('/health', (req, res) => {
   res.json({ ok: true, route: 'admin' });
+});
+
+adminRouter.get('/debug-auth', (req, res) => {
+  res.json({
+    ok: true,
+    username: ADMIN_USERNAME,
+    usernameLength: ADMIN_USERNAME.length,
+    passwordLength: ADMIN_PASSWORD.length,
+    passwordHash: shortHash(ADMIN_PASSWORD),
+    sessionSecretLength: ADMIN_SESSION_SECRET.length,
+    nodeEnv: process.env.NODE_ENV || null,
+    cwd: process.cwd()
+  });
 });
 
 app.use('/admin', adminRouter);

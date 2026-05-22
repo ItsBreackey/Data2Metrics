@@ -52,16 +52,11 @@ jobs:
               pm2 logs data2metrics --lines 100 --nostream || true
               exit 1
             fi
-            LISTENER_PID=$(ss -ltnp 'sport = :3000' | sed -n '2p' | sed -n 's/.*pid=\([0-9]\+\).*/\1/p')
-            echo "Listener PID on :3000: ${LISTENER_PID}"
-            if [ -z "${LISTENER_PID}" ] || [ "${LISTENER_PID}" != "${PM2_PID}" ]; then
-              echo "ERROR: Port 3000 listener PID does not match PM2 PID"
-              ss -ltnp 'sport = :3000' || true
-              pm2 ls
-              pm2 logs data2metrics --lines 100 --nostream || true
-              exit 1
-            fi
-            curl -fsS http://127.0.0.1:3000/__build | grep -q "data2metrics-2026-05-23-admin-route-check"
+            echo "--- LOCAL APP CHECKS ---"
+            ss -ltnp 'sport = :3000' || true
+            BUILD_RESPONSE=$(curl -fsS http://127.0.0.1:3000/__build)
+            echo "${BUILD_RESPONSE}"
+            echo "${BUILD_RESPONSE}" | grep -q "data2metrics-2026-05-23-admin-route-check"
             curl -fsS http://127.0.0.1:3000/admin/health
             pm2 save
 

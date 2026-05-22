@@ -235,7 +235,7 @@
                 <a href="#services" class="hover:text-pink transition">Services</a>
                 <a href="#portfolio" class="hover:text-pink transition">Work</a>
                 <a href="#blog" class="hover:text-pink transition">Blog</a>
-                <% if (NODE_ENV === 'development') { %>
+                <% if (typeof NODE_ENV !== 'undefined' && NODE_ENV === 'development') { %>
                 <a href="/admin/login" class="hover:text-pink transition">Admin</a>
                 <% } %>
                 <a href="#contact" class="btn-primary px-5 py-2 rounded-full font-semibold">Contact</a>
@@ -251,7 +251,7 @@
             <a href="#services" class="block hover:text-pink transition">Services</a>
             <a href="#portfolio" class="block hover:text-pink transition">Work</a>
             <a href="#blog" class="block hover:text-pink transition">Blog</a>
-            <% if (NODE_ENV === 'development') { %>
+            <% if (typeof NODE_ENV !== 'undefined' && NODE_ENV === 'development') { %>
             <a href="/admin/login" class="block hover:text-pink transition">Admin</a>
             <% } %>
             <a href="#contact" class="block text-lavender font-semibold">Contact</a>

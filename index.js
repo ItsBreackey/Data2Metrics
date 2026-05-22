@@ -92,6 +92,10 @@ app.use(session({
 
 app.set('view engine', 'ejs');
 app.locals.NODE_ENV = process.env.NODE_ENV || 'development';
+app.use((req, res, next) => {
+  res.locals.NODE_ENV = process.env.NODE_ENV || 'development';
+  next();
+});
 app.use(express.static('public'));
 app.use('/logo', express.static('public/logo'));
 

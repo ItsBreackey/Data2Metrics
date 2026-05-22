@@ -20,9 +20,48 @@ jobs:
           script: |
             cd /home/breackey/apps/Data2Metrics
             git pull origin main
+            echo "--- DEPLOY CONTEXT ---"
+            pwd
+            git rev-parse HEAD
+            ls -la
+            grep -n "adminRouter.get('/health'" index.js
+            grep -n "app.use('/admin', adminRouter)" index.js
+            if [ ! -f .env ]; then
+              echo "ERROR: /home/breackey/apps/Data2Metrics/.env is missing"
+              echo "Create .env with ADMIN_USERNAME, ADMIN_PASSWORD, ADMIN_SESSION_SECRET, NODE_ENV"
+              exit 1
+            fi
+            set -a
+            . ./.env
+            set +a
+            for required_var in ADMIN_USERNAME ADMIN_PASSWORD ADMIN_SESSION_SECRET; do
+              eval "value=\${$required_var}"
+              if [ -z "$value" ]; then
+                echo "ERROR: Missing required env var in .env: $required_var"
+                exit 1
+              fi
+            done
             npm install
             pm2 startOrReload ecosystem.config.js --only data2metrics --update-env
             sleep 2
+            PM2_PID=$(pm2 pid data2metrics)
+            echo "PM2 PID: ${PM2_PID}"
+            if [ -z "${PM2_PID}" ] || [ "${PM2_PID}" = "0" ]; then
+              echo "ERROR: pm2 pid data2metrics returned ${PM2_PID}"
+              pm2 ls
+              pm2 logs data2metrics --lines 100 --nostream || true
+              exit 1
+            fi
+            LISTENER_PID=$(ss -ltnp 'sport = :3000' | sed -n '2p' | sed -n 's/.*pid=\([0-9]\+\).*/\1/p')
+            echo "Listener PID on :3000: ${LISTENER_PID}"
+            if [ -z "${LISTENER_PID}" ] || [ "${LISTENER_PID}" != "${PM2_PID}" ]; then
+              echo "ERROR: Port 3000 listener PID does not match PM2 PID"
+              ss -ltnp 'sport = :3000' || true
+              pm2 ls
+              pm2 logs data2metrics --lines 100 --nostream || true
+              exit 1
+            fi
+            curl -fsS http://127.0.0.1:3000/__build | grep -q "data2metrics-2026-05-23-admin-route-check"
             curl -fsS http://127.0.0.1:3000/admin/health
             pm2 save
 

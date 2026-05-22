@@ -5,7 +5,9 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 const adminRouter = express.Router();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
+const BUILD_MARKER = 'data2metrics-2026-05-23-admin-route-check';
 
 function requireEnv(name) {
   const value = process.env[name];
@@ -814,6 +816,10 @@ app.get('/business_compass', (req, res) => {
     res.render('business_compass');
 });
 
-app.listen(PORT, () => {
-  console.log(`Data2Metrics live at http://localhost:${PORT}`);
+app.get('/__build', (req, res) => {
+  res.json({ ok: true, build: BUILD_MARKER, pid: process.pid, cwd: process.cwd() });
+});
+
+app.listen(PORT, HOST, () => {
+  console.log(`Data2Metrics boot ${BUILD_MARKER} at http://${HOST}:${PORT} (pid: ${process.pid}, cwd: ${process.cwd()})`);
 });

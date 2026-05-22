@@ -80,6 +80,7 @@ function clearLoginAttempts(ip) {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.set('trust proxy', 1);
 app.use(session({
   secret: ADMIN_SESSION_SECRET,
   resave: false,

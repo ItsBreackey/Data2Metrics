@@ -11,7 +11,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data2Metrics | Turning Data Into Decisions</title>
-    <meta name="description" content="Data2Metrics - Professional data analysis, dashboarding, and insights consultancy. Turning raw data into measurable business value.">
+        <meta name="description" content="Data2Metrics - Professional data analysis, dashboarding, and insights consultancy. Turning raw data into measurable business value.">
+    
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="/logo/d2m_logo.png">
     <meta name="keywords" content="data analysis, Power BI, dashboards, data analytics Kenya, data engineering, forecasting, ETL, Brenda Awino">
     <meta name="author" content="Brenda Awino">
     <meta property="og:title" content="Data2Metrics | Turning Data Into Decisions">
@@ -232,6 +235,9 @@
                 <a href="#services" class="hover:text-pink transition">Services</a>
                 <a href="#portfolio" class="hover:text-pink transition">Work</a>
                 <a href="#blog" class="hover:text-pink transition">Blog</a>
+                <% if (NODE_ENV === 'development') { %>
+                <a href="/admin/login" class="hover:text-pink transition">Admin</a>
+                <% } %>
                 <a href="#contact" class="btn-primary px-5 py-2 rounded-full font-semibold">Contact</a>
             </div>
             <button class="md:hidden flex flex-col gap-1.5" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
@@ -245,6 +251,9 @@
             <a href="#services" class="block hover:text-pink transition">Services</a>
             <a href="#portfolio" class="block hover:text-pink transition">Work</a>
             <a href="#blog" class="block hover:text-pink transition">Blog</a>
+            <% if (NODE_ENV === 'development') { %>
+            <a href="/admin/login" class="block hover:text-pink transition">Admin</a>
+            <% } %>
             <a href="#contact" class="block text-lavender font-semibold">Contact</a>
         </div>
     </nav>

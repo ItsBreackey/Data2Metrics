@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Data2Metrics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: #0b0b0f;
+      color: #ffffff;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(181, 126, 220, 0.25);
+      backdrop-filter: blur(8px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center px-6">
+  <main class="w-full max-w-md">
+    <section class="glass-card rounded-2xl p-8">
+      <h1 class="text-2xl font-bold mb-2">Admin Login</h1>
+      <p class="text-gray-400 text-sm mb-6">Single-user access for payment confirmation and lead management.</p>
+
+      <% if (error) { %>
+        <div class="mb-4 text-sm text-red-300 border border-red-400/40 bg-red-400/10 rounded p-3"><%= error %></div>
+      <% } %>
+
+      <form action="/admin/login" method="POST" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Username</label>
+          <input name="username" required class="w-full bg-transparent border border-gray-700 rounded p-3" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Password</label>
+          <input type="password" name="password" required class="w-full bg-transparent border border-gray-700 rounded p-3" />
+        </div>
+        <button class="w-full py-3 rounded bg-[#B57EDC] text-black font-bold">Sign In</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

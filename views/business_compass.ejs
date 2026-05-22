@@ -9,6 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Compass | Data2Metrics</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/logo/d2m_logo.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
@@ -142,6 +145,9 @@
             <a href="#how-it-works-section" class="hover:text-pink transition">How it Works</a>
             <a href="#report-section" class="hover:text-pink transition">Pricing</a>
             <a href="#faq" class="hover:text-pink transition">FAQ</a>
+            <% if (NODE_ENV === 'development') { %>
+            <a href="/admin/login" class="hover:text-pink transition">Admin</a>
+            <% } %>
             <a href="#contact" class="btn-primary px-5 py-2 rounded-full font-semibold">Contact</a>
         </div>
     </div>
@@ -182,7 +188,7 @@
             </div>
             <div class="glass p-5 rounded-xl">
                 <p class="text-gray-400 text-sm">Cost Leaks</p>
-                <p class="text-3xl font-bold text-lavender mt-2">4</p>
+                <p class="text-3xl font-bold text-pink mt-2">4</p>
             </div>
             <div class="glass p-5 rounded-xl col-span-2">
                 <p class="text-gray-400 text-sm mb-4">Weekly Growth Snapshot</p>
@@ -355,41 +361,58 @@
     </div>
 
     <div class="grid md:grid-cols-3 gap-6" id="planCards">
-        <!-- Basic -->
-        <div class="glass-card p-8 rounded-2xl fade-in" data-plan="Basic">
-            <h3 class="text-xl font-bold mb-2">Basic</h3>
-            <p class="text-2xl font-bold text-lavender mb-4">KES 5,000</p>
+        <!-- Essential -->
+        <div class="glass-card p-8 rounded-2xl fade-in" data-plan="Essential">
+            <h3 class="text-xl font-bold mb-2">Compass Essential</h3>
+            <p class="text-2xl font-bold text-lavender mb-1">KES 5,000/month</p>
+            <p class="text-xs text-gray-400 mb-4" data-setup-fee>Setup Fee: <span class="line-through">KES 3,000</span> <span class="text-lavender font-semibold">KES 1,500</span> (50% off)</p>
             <ul class="text-gray-400 text-sm space-y-2 mb-6">
-                <li>✔ Monthly dashboard</li>
-                <li>✔ Track revenue & expenses</li>
-                <li>✔ Basic insights</li>
+                <li>✔ Sales and expense tracking</li>
+                <li>✔ Inventory visibility</li>
+                <li>✔ Basic dashboard and core KPIs</li>
+                <li>✔ Monthly PDF summary</li>
+                <li>✔ Low stock alerts</li>
+                <li>✔ Managed onboarding</li>
+                <li>✔ Email support</li>
             </ul>
             <button class="choose-plan-btn btn w-full py-3 rounded font-bold mb-2">Choose This Plan</button>
         </div>
-        <!-- Growth (Featured) -->
-        <div class="glass-card p-8 rounded-2xl fade-in relative border border-pink" data-plan="Growth">
+        <!-- Compass Growth (Featured) -->
+        <div class="glass-card p-8 rounded-2xl fade-in relative border border-pink" data-plan="Compass Growth">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-pink text-black text-xs px-3 py-1 rounded-full font-bold">
                 MOST POPULAR
             </div>
-            <h3 class="text-xl font-bold mb-2">Growth</h3>
-            <p class="text-2xl font-bold text-pink mb-4">KES 10,000</p>
+            <h3 class="text-xl font-bold mb-2">Compass Growth</h3>
+            <p class="text-2xl font-bold text-pink mb-1">KES 10,000/month</p>
+            <p class="text-xs text-gray-400 mb-4" data-setup-fee>Setup Fee: <span class="line-through">KES 7,500</span> <span class="text-pink font-semibold">KES 3,750</span> (50% off)</p>
             <ul class="text-gray-400 text-sm space-y-2 mb-6">
-                <li>✔ Weekly insights</li>
-                <li>✔ Profit optimization</li>
-                <li>✔ 10+ KPIs</li>
-                <li>✔ WhatsApp support</li>
+                <li>✔ Everything in Compass Essential</li>
+                <li>✔ Full dashboard suite (Cash Flow and Debts)</li>
+                <li>✔ Debt tracking</li>
+                <li>✔ Returns and refunds tracking</li>
+                <li>✔ Cash flow visibility</li>
+                <li>✔ Targets and goal tracking</li>
+                <li>✔ Business health snapshot</li>
+                <li>✔ Alerts and reminders</li>
+                <li>✔ Monthly business insights</li>
+                <li>✔ Monthly review session</li>
             </ul>
             <button class="choose-plan-btn btn w-full py-3 rounded font-bold mb-2">Choose This Plan</button>
         </div>
-        <!-- Premium -->
-        <div class="glass-card p-8 rounded-2xl fade-in" data-plan="Premium">
-            <h3 class="text-xl font-bold mb-2">Premium</h3>
-            <p class="text-2xl font-bold text-lavender mb-4">KES 20,000</p>
+        <!-- Compass Pro -->
+        <div class="glass-card p-8 rounded-2xl fade-in" data-plan="Compass Pro">
+            <h3 class="text-xl font-bold mb-2">Compass Pro</h3>
+            <p class="text-2xl font-bold text-lavender mb-1">KES 20,000/month</p>
+            <p class="text-xs text-gray-400 mb-4" data-setup-fee>Setup Fee: <span class="line-through">KES 15,000</span> <span class="text-lavender font-semibold">KES 7,500</span> (50% off)</p>
             <ul class="text-gray-400 text-sm space-y-2 mb-6">
-                <li>✔ Real-time dashboards</li>
-                <li>✔ Forecasting</li>
-                <li>✔ Strategy support</li>
-                <li>✔ Priority access</li>
+                <li>✔ Everything in Compass Growth</li>
+                <li>✔ Advanced forecasting</li>
+                <li>✔ Custom KPI setup</li>
+                <li>✔ Strategic reviews</li>
+                <li>✔ Operational risk monitoring</li>
+                <li>✔ Priority support</li>
+                <li>✔ Deeper analytics support</li>
+                <li>✔ Multi-segment business configuration</li>
             </ul>
             <button class="choose-plan-btn btn w-full py-3 rounded font-bold mb-2">Choose This Plan</button>
         </div>
@@ -749,7 +772,56 @@
     }, 600);
 }
 
-    function generateReport() {
+let selectedPlan = null;
+let latestReportData = null;
+
+function formatKes(value) {
+    return `KES ${Number(value || 0).toLocaleString()}`;
+}
+
+async function refreshPricingStatus() {
+    try {
+        const response = await fetch('/api/pricing-status');
+        if (!response.ok) return;
+
+        const payload = await response.json();
+        const plans = payload.plans || {};
+
+        document.querySelectorAll('#planCards .glass-card').forEach(card => {
+            const planKey = card.getAttribute('data-plan');
+            const planQuote = plans[planKey];
+            const setupEl = card.querySelector('[data-setup-fee]');
+
+            if (!planQuote || !setupEl) return;
+
+            const slotsText = `${planQuote.slotsRemaining}/${planQuote.discountLimit} discounted slots left`;
+            const discountText = planQuote.discountApplied ? '(50% off)' : '(discount slots filled)';
+            setupEl.innerHTML = `Setup Fee: <span class="line-through">${formatKes(planQuote.setupFeeOriginal)}</span> <span class="font-semibold">${formatKes(planQuote.setupFeeNow)}</span> ${discountText}<br><span class="text-[11px] text-gray-500">${slotsText}</span>`;
+        });
+    } catch (error) {
+        // Keep UI functional even if pricing status API is unavailable.
+    }
+}
+
+async function saveReportLead(reportData) {
+    try {
+        await fetch('/api/leads/report', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                revenue: reportData.revenue,
+                expenses: reportData.expenses,
+                customers: reportData.customers,
+                recommendedPlan: reportData.plan,
+                selectedPlan: selectedPlan
+            })
+        });
+    } catch (error) {
+        // Non-blocking: report still renders even if lead save fails.
+    }
+}
+
+function generateReport() {
     const revenue = Number(document.getElementById("revenue").value);
     const expenses = Number(document.getElementById("expenses").value);
     const customers = Number(document.getElementById("customers").value);
@@ -757,13 +829,13 @@
     const profit = revenue - expenses;
     const margin = (profit / revenue) * 100;
 
-    let plan = "Basic";
+    let plan = "Essential";
     let insight = "";
     let risk = "";
 
-    if (revenue < 50000) plan = "Basic";
-    else if (revenue < 120000) plan = "Growth";
-    else plan = "Premium";
+    if (revenue < 50000) plan = "Essential";
+    else if (revenue < 120000) plan = "Compass Growth";
+    else plan = "Compass Pro";
 
     if (margin < 10) {
         insight = "Your profit margin is very low. Expenses are consuming growth.";
@@ -805,13 +877,14 @@
             setTimeout(() => {
                 thinking.classList.add("hidden");
                 const data = generateReport();
+                latestReportData = data;
                 showReport(data);
+                saveReportLead(data);
             }, 500);
         }
     }, 700);
 }
 
-let selectedPlan = null;
 function showReport(r) {
     selectedPlan = r.plan; // default to recommended
     document.getElementById("report").innerHTML = `
@@ -868,12 +941,8 @@ function setupPlanSelection(r) {
             // Update plan name in report
             const planName = document.getElementById('selectedPlanName');
             if (planName) planName.textContent = plan;
-            // Update WhatsApp links
-            updateWhatsAppLinks(r.revenue, plan);
         };
     });
-    // Set WhatsApp links for all plans
-    updateWhatsAppLinks(r.revenue, selectedPlan);
 }
 
 function highlightPlanCard(plan) {
@@ -887,29 +956,54 @@ function highlightPlanCard(plan) {
     });
 }
 
-function updateWhatsAppLinks(revenue, plan) {
-    const msg = encodeURIComponent(
-`Hi Data2Metrics 👋\n\nI just generated my Business Decision Report.\n\nRevenue: ${revenue}\nSelected Plan: ${plan}\n\nI want help setting this up.`
-    );
-    document.querySelectorAll('.get-started-link').forEach(link => {
-        link.href = `https://wa.me/254703462665?text=${msg}`;
-    });
-}
+async function sendWhatsApp(revenue, plan) {
+    const payload = {
+        plan,
+        revenue,
+        expenses: latestReportData?.expenses,
+        customers: latestReportData?.customers,
+        recommendedPlan: latestReportData?.plan || plan
+    };
 
-function sendWhatsApp(revenue, plan) {
-    const msg = encodeURIComponent(
+    try {
+        const response = await fetch('/api/plan-selections', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error('Could not reserve package quote.');
+        }
+
+        const quote = await response.json();
+        await refreshPricingStatus();
+
+        const discountLine = quote.discountApplied
+            ? 'Setup discount: 50% currently available (final confirmation is done after payment).'
+            : 'Setup discount: no discounted slots currently left for this package.';
+
+        const msg = encodeURIComponent(
 `Hi Data2Metrics 👋
 
 I just generated my Business Decision Report.
 
-Revenue: ${revenue}
-Recommended Plan: ${plan}
+Revenue: ${formatKes(revenue)}
+Selected Plan: ${quote.plan}
+Monthly Fee: ${formatKes(quote.monthlyFee)}
+Setup Fee: ${formatKes(quote.setupFeeOriginal)} -> ${formatKes(quote.setupFeeNow)}
+${discountLine}
 
-I want help setting this up.`
-    );
+Please help me get started.`
+        );
 
-    window.open(`https://wa.me/254703462665?text=${msg}`, "_blank");
+        window.open(`https://wa.me/254703462665?text=${msg}`, "_blank");
+    } catch (error) {
+        alert('We could not process your plan selection right now. Please try again.');
+    }
 }
+
+refreshPricingStatus();
 
 </script>
 

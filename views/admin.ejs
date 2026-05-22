@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data2Metrics Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: radial-gradient(circle at top right, rgba(244, 114, 182, 0.14), transparent 35%), #0b0b0f;
+      color: #ffffff;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(181, 126, 220, 0.25);
+      backdrop-filter: blur(8px);
+    }
+    .kpi-card {
+      border: 1px solid rgba(244, 114, 182, 0.2);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+    }
+    .trend-chip {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 10px;
+      font-size: 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #d1d5db;
+      background: rgba(17, 24, 39, 0.5);
+    }
+    .trend-chip--good {
+      color: #86efac;
+      border-color: rgba(34, 197, 94, 0.45);
+      background: rgba(22, 101, 52, 0.28);
+    }
+    .trend-chip--warn {
+      color: #fcd34d;
+      border-color: rgba(234, 179, 8, 0.45);
+      background: rgba(133, 77, 14, 0.28);
+    }
+    .trend-chip--risk {
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.45);
+      background: rgba(127, 29, 29, 0.28);
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <main class="max-w-7xl mx-auto px-6 py-10 space-y-8">
+    <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-pink-300 mb-2">Operations Console</p>
+        <h1 class="text-3xl font-bold">Admin Dashboard</h1>
+        <p class="text-gray-400 text-sm mt-1">Manage discounts, confirm payments, and move leads through your funnel.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="refreshBtn" class="px-4 py-2 rounded bg-pink-500 text-black font-semibold">Refresh Data</button>
+        <form action="/admin/logout" method="POST">
+          <button class="px-4 py-2 rounded border border-gray-600 text-gray-200">Logout</button>
+        </form>
+      </div>
+    </header>
+
+    <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div class="kpi-card rounded-xl p-5">
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Total Leads</p>
+        <p id="kpiTotalLeads" class="text-3xl font-bold mt-2">0</p>
+        <span id="kpiTotalLeadsTrend" class="trend-chip">Report share: 0%</span>
+      </div>
+      <div class="kpi-card rounded-xl p-5">
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Converted Leads</p>
+        <p id="kpiConvertedLeads" class="text-3xl font-bold mt-2 text-[#B57EDC]">0</p>
+        <span id="kpiConvertedLeadsTrend" class="trend-chip">Conversion rate: 0%</span>
+      </div>
+      <div class="kpi-card rounded-xl p-5">
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Payment Claims</p>
+        <p id="kpiClaims" class="text-3xl font-bold mt-2 text-pink-300">0</p>
+        <span id="kpiClaimsTrend" class="trend-chip">Claim-to-conversion: 0%</span>
+      </div>
+      <div class="kpi-card rounded-xl p-5">
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Open Discount Slots</p>
+        <p id="kpiOpenSlots" class="text-3xl font-bold mt-2 text-green-300">0</p>
+        <span id="kpiOpenSlotsTrend" class="trend-chip">Discount utilization: 0%</span>
+      </div>
+    </section>
+
+    <section class="glass-card rounded-2xl p-6">
+      <h2 class="text-xl font-bold mb-4">Discount Slots by Package</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm" id="planTable">
+          <thead>
+            <tr class="text-left text-gray-300 border-b border-gray-700">
+              <th class="py-2">Package</th>
+              <th class="py-2">Monthly Fee</th>
+              <th class="py-2">Setup Fee</th>
+              <th class="py-2">Discounted Setup</th>
+              <th class="py-2">Used</th>
+              <th class="py-2">Remaining</th>
+            </tr>
+          </thead>
+          <tbody id="planTableBody">
+            <% Object.values(overview.planStats).forEach((stat) => { %>
+              <tr class="border-b border-gray-800">
+                <td class="py-2"><%= stat.plan %></td>
+                <td class="py-2">KES <%= stat.monthlyFee.toLocaleString() %></td>
+                <td class="py-2">KES <%= stat.setupFeeOriginal.toLocaleString() %></td>
+                <td class="py-2">KES <%= stat.setupFeeDiscounted.toLocaleString() %></td>
+                <td class="py-2"><%= stat.usedDiscountSlots %> / <%= stat.discountLimit %></td>
+                <td class="py-2"><%= stat.remainingDiscountSlots %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="grid lg:grid-cols-[1.2fr_0.8fr] gap-6">
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="text-xl font-bold mb-4">Confirm Paid Package</h2>
+        <p class="text-gray-400 text-sm mb-4">Use a unique payment reference. Discount is consumed only at confirmation.</p>
+        <form id="confirmForm" class="space-y-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Plan</label>
+            <select id="plan" required class="w-full bg-transparent border border-gray-700 rounded p-2">
+              <option value="Essential">Essential</option>
+              <option value="Compass Growth">Compass Growth</option>
+              <option value="Compass Pro">Compass Pro</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Payment Reference</label>
+            <input id="paymentRef" required class="w-full bg-transparent border border-gray-700 rounded p-2" placeholder="MPESA-XYZ123" />
+          </div>
+          <button class="w-full py-3 rounded bg-[#B57EDC] text-black font-bold">Confirm Payment</button>
+        </form>
+        <pre id="confirmResult" class="mt-4 text-xs text-gray-300 whitespace-pre-wrap"></pre>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="text-xl font-bold mb-4">Lead Summary</h2>
+        <div id="leadSummary" class="space-y-2 text-sm">
+          <% Object.entries(overview.leadSummary).forEach(([key, value]) => { %>
+            <div class="flex justify-between border-b border-gray-800 pb-1">
+              <span class="text-gray-300"><%= key %></span>
+              <span><%= value %></span>
+            </div>
+          <% }) %>
+        </div>
+        <h3 class="text-base font-semibold mt-6 mb-3">Lead Status Summary</h3>
+        <div id="leadStatusSummary" class="space-y-2 text-sm">
+          <% Object.entries(overview.leadStatusSummary || {}).forEach(([key, value]) => { %>
+            <div class="flex justify-between border-b border-gray-800 pb-1">
+              <span class="text-gray-300"><%= key %></span>
+              <span><%= value %></span>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass-card rounded-2xl p-6">
+      <h2 class="text-xl font-bold mb-4">Recent Leads</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-gray-300 border-b border-gray-700">
+              <th class="py-2">Date</th>
+              <th class="py-2">Type</th>
+              <th class="py-2">Plan</th>
+              <th class="py-2">Status</th>
+              <th class="py-2">Notes</th>
+              <th class="py-2">Action</th>
+            </tr>
+          </thead>
+          <tbody id="leadsBody">
+            <% overview.recentLeads.forEach((lead) => { %>
+              <tr class="border-b border-gray-800" data-lead-id="<%= lead.id %>">
+                <td class="py-2"><%= lead.createdAt || '-' %></td>
+                <td class="py-2"><%= lead.type || '-' %></td>
+                <td class="py-2"><%= lead.plan || lead.selectedPlan || lead.recommendedPlan || '-' %></td>
+                <td class="py-2">
+                  <select class="lead-status bg-transparent border border-gray-700 rounded p-1">
+                    <% leadStatuses.forEach((status) => { %>
+                      <option value="<%= status %>" <%= lead.status === status ? 'selected' : '' %>><%= status %></option>
+                    <% }) %>
+                  </select>
+                </td>
+                <td class="py-2"><input class="lead-notes bg-transparent border border-gray-700 rounded p-1 w-full" value="<%= lead.notes || '' %>" /></td>
+                <td class="py-2"><button class="save-lead px-3 py-1 rounded bg-[#B57EDC] text-black font-semibold">Save</button></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <p id="leadSaveMsg" class="text-xs text-gray-400 mt-3"></p>
+    </section>
+
+    <section class="glass-card rounded-2xl p-6">
+      <h2 class="text-xl font-bold mb-4">Recent Payment Claims</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-gray-300 border-b border-gray-700">
+              <th class="py-2">Date</th>
+              <th class="py-2">Payment Ref</th>
+              <th class="py-2">Plan</th>
+              <th class="py-2">Setup Before</th>
+              <th class="py-2">Setup Final</th>
+              <th class="py-2">Discount Applied</th>
+            </tr>
+          </thead>
+          <tbody id="claimsBody">
+            <% overview.recentPaymentClaims.forEach((claim) => { %>
+              <tr class="border-b border-gray-800">
+                <td class="py-2"><%= claim.confirmedAt %></td>
+                <td class="py-2"><%= claim.paymentRef %></td>
+                <td class="py-2"><%= claim.plan %></td>
+                <td class="py-2">KES <%= claim.setupFeeOriginal.toLocaleString() %></td>
+                <td class="py-2">KES <%= claim.setupFeeNow.toLocaleString() %></td>
+                <td class="py-2"><%= claim.discountApplied ? 'Yes' : 'No' %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const LEAD_STATUSES = ['new', 'contacted', 'converted', 'closed'];
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function updateKpis(overview) {
+      const leadSummary = overview.leadSummary || {};
+      const leadStatusSummary = overview.leadStatusSummary || {};
+      const totalLeads = Object.values(leadSummary).reduce((sum, value) => sum + Number(value || 0), 0);
+      const convertedLeads = Number(leadStatusSummary.converted || 0);
+      const claimsCount = Number((overview.recentPaymentClaims || []).length);
+      const reportLeads = Number(leadSummary.report || 0);
+
+      const planStats = Object.values(overview.planStats || {});
+      const openSlots = planStats.reduce((sum, stat) => sum + Number(stat.remainingDiscountSlots || 0), 0);
+      const totalSlots = planStats.reduce((sum, stat) => sum + Number(stat.discountLimit || 0), 0);
+      const usedSlots = planStats.reduce((sum, stat) => sum + Number(stat.usedDiscountSlots || 0), 0);
+
+      const percent = (part, whole) => {
+        if (!whole) return 0;
+        return Math.round((Number(part || 0) / Number(whole || 1)) * 100);
+      };
+
+      const reportShare = percent(reportLeads, totalLeads);
+      const conversionRate = percent(convertedLeads, totalLeads);
+      const claimToConversion = percent(claimsCount, convertedLeads || 1);
+      const utilization = percent(usedSlots, totalSlots || 1);
+
+      const applyChipTone = (id, tone) => {
+        const chip = document.getElementById(id);
+        if (!chip) return;
+        chip.classList.remove('trend-chip--good', 'trend-chip--warn', 'trend-chip--risk');
+        chip.classList.add(tone);
+      };
+
+      document.getElementById('kpiTotalLeads').textContent = totalLeads;
+      document.getElementById('kpiConvertedLeads').textContent = convertedLeads;
+      document.getElementById('kpiClaims').textContent = claimsCount;
+      document.getElementById('kpiOpenSlots').textContent = openSlots;
+      document.getElementById('kpiTotalLeadsTrend').textContent = `Report share: ${reportShare}%`;
+      document.getElementById('kpiConvertedLeadsTrend').textContent = `Conversion rate: ${conversionRate}%`;
+      document.getElementById('kpiClaimsTrend').textContent = `Claim-to-conversion: ${claimToConversion}%`;
+      document.getElementById('kpiOpenSlotsTrend').textContent = `Discount utilization: ${utilization}%`;
+
+      const reportTone = reportShare >= 50 ? 'trend-chip--good' : reportShare >= 25 ? 'trend-chip--warn' : 'trend-chip--risk';
+      const conversionTone = conversionRate >= 35 ? 'trend-chip--good' : conversionRate >= 15 ? 'trend-chip--warn' : 'trend-chip--risk';
+      const claimsTone = (claimToConversion >= 80 && claimToConversion <= 120) ? 'trend-chip--good' : (claimToConversion >= 50 && claimToConversion <= 150) ? 'trend-chip--warn' : 'trend-chip--risk';
+      const utilizationTone = utilization <= 60 ? 'trend-chip--good' : utilization <= 85 ? 'trend-chip--warn' : 'trend-chip--risk';
+
+      applyChipTone('kpiTotalLeadsTrend', reportTone);
+      applyChipTone('kpiConvertedLeadsTrend', conversionTone);
+      applyChipTone('kpiClaimsTrend', claimsTone);
+      applyChipTone('kpiOpenSlotsTrend', utilizationTone);
+    }
+
+    function buildLeadRow(lead) {
+      const planText = lead.plan || lead.selectedPlan || lead.recommendedPlan || '-';
+      const statusOptions = LEAD_STATUSES
+        .map((status) => `<option value="${status}" ${lead.status === status ? 'selected' : ''}>${status}</option>`)
+        .join('');
+
+      return `
+        <tr class="border-b border-gray-800" data-lead-id="${escapeHtml(lead.id)}">
+          <td class="py-2">${escapeHtml(lead.createdAt || '-')}</td>
+          <td class="py-2">${escapeHtml(lead.type || '-')}</td>
+          <td class="py-2">${escapeHtml(planText)}</td>
+          <td class="py-2">
+            <select class="lead-status bg-transparent border border-gray-700 rounded p-1">${statusOptions}</select>
+          </td>
+          <td class="py-2"><input class="lead-notes bg-transparent border border-gray-700 rounded p-1 w-full" value="${escapeHtml(lead.notes || '')}" /></td>
+          <td class="py-2"><button class="save-lead px-3 py-1 rounded bg-[#B57EDC] text-black font-semibold">Save</button></td>
+        </tr>
+      `;
+    }
+
+    async function refreshOverview() {
+      const response = await fetch('/api/admin/overview');
+      if (!response.ok) return;
+
+      const overview = await response.json();
+      updateKpis(overview);
+
+      const planRows = Object.values(overview.planStats).map((stat) => `
+        <tr class="border-b border-gray-800">
+          <td class="py-2">${stat.plan}</td>
+          <td class="py-2">KES ${Number(stat.monthlyFee).toLocaleString()}</td>
+          <td class="py-2">KES ${Number(stat.setupFeeOriginal).toLocaleString()}</td>
+          <td class="py-2">KES ${Number(stat.setupFeeDiscounted).toLocaleString()}</td>
+          <td class="py-2">${stat.usedDiscountSlots} / ${stat.discountLimit}</td>
+          <td class="py-2">${stat.remainingDiscountSlots}</td>
+        </tr>
+      `).join('');
+      document.getElementById('planTableBody').innerHTML = planRows;
+
+      const leadSummary = Object.entries(overview.leadSummary)
+        .map(([key, value]) => `<div class="flex justify-between border-b border-gray-800 pb-1"><span class="text-gray-300">${key}</span><span>${value}</span></div>`)
+        .join('');
+      document.getElementById('leadSummary').innerHTML = leadSummary || '<p class="text-gray-400 text-sm">No leads yet.</p>';
+
+      const leadStatusSummary = Object.entries(overview.leadStatusSummary || {})
+        .map(([key, value]) => `<div class="flex justify-between border-b border-gray-800 pb-1"><span class="text-gray-300">${key}</span><span>${value}</span></div>`)
+        .join('');
+      document.getElementById('leadStatusSummary').innerHTML = leadStatusSummary || '<p class="text-gray-400 text-sm">No lead statuses yet.</p>';
+
+      const claimsRows = overview.recentPaymentClaims.map((claim) => `
+        <tr class="border-b border-gray-800">
+          <td class="py-2">${claim.confirmedAt}</td>
+          <td class="py-2">${claim.paymentRef}</td>
+          <td class="py-2">${claim.plan}</td>
+          <td class="py-2">KES ${Number(claim.setupFeeOriginal).toLocaleString()}</td>
+          <td class="py-2">KES ${Number(claim.setupFeeNow).toLocaleString()}</td>
+          <td class="py-2">${claim.discountApplied ? 'Yes' : 'No'}</td>
+        </tr>
+      `).join('');
+      document.getElementById('claimsBody').innerHTML = claimsRows;
+
+      const leadRows = (overview.recentLeads || []).map((lead) => buildLeadRow(lead)).join('');
+      document.getElementById('leadsBody').innerHTML = leadRows;
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', refreshOverview);
+
+    document.getElementById('confirmForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const payload = {
+        plan: document.getElementById('plan').value,
+        paymentRef: document.getElementById('paymentRef').value.trim()
+      };
+
+      const resultNode = document.getElementById('confirmResult');
+      resultNode.textContent = 'Submitting...';
+
+      try {
+        const response = await fetch('/api/plan-selections/confirm-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const body = await response.json();
+        if (!response.ok) {
+          resultNode.textContent = body.error || 'Request failed.';
+          return;
+        }
+
+        resultNode.textContent = JSON.stringify(body, null, 2);
+        document.getElementById('paymentRef').value = '';
+        await refreshOverview();
+      } catch (error) {
+        resultNode.textContent = 'Request failed. Please try again.';
+      }
+    });
+
+    document.getElementById('leadsBody').addEventListener('click', async (event) => {
+      if (!event.target.classList.contains('save-lead')) return;
+
+      const row = event.target.closest('tr[data-lead-id]');
+      if (!row) return;
+
+      const leadId = row.getAttribute('data-lead-id');
+      const status = row.querySelector('.lead-status').value;
+      const notes = row.querySelector('.lead-notes').value;
+      const msg = document.getElementById('leadSaveMsg');
+      msg.textContent = 'Saving...';
+
+      try {
+        const response = await fetch(`/api/admin/leads/${encodeURIComponent(leadId)}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status, notes })
+        });
+
+        const body = await response.json();
+        if (!response.ok) {
+          msg.textContent = body.error || 'Could not save lead updates.';
+          return;
+        }
+
+        msg.textContent = 'Lead updated.';
+        await refreshOverview();
+      } catch (error) {
+        msg.textContent = 'Could not save lead updates.';
+      }
+    });
+
+    refreshOverview();
+  </script>
+</body>
+</html>

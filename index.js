@@ -1,10 +1,533 @@
 const express = require('express');
+const session = require('express-session');
+require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
 const app = express();
+const adminRouter = express.Router();
 const PORT = 3000;
 
+function requireEnv(name) {
+  const value = process.env[name];
+  if (!value || !String(value).trim()) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return String(value).trim();
+}
+
+const ADMIN_USERNAME = requireEnv('ADMIN_USERNAME');
+const ADMIN_PASSWORD = requireEnv('ADMIN_PASSWORD');
+const ADMIN_SESSION_SECRET = requireEnv('ADMIN_SESSION_SECRET');
+
+const LOGIN_WINDOW_MS = 10 * 60 * 1000;
+const LOGIN_BLOCK_MS = 15 * 60 * 1000;
+const MAX_LOGIN_ATTEMPTS = 5;
+const loginAttemptStore = new Map();
+
+function getClientIp(req) {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (typeof forwarded === 'string' && forwarded.length > 0) {
+    return forwarded.split(',')[0].trim();
+  }
+  return req.ip || req.socket?.remoteAddress || 'unknown';
+}
+
+function getLoginState(ip) {
+  const now = Date.now();
+  const state = loginAttemptStore.get(ip);
+
+  if (!state) {
+    return { count: 0, windowStartedAt: now, blockedUntil: 0 };
+  }
+
+  if (state.blockedUntil && state.blockedUntil > now) {
+    return state;
+  }
+
+  if (now - state.windowStartedAt > LOGIN_WINDOW_MS) {
+    return { count: 0, windowStartedAt: now, blockedUntil: 0 };
+  }
+
+  return state;
+}
+
+function recordFailedLogin(ip) {
+  const now = Date.now();
+  const state = getLoginState(ip);
+  const nextCount = state.count + 1;
+
+  const nextState = {
+    count: nextCount,
+    windowStartedAt: state.windowStartedAt || now,
+    blockedUntil: 0
+  };
+
+  if (nextCount >= MAX_LOGIN_ATTEMPTS) {
+    nextState.blockedUntil = now + LOGIN_BLOCK_MS;
+    nextState.count = 0;
+    nextState.windowStartedAt = now;
+  }
+
+  loginAttemptStore.set(ip, nextState);
+  return nextState;
+}
+
+function clearLoginAttempts(ip) {
+  loginAttemptStore.delete(ip);
+}
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: ADMIN_SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 8
+  }
+}));
+
 app.set('view engine', 'ejs');
+app.locals.NODE_ENV = process.env.NODE_ENV || 'development';
 app.use(express.static('public'));
 app.use('/logo', express.static('public/logo'));
+
+const PLAN_PRICING = {
+  Essential: { monthlyFee: 5000, setupFee: 3000 },
+  'Compass Growth': { monthlyFee: 10000, setupFee: 7500 },
+  'Compass Pro': { monthlyFee: 20000, setupFee: 15000 }
+};
+
+const PLAN_ALIASES = {
+  Essential: 'Essential',
+  'Compass Essential': 'Essential',
+  'Compass Growth': 'Compass Growth',
+  Growth: 'Compass Growth',
+  'Compass Pro': 'Compass Pro',
+  Pro: 'Compass Pro'
+};
+
+const DISCOUNT_LIMIT_PER_PLAN = 5;
+const DATA_DIR = path.join(__dirname, 'data');
+const SALES_STATE_FILE = path.join(DATA_DIR, 'sales-state.json');
+const LEAD_STATUSES = ['new', 'contacted', 'converted', 'closed'];
+
+function isValidAdminCredentials(username, password) {
+  return username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
+}
+
+function requireAdminSession(req, res, next) {
+  if (req.session && req.session.isAdmin) {
+    return next();
+  }
+
+  if (req.accepts('html')) {
+    return res.redirect('/admin/login');
+  }
+
+  return res.status(401).json({ error: 'Authentication required.' });
+}
+
+adminRouter.get('/login', (req, res) => {
+  if (req.session && req.session.isAdmin) {
+    return res.redirect('/admin');
+  }
+  return res.render('admin_login', { error: null });
+});
+
+adminRouter.post('/login', (req, res) => {
+  const ip = getClientIp(req);
+  const loginState = getLoginState(ip);
+  const now = Date.now();
+
+  if (loginState.blockedUntil && loginState.blockedUntil > now) {
+    const minutesLeft = Math.ceil((loginState.blockedUntil - now) / 60000);
+    return res.status(429).render('admin_login', {
+      error: `Too many attempts. Try again in about ${minutesLeft} minute(s).`
+    });
+  }
+
+  const username = typeof req.body.username === 'string' ? req.body.username.trim() : '';
+  const password = typeof req.body.password === 'string' ? req.body.password : '';
+
+  if (!isValidAdminCredentials(username, password)) {
+    recordFailedLogin(ip);
+    return res.status(401).render('admin_login', { error: 'Invalid username or password.' });
+  }
+
+  clearLoginAttempts(ip);
+  return req.session.regenerate((error) => {
+    if (error) {
+      return res.status(500).render('admin_login', { error: 'Login failed. Please try again.' });
+    }
+
+    req.session.isAdmin = true;
+    return res.redirect('/admin');
+  });
+});
+
+adminRouter.post('/logout', requireAdminSession, (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/admin/login');
+  });
+});
+
+adminRouter.get('/', requireAdminSession, (req, res) => {
+  const state = loadSalesState();
+  const overview = buildAdminOverview(state);
+  res.render('admin', { overview, leadStatuses: LEAD_STATUSES });
+});
+
+adminRouter.get('/health', (req, res) => {
+  res.json({ ok: true, route: 'admin' });
+});
+
+app.use('/admin', adminRouter);
+
+function ensureDataFiles() {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+
+  if (!fs.existsSync(SALES_STATE_FILE)) {
+    const initialState = {
+      discountsUsed: {
+        Essential: 0,
+        'Compass Growth': 0,
+        'Compass Pro': 0
+      },
+      leads: [],
+      paymentClaims: []
+    };
+    fs.writeFileSync(SALES_STATE_FILE, JSON.stringify(initialState, null, 2));
+  }
+}
+
+function loadSalesState() {
+  ensureDataFiles();
+  const raw = fs.readFileSync(SALES_STATE_FILE, 'utf8');
+  const parsed = JSON.parse(raw);
+  parsed.discountsUsed = parsed.discountsUsed || {};
+  parsed.leads = parsed.leads || [];
+  parsed.paymentClaims = parsed.paymentClaims || [];
+
+  const legacyPlanMap = {};
+
+  let stateMutated = false;
+
+  Object.entries(legacyPlanMap).forEach(([legacy, modern]) => {
+    if (parsed.discountsUsed[legacy] !== undefined) {
+      parsed.discountsUsed[modern] = Number(parsed.discountsUsed[modern] || 0) + Number(parsed.discountsUsed[legacy] || 0);
+      delete parsed.discountsUsed[legacy];
+      stateMutated = true;
+    }
+  });
+
+  const normalizeStoredPlan = (value) => {
+    if (!value || typeof value !== 'string') return value;
+    return legacyPlanMap[value] || value;
+  };
+
+  parsed.leads.forEach((lead, index) => {
+    if (!lead.id) {
+      lead.id = `lead-${Date.now()}-${index}`;
+      stateMutated = true;
+    }
+    if (!lead.status || !LEAD_STATUSES.includes(lead.status)) {
+      lead.status = 'new';
+      stateMutated = true;
+    }
+    if (typeof lead.notes !== 'string') {
+      lead.notes = '';
+      stateMutated = true;
+    }
+
+    const nextPlan = normalizeStoredPlan(lead.plan);
+    const nextRecommendedPlan = normalizeStoredPlan(lead.recommendedPlan);
+    const nextSelectedPlan = normalizeStoredPlan(lead.selectedPlan);
+    if (nextPlan !== lead.plan) {
+      lead.plan = nextPlan;
+      stateMutated = true;
+    }
+    if (nextRecommendedPlan !== lead.recommendedPlan) {
+      lead.recommendedPlan = nextRecommendedPlan;
+      stateMutated = true;
+    }
+    if (nextSelectedPlan !== lead.selectedPlan) {
+      lead.selectedPlan = nextSelectedPlan;
+      stateMutated = true;
+    }
+  });
+
+  parsed.paymentClaims.forEach((claim) => {
+    const nextPlan = normalizeStoredPlan(claim.plan);
+    if (nextPlan !== claim.plan) {
+      claim.plan = nextPlan;
+      stateMutated = true;
+    }
+  });
+
+  if (stateMutated) {
+    fs.writeFileSync(SALES_STATE_FILE, JSON.stringify(parsed, null, 2));
+  }
+
+  return parsed;
+}
+
+function saveSalesState(state) {
+  ensureDataFiles();
+  fs.writeFileSync(SALES_STATE_FILE, JSON.stringify(state, null, 2));
+}
+
+function normalizePlan(planName) {
+  if (!planName || typeof planName !== 'string') return null;
+  return PLAN_ALIASES[planName.trim()] || null;
+}
+
+function getPlanQuote(planName, discountsUsed) {
+  const pricing = PLAN_PRICING[planName];
+  if (!pricing) return null;
+
+  const used = Number(discountsUsed[planName] || 0);
+  const slotsRemaining = Math.max(0, DISCOUNT_LIMIT_PER_PLAN - used);
+  const discountApplied = slotsRemaining > 0;
+  const setupFeeNow = discountApplied ? Math.floor(pricing.setupFee / 2) : pricing.setupFee;
+
+  return {
+    plan: planName,
+    monthlyFee: pricing.monthlyFee,
+    setupFeeOriginal: pricing.setupFee,
+    setupFeeNow,
+    discountApplied,
+    slotsRemaining,
+    discountLimit: DISCOUNT_LIMIT_PER_PLAN
+  };
+}
+
+function buildAdminOverview(state) {
+  const planStats = Object.keys(PLAN_PRICING).reduce((acc, planName) => {
+    const used = Number(state.discountsUsed[planName] || 0);
+    const remaining = Math.max(0, DISCOUNT_LIMIT_PER_PLAN - used);
+    const pricing = PLAN_PRICING[planName];
+
+    acc[planName] = {
+      plan: planName,
+      usedDiscountSlots: used,
+      remainingDiscountSlots: remaining,
+      discountLimit: DISCOUNT_LIMIT_PER_PLAN,
+      monthlyFee: pricing.monthlyFee,
+      setupFeeOriginal: pricing.setupFee,
+      setupFeeDiscounted: Math.floor(pricing.setupFee / 2)
+    };
+    return acc;
+  }, {});
+
+  const leadSummary = state.leads.reduce((acc, lead) => {
+    const key = lead && lead.type ? lead.type : 'unknown';
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
+
+  const leadStatusSummary = state.leads.reduce((acc, lead) => {
+    const key = lead && lead.status ? lead.status : 'unknown';
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
+
+  return {
+    planStats,
+    leadSummary,
+    leadStatusSummary,
+    recentLeads: state.leads.slice(-25).reverse(),
+    recentPaymentClaims: state.paymentClaims.slice(-25).reverse()
+  };
+}
+
+app.get('/api/pricing-status', (req, res) => {
+  const state = loadSalesState();
+  const plans = Object.keys(PLAN_PRICING).reduce((acc, planName) => {
+    acc[planName] = getPlanQuote(planName, state.discountsUsed);
+    return acc;
+  }, {});
+
+  res.json({ plans });
+});
+
+app.post('/api/leads/report', (req, res) => {
+  const revenue = Number(req.body.revenue);
+  const expenses = Number(req.body.expenses);
+  const customers = Number(req.body.customers);
+  const recommendedPlan = normalizePlan(req.body.recommendedPlan) || req.body.recommendedPlan || null;
+  const selectedPlan = normalizePlan(req.body.selectedPlan) || req.body.selectedPlan || null;
+
+  if (!Number.isFinite(revenue) || !Number.isFinite(expenses) || !Number.isFinite(customers)) {
+    return res.status(400).json({ error: 'Invalid report payload.' });
+  }
+
+  const state = loadSalesState();
+  state.leads.push({
+    id: `lead-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    type: 'report',
+    status: 'new',
+    notes: '',
+    revenue,
+    expenses,
+    customers,
+    recommendedPlan,
+    selectedPlan,
+    createdAt: new Date().toISOString()
+  });
+  saveSalesState(state);
+
+  res.json({ ok: true });
+});
+
+app.post('/api/plan-selections', (req, res) => {
+  const normalizedPlan = normalizePlan(req.body.plan);
+  if (!normalizedPlan) {
+    return res.status(400).json({ error: 'Invalid plan selected.' });
+  }
+
+  const revenue = Number(req.body.revenue);
+  const expenses = Number(req.body.expenses);
+  const customers = Number(req.body.customers);
+  const recommendedPlan = normalizePlan(req.body.recommendedPlan) || req.body.recommendedPlan || null;
+
+  const state = loadSalesState();
+  const quotePreview = getPlanQuote(normalizedPlan, state.discountsUsed);
+
+  state.leads.push({
+    id: `lead-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    type: 'plan_selection',
+    status: 'new',
+    notes: '',
+    plan: normalizedPlan,
+    revenue: Number.isFinite(revenue) ? revenue : null,
+    expenses: Number.isFinite(expenses) ? expenses : null,
+    customers: Number.isFinite(customers) ? customers : null,
+    recommendedPlan,
+    discountPreviewApplied: quotePreview ? quotePreview.discountApplied : false,
+    slotsRemainingPreview: quotePreview ? quotePreview.slotsRemaining : 0,
+    createdAt: new Date().toISOString()
+  });
+
+  saveSalesState(state);
+
+  res.json({
+    plan: normalizedPlan,
+    monthlyFee: PLAN_PRICING[normalizedPlan].monthlyFee,
+    setupFeeOriginal: PLAN_PRICING[normalizedPlan].setupFee,
+    setupFeeNow: quotePreview ? quotePreview.setupFeeNow : PLAN_PRICING[normalizedPlan].setupFee,
+    discountApplied: quotePreview ? quotePreview.discountApplied : false,
+    slotsRemaining: quotePreview ? quotePreview.slotsRemaining : 0,
+    quoteType: 'preview',
+    discountLimit: DISCOUNT_LIMIT_PER_PLAN
+  });
+});
+
+app.post('/api/plan-selections/confirm-payment', requireAdminSession, (req, res) => {
+  const normalizedPlan = normalizePlan(req.body.plan);
+  const paymentRef = typeof req.body.paymentRef === 'string' ? req.body.paymentRef.trim() : '';
+
+  if (!normalizedPlan) {
+    return res.status(400).json({ error: 'Invalid plan selected.' });
+  }
+
+  if (!paymentRef) {
+    return res.status(400).json({ error: 'paymentRef is required to confirm payment.' });
+  }
+
+  const state = loadSalesState();
+  const existingClaim = state.paymentClaims.find((claim) => claim.paymentRef === paymentRef);
+
+  if (existingClaim) {
+    return res.json({
+      ...existingClaim,
+      quoteType: 'final',
+      idempotentReplay: true
+    });
+  }
+
+  const pricing = PLAN_PRICING[normalizedPlan];
+  const usage = Number(state.discountsUsed[normalizedPlan] || 0);
+  const canApplyDiscount = usage < DISCOUNT_LIMIT_PER_PLAN;
+
+  if (canApplyDiscount) {
+    state.discountsUsed[normalizedPlan] = usage + 1;
+  }
+
+  const updatedUsage = Number(state.discountsUsed[normalizedPlan] || 0);
+  const slotsRemaining = Math.max(0, DISCOUNT_LIMIT_PER_PLAN - updatedUsage);
+  const setupFeeNow = canApplyDiscount ? Math.floor(pricing.setupFee / 2) : pricing.setupFee;
+
+  const claimRecord = {
+    paymentRef,
+    plan: normalizedPlan,
+    monthlyFee: pricing.monthlyFee,
+    setupFeeOriginal: pricing.setupFee,
+    setupFeeNow,
+    discountApplied: canApplyDiscount,
+    slotsRemaining,
+    discountLimit: DISCOUNT_LIMIT_PER_PLAN,
+    confirmedAt: new Date().toISOString()
+  };
+
+  state.paymentClaims.push(claimRecord);
+  state.leads.push({
+    id: `lead-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    type: 'payment_confirmation',
+    status: 'converted',
+    notes: '',
+    paymentRef,
+    plan: normalizedPlan,
+    discountApplied: canApplyDiscount,
+    createdAt: claimRecord.confirmedAt
+  });
+
+  saveSalesState(state);
+
+  res.json({
+    ...claimRecord,
+    quoteType: 'final',
+    idempotentReplay: false
+  });
+});
+
+app.get('/api/admin/overview', requireAdminSession, (req, res) => {
+  const state = loadSalesState();
+  res.json(buildAdminOverview(state));
+});
+
+app.patch('/api/admin/leads/:leadId', requireAdminSession, (req, res) => {
+  const leadId = req.params.leadId;
+  const state = loadSalesState();
+  const lead = state.leads.find((entry) => entry.id === leadId);
+
+  if (!lead) {
+    return res.status(404).json({ error: 'Lead not found.' });
+  }
+
+  const nextStatus = typeof req.body.status === 'string' ? req.body.status.trim().toLowerCase() : '';
+  const nextNotes = typeof req.body.notes === 'string' ? req.body.notes : null;
+
+  if (nextStatus) {
+    if (!LEAD_STATUSES.includes(nextStatus)) {
+      return res.status(400).json({ error: 'Invalid lead status.' });
+    }
+    lead.status = nextStatus;
+  }
+
+  if (nextNotes !== null) {
+    lead.notes = nextNotes;
+  }
+
+  lead.updatedAt = new Date().toISOString();
+  saveSalesState(state);
+
+  return res.json({ ok: true, lead });
+});
+
 
 // --- Project Data ---
 const projects = {
@@ -286,8 +809,6 @@ app.get('/blog/:slug', (req, res) => {
 app.get('/business_compass', (req, res) => {
     res.render('business_compass');
 });
-
-
 
 app.listen(PORT, () => {
   console.log(`Data2Metrics live at http://localhost:${PORT}`);

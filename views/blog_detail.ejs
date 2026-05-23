@@ -3,30 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= post.title %> | Data2Metrics Blog</title>
+    <title><%= pageTitle || (post.title + ' | Data2Metrics Blog') %></title>
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="/logo/d2m_logo.png">
-    <meta name="description" content="<%= post.excerpt %>">
+        <link rel="icon" type="image/png" href="/logo/d2m_logo_256.png">
+    <meta name="description" content="<%= pageDescription || post.excerpt %>">
+    <link rel="canonical" href="<%= canonicalUrl || ('https://data2metrics.com/blog/' + post.slug) %>">
     <meta name="keywords" content="data analytics, blog, <%= post.category %>, Data2Metrics, Brenda Awino">
     <meta name="author" content="<%= post.author %>">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:title" content="<%= post.title %> | Data2Metrics Blog">
-    <meta property="og:description" content="<%= post.excerpt %>">
-    <meta property="og:url" content="https://data2metrics.com/blog/<%= post.slug %>">
+    <meta property="og:title" content="<%= pageTitle || (post.title + ' | Data2Metrics Blog') %>">
+    <meta property="og:description" content="<%= pageDescription || post.excerpt %>">
+    <meta property="og:url" content="<%= canonicalUrl || ('https://data2metrics.com/blog/' + post.slug) %>">
     <meta property="og:site_name" content="Data2Metrics Blog">
     <!-- Optionally add og:image if available -->
     <meta property="og:image" content="https://data2metrics.com/logo/d2m_social.png">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="<%= post.title %> | Data2Metrics Blog">
-    <meta name="twitter:description" content="<%= post.excerpt %>">
+    <meta name="twitter:title" content="<%= pageTitle || (post.title + ' | Data2Metrics Blog') %>">
+    <meta name="twitter:description" content="<%= pageDescription || post.excerpt %>">
     <meta name="twitter:site" content="@data2metrics">
     <!-- Optionally add twitter:image if available -->
         <meta name="twitter:image" content="https://data2metrics.com/logo/d2m_social.png">
-    <script src="https://cdn.tailwindcss.com"></script>
+        <script type="application/ld+json">
+            <%- JSON.stringify({
+                '@context': 'https://schema.org',
+                '@type': 'Article',
+                headline: post.title,
+                description: pageDescription || post.excerpt,
+                author: {
+                    '@type': 'Person',
+                    name: post.author || 'Brenda Awino'
+                },
+                publisher: {
+                    '@type': 'Organization',
+                    name: 'Data2Metrics',
+                    logo: {
+                        '@type': 'ImageObject',
+                        url: `${siteUrl || 'https://data2metrics.com'}/logo/d2m_logo_256.png`
+                    }
+                },
+                mainEntityOfPage: canonicalUrl || `https://data2metrics.com/blog/${post.slug}`,
+                image: `${siteUrl || 'https://data2metrics.com'}/logo/d2m_social.png`,
+                datePublished: post.date
+            }) %>
+        </script>
+    <link rel="stylesheet" href="/css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -98,7 +122,7 @@
         <div class="flex justify-between items-center p-6 max-w-7xl mx-auto">
             <div class="flex items-center gap-3">
                 <a href="/">
-                    <img src="/logo/d2m_logo.png" alt="Data2Metrics Logo" class="h-14 w-auto" style="max-height:64px;" />
+                    <img src="/logo/d2m_logo_256.png" alt="Data2Metrics Logo" class="h-14 w-auto" style="max-height:64px;" width="256" height="256" loading="eager" decoding="async" fetchpriority="high" />
                 </a>
                 <a href="/" class="text-2xl font-bold tracking-tighter">Data<span class="text-lavender">2</span>Metrics</a>
             </div>
@@ -147,6 +171,7 @@
             <p class="text-gray-400 mb-6">Want expert help with your data challenges?</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="/#contact" class="btn-primary px-8 py-4 rounded-lg font-bold">Get in Touch</a>
+                <a href="/#consulting" class="btn-outline px-8 py-4 rounded-lg font-bold">Consultancy Services</a>
                 <a href="/#blog" class="btn-outline px-8 py-4 rounded-lg font-bold">Read More Articles</a>
             </div>
         </div>
@@ -184,10 +209,11 @@
             <div>
                 <p class="font-semibold mb-2 text-xs">Quick Links</p>
                 <div class="space-y-1 text-xs text-gray-500">
-                    <a href="#services" class="block hover:text-pink transition">Services</a>
-                    <a href="#portfolio" class="block hover:text-pink transition">Work</a>
-                    <a href="#blog" class="block hover:text-pink transition">Blog</a>
-                    <a href="#contact" class="block hover:text-pink transition">Contact</a>
+                    <a href="/#consulting" class="block hover:text-pink transition">Consultancy</a>
+                    <a href="/#services" class="block hover:text-pink transition">Services</a>
+                    <a href="/#portfolio" class="block hover:text-pink transition">Work</a>
+                    <a href="/#blog" class="block hover:text-pink transition">Blog</a>
+                    <a href="/#contact" class="block hover:text-pink transition">Contact</a>
                 </div>
             </div>
             <div>

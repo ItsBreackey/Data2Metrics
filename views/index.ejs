@@ -3,18 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data2Metrics | Turning Data Into Decisions</title>
-        <meta name="description" content="Data2Metrics - Professional data analysis, dashboarding, and insights consultancy. Turning raw data into measurable business value.">
+    <title><%= pageTitle || 'Data Analytics Consultant Kenya | Data2Metrics' %></title>
+    <meta name="description" content="<%= pageDescription || 'Data2Metrics is a data analytics consultant in Kenya helping businesses build dashboards, automate reporting, and turn data into decisions.' %>">
+    <link rel="canonical" href="<%= canonicalUrl || 'https://data2metrics.com' %>">
     
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="/logo/d2m_logo.png">
+        <link rel="icon" type="image/png" href="/logo/d2m_logo_256.png">
     <meta name="keywords" content="data analysis, Power BI, dashboards, data analytics Kenya, data engineering, forecasting, ETL, Brenda Awino">
     <meta name="author" content="Brenda Awino">
-    <meta property="og:title" content="Data2Metrics | Turning Data Into Decisions">
-    <meta property="og:description" content="We help businesses transform raw data into clear insights, accurate forecasts, and actionable strategies.">
+    <meta property="og:title" content="<%= pageTitle || 'Data Analytics Consultant Kenya | Data2Metrics' %>">
+    <meta property="og:description" content="<%= pageDescription || 'Data2Metrics is a data analytics consultant in Kenya helping businesses build dashboards, automate reporting, and turn data into decisions.' %>">
+    <meta property="og:url" content="<%= canonicalUrl || 'https://data2metrics.com' %>">
+    <meta property="og:site_name" content="Data2Metrics">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-    <script src="https://cdn.tailwindcss.com"></script>
+        <script type="application/ld+json">
+            <%- JSON.stringify({
+                '@context': 'https://schema.org',
+                '@graph': [
+                    {
+                        '@type': 'Organization',
+                        name: 'Data2Metrics',
+                        url: canonicalUrl || 'https://data2metrics.com',
+                        logo: `${siteUrl || 'https://data2metrics.com'}/logo/d2m_logo_256.png`,
+                        founder: {
+                            '@type': 'Person',
+                            name: 'Brenda Awino'
+                        },
+                        contactPoint: {
+                            '@type': 'ContactPoint',
+                            email: 'brenda@data2metrics.com',
+                            telephone: '+254703462665',
+                            contactType: 'customer support',
+                            areaServed: 'KE'
+                        }
+                    },
+                    {
+                        '@type': 'ProfessionalService',
+                        name: 'Data2Metrics',
+                        url: canonicalUrl || 'https://data2metrics.com',
+                        areaServed: 'Kenya',
+                        serviceType: 'Data analytics consulting',
+                        description: pageDescription || 'Data2Metrics is a data analytics consultant in Kenya helping businesses build dashboards, automate reporting, and turn data into decisions.'
+                    }
+                ]
+            }) %>
+        </script>
+    <link rel="stylesheet" href="/css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -206,6 +241,7 @@
     <nav class="dot-nav" aria-label="Section navigation">
         <a href="#hero" title="Home"></a>
         <a href="#services" title="Services"></a>
+        <a href="#consulting" title="Consulting"></a>
         <a href="#methodology" title="Process"></a>
         <a href="#business_compass" title="Business Compass"></a>
         <a href="#portfolio" title="Work"></a>
@@ -219,11 +255,12 @@
         <div class="flex justify-between items-center p-6 max-w-7xl mx-auto">
             <div class="flex items-center gap-3">
                 <a href="#hero">
-                    <img src="/logo/d2m_logo.png" alt="Data2Metrics Logo" class="h-14 w-auto" style="max-height:64px;" />
+                    <img src="/logo/d2m_logo_256.png" alt="Data2Metrics Logo" class="h-14 w-auto" style="max-height:64px;" width="256" height="256" loading="eager" decoding="async" fetchpriority="high" />
                 </a>
                 <a href="#hero" class="text-2xl font-bold tracking-tighter">Data<span class="text-lavender">2</span>Metrics</a>
             </div>
             <div class="space-x-8 hidden md:flex text-sm text-gray-400 items-center">
+                <a href="#consulting" class="hover:text-pink transition">Consultancy</a>
                 <a href="/business_compass" class="hover:text-pink transition">Business Compass</a>
                 <a href="#services" class="hover:text-pink transition">Services</a>
                 <a href="#portfolio" class="hover:text-pink transition">Work</a>
@@ -240,6 +277,7 @@
             </button>
         </div>
         <div id="mobile-menu" class="hidden md:hidden px-6 pb-6 space-y-4 text-sm text-gray-400">
+            <a href="#consulting" class="block hover:text-pink transition">Consultancy</a>
             <a href="/business_compass" class="block hover:text-pink transition">Business Compass</a>
             <a href="#services" class="block hover:text-pink transition">Services</a>
             <a href="#portfolio" class="block hover:text-pink transition">Work</a>
@@ -306,6 +344,57 @@
                 <div class="text-pink mb-4 text-3xl"><i class="fas fa-comments"></i></div>
                 <h3 class="text-lg font-bold mb-2">Consulting & Support</h3>
                 <p class="text-gray-400 text-sm">Get expert help on your business strategy and operations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Consultancy: service section after What We Do -->
+    <section id="consulting" class="py-20 bg-[#0f0f15] scroll-mt-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="md:flex md:items-end md:justify-between gap-8 mb-10">
+                <h2 class="text-3xl font-bold fade-in">Consultancy Services</h2>
+                <p class="text-gray-400 max-w-md mt-3 md:mt-0 fade-in">A structured consulting process designed to turn your data into focused leadership decisions and practical execution.</p>
+            </div>
+
+            <div class="grid md:grid-cols-[1.1fr_0.9fr] gap-12 items-center fade-in">
+                <div class="space-y-6">
+                    <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
+                        <div class="text-lavender text-3xl"><i class="fas fa-magnifying-glass-chart"></i></div>
+                        <div>
+                            <h3 class="font-bold mb-1">Decision Clarity</h3>
+                            <p class="text-gray-400 text-sm">Identify which numbers matter most, who owns them, and how often to review them.</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
+                        <div class="text-pink text-3xl"><i class="fas fa-diagram-project"></i></div>
+                        <div>
+                            <h3 class="font-bold mb-1">KPI & Process Alignment</h3>
+                            <p class="text-gray-400 text-sm">Align sales, finance, and operations with shared KPIs and practical execution rhythms.</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
+                        <div class="text-lavender text-3xl"><i class="fas fa-people-group"></i></div>
+                        <div>
+                            <h3 class="font-bold mb-1">Hands-On Advisory</h3>
+                            <p class="text-gray-400 text-sm">Get direct support for leadership decisions, team accountability, and implementation follow-through.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl h-full flex flex-col justify-center">
+                    <h3 class="text-2xl font-bold mb-6 text-center">Why Choose Data2Metrics Consultancy?</h3>
+                    <ul class="space-y-4 text-base">
+                        <li class="flex items-center gap-3"><span class="text-pink text-xl"><i class="fas fa-check-circle"></i></span> Move from scattered reports to focused leadership decisions</li>
+                        <li class="flex items-center gap-3"><span class="text-pink text-xl"><i class="fas fa-check-circle"></i></span> Build KPI accountability across your team</li>
+                        <li class="flex items-center gap-3"><span class="text-pink text-xl"><i class="fas fa-check-circle"></i></span> Improve speed and quality of weekly business reviews</li>
+                        <li class="flex items-center gap-3"><span class="text-pink text-xl"><i class="fas fa-check-circle"></i></span> Get practical guidance tailored to your business context</li>
+                        <li class="flex items-center gap-3"><span class="text-pink text-xl"><i class="fas fa-check-circle"></i></span> Stay supported through implementation, not just strategy slides</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center mt-10 fade-in">
+                <a href="#contact" class="btn-outline px-10 py-4 rounded-lg font-bold text-lg">Book Consultancy Call</a>
             </div>
         </div>
     </section>
@@ -526,6 +615,7 @@
             <div>
                 <p class="font-semibold mb-2 text-xs">Quick Links</p>
                 <div class="space-y-1 text-xs text-gray-500">
+                    <a href="#consulting" class="block hover:text-pink transition">Consultancy</a>
                     <a href="#services" class="block hover:text-pink transition">Services</a>
                     <a href="#portfolio" class="block hover:text-pink transition">Work</a>
                     <a href="#blog" class="block hover:text-pink transition">Blog</a>
@@ -626,6 +716,10 @@
         // Show a thank you message after contact form is submitted
         function handleContact(form) {
             const msg = document.getElementById('contact-msg');
+            if (!msg) {
+                form.reset();
+                return;
+            }
             msg.textContent = "Thanks! I'll get back to you soon.";
             msg.classList.remove('hidden');
             form.reset();
@@ -634,6 +728,10 @@
         // Show a thank you message after subscribing
         function handleSubscribe(form) {
             const msg = document.getElementById('subscribe-msg');
+            if (!msg) {
+                form.reset();
+                return;
+            }
             msg.textContent = "You're subscribed! Stay tuned.";
             msg.classList.remove('hidden');
             form.reset();
@@ -655,9 +753,19 @@
 
         // Fake live metrics animation
         setInterval(() => {
-            document.getElementById('metric-users').textContent = 120 + Math.floor(Math.random() * 10);
-            document.getElementById('metric-insights').textContent = 300 + Math.floor(Math.random() * 50);
-            document.getElementById('metric-growth').textContent = 15 + Math.floor(Math.random() * 10);
+            const metricUsers = document.getElementById('metric-users');
+            const metricInsights = document.getElementById('metric-insights');
+            const metricGrowth = document.getElementById('metric-growth');
+
+            if (metricUsers) {
+                metricUsers.textContent = 120 + Math.floor(Math.random() * 10);
+            }
+            if (metricInsights) {
+                metricInsights.textContent = 300 + Math.floor(Math.random() * 50);
+            }
+            if (metricGrowth) {
+                metricGrowth.textContent = 15 + Math.floor(Math.random() * 10);
+            }
         }, 3000);
 
         function unlockPricing(e) {

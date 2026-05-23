@@ -8,6 +8,7 @@ const adminRouter = express.Router();
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 const BUILD_MARKER = 'data2metrics-2026-05-23-admin-route-check';
+const SITE_URL = (process.env.SITE_URL || 'https://data2metrics.com').replace(/\/$/, '');
 
 function requireEnv(name) {
   const value = process.env[name];
@@ -99,8 +100,18 @@ app.use((req, res, next) => {
   res.locals.NODE_ENV = process.env.NODE_ENV || 'development';
   next();
 });
-app.use(express.static('public'));
-app.use('/logo', express.static('public/logo'));
+app.use(express.static('public', {
+  maxAge: '30d',
+  immutable: true,
+  etag: true,
+  lastModified: true
+}));
+app.use('/logo', express.static('public/logo', {
+  maxAge: '30d',
+  immutable: true,
+  etag: true,
+  lastModified: true
+}));
 
 const PLAN_PRICING = {
   Essential: { monthlyFee: 5000, setupFee: 3000 },
@@ -121,6 +132,47 @@ const DISCOUNT_LIMIT_PER_PLAN = 5;
 const DATA_DIR = path.join(__dirname, 'data');
 const SALES_STATE_FILE = path.join(DATA_DIR, 'sales-state.json');
 const LEAD_STATUSES = ['new', 'contacted', 'converted', 'closed'];
+
+function getFileLastModifiedIso(filePath) {
+  try {
+    return fs.statSync(filePath).mtime.toISOString();
+  } catch {
+    return new Date().toISOString();
+  }
+}
+
+function parseBlogDateToIso(dateString, fallbackIso) {
+  if (!dateString || typeof dateString !== 'string') {
+    return fallbackIso;
+  }
+
+  const parsed = new Date(dateString);
+  if (Number.isNaN(parsed.getTime())) {
+    return fallbackIso;
+  }
+
+  return parsed.toISOString();
+}
+
+function getAssetHealth(relativePath) {
+  const absolutePath = path.join(__dirname, relativePath);
+  if (!fs.existsSync(absolutePath)) {
+    return {
+      path: relativePath,
+      exists: false,
+      sizeBytes: 0,
+      modifiedAt: null
+    };
+  }
+
+  const stats = fs.statSync(absolutePath);
+  return {
+    path: relativePath,
+    exists: true,
+    sizeBytes: stats.size,
+    modifiedAt: stats.mtime.toISOString()
+  };
+}
 
 function isValidAdminCredentials(username, password) {
   return username === ADMIN_USERNAME && password === ADMIN_PASSWORD;
@@ -772,11 +824,19 @@ const blogPosts = {
 
 // --- Routes ---
 app.get('/', (req, res) => {
-  res.render('index', { projects, blogPosts });
+  res.render('index', {
+    projects,
+    blogPosts,
+    canonicalUrl: SITE_URL,
+    pageTitle: 'Data Analytics Consultant Kenya | Data2Metrics',
+    pageDescription: 'Data2Metrics is a data analytics consultant in Kenya helping businesses build dashboards, automate reporting, and turn data into decisions.',
+    siteUrl: SITE_URL
+  });
 });
 
 app.get('/project/:slug', (req, res) => {
-  const project = projects[req.params.slug];
+  const slug = req.params.slug;
+  const project = projects[slug];
   if (!project) return res.status(404).send('Project not found');
 
   // Find related projects (sharing at least one tag, not self)
@@ -791,11 +851,19 @@ app.get('/project/:slug', (req, res) => {
       date: '', // Add date if available
     }));
 
-  res.render('project_detail', { project, relatedProjects });
+  res.render('project_detail', {
+    project: { ...project, slug },
+    relatedProjects,
+    canonicalUrl: `${SITE_URL}/project/${slug}`,
+    pageTitle: `${project.title} | Data2Metrics`,
+    pageDescription: project.description || project.cardDescription || project.overview,
+    siteUrl: SITE_URL
+  });
 });
 
 app.get('/blog/:slug', (req, res) => {
-  const post = blogPosts[req.params.slug];
+  const slug = req.params.slug;
+  const post = blogPosts[slug];
   if (!post) return res.status(404).send('Post not found');
 
   // Find related posts (same category, not self)
@@ -810,15 +878,88 @@ app.get('/blog/:slug', (req, res) => {
       author: p.author
     }));
 
-  res.render('blog_detail', { post, relatedPosts });
+  res.render('blog_detail', {
+    post: { ...post, slug },
+    relatedPosts,
+    canonicalUrl: `${SITE_URL}/blog/${slug}`,
+    pageTitle: `${post.title} | Data2Metrics Blog`,
+    pageDescription: post.excerpt,
+    siteUrl: SITE_URL
+  });
 });
 
 app.get('/business_compass', (req, res) => {
-    res.render('business_compass');
+    res.render('business_compass', {
+      canonicalUrl: `${SITE_URL}/business_compass`,
+      pageTitle: 'Business Compass | Data2Metrics',
+      pageDescription: 'Business Compass helps SMEs track profit, control expenses, and get clear weekly insights.',
+      siteUrl: SITE_URL
+    });
+});
+
+app.get('/data-analytics-consultant-kenya', (req, res) => {
+  res.redirect(301, '/');
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  res.send(`User-agent: *\nAllow: /\nSitemap: ${SITE_URL}/sitemap.xml\n`);
+});
+
+app.get('/sitemap.xml', (req, res) => {
+  const homeLastMod = getFileLastModifiedIso(path.join(__dirname, 'views', 'index.ejs'));
+  const compassLastMod = getFileLastModifiedIso(path.join(__dirname, 'views', 'business_compass.ejs'));
+  const projectLastMod = getFileLastModifiedIso(path.join(__dirname, 'views', 'project_detail.ejs'));
+  const blogTemplateLastMod = getFileLastModifiedIso(path.join(__dirname, 'views', 'blog_detail.ejs'));
+
+  const entries = [
+    { url: '/', lastmod: homeLastMod, priority: '1.0' },
+    { url: '/business_compass', lastmod: compassLastMod, priority: '0.8' },
+    ...Object.keys(projects).map((slug) => ({
+      url: `/project/${slug}`,
+      lastmod: projectLastMod,
+      priority: '0.7'
+    })),
+    ...Object.entries(blogPosts).map(([slug, post]) => ({
+      url: `/blog/${slug}`,
+      lastmod: parseBlogDateToIso(post.date, blogTemplateLastMod),
+      priority: '0.7'
+    }))
+  ];
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    entries.map((entry) => `  <url><loc>${SITE_URL}${entry.url}</loc><lastmod>${entry.lastmod}</lastmod><changefreq>weekly</changefreq><priority>${entry.priority}</priority></url>`).join('\n') +
+    `\n</urlset>\n`;
+
+  res.type('application/xml');
+  res.send(xml);
 });
 
 app.get('/__build', (req, res) => {
   res.json({ ok: true, build: BUILD_MARKER, pid: process.pid, cwd: process.cwd() });
+});
+
+app.get('/__readiness', (req, res) => {
+  const tailwindCss = getAssetHealth('public/css/tailwind.css');
+  const optimizedLogo = getAssetHealth('public/logo/d2m_logo_256.png');
+
+  const checks = {
+    hasTailwindCss: tailwindCss.exists && tailwindCss.sizeBytes > 0,
+    hasOptimizedLogo: optimizedLogo.exists && optimizedLogo.sizeBytes > 0,
+    usesExpectedSiteUrl: SITE_URL.length > 0
+  };
+
+  res.json({
+    ok: Object.values(checks).every(Boolean),
+    build: BUILD_MARKER,
+    siteUrl: SITE_URL,
+    checks,
+    assets: {
+      tailwindCss,
+      optimizedLogo
+    }
+  });
 });
 
 app.listen(PORT, HOST, () => {

@@ -1,19 +1,40 @@
-    </style>
-<!-- ...existing code... (all main content goes here) ... -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Compass | Data2Metrics</title>
+    <title><%= pageTitle || 'Business Compass | Data2Metrics' %></title>
+    <meta name="description" content="<%= pageDescription || 'Business Compass helps SMEs track profit, control expenses, and get clear weekly insights.' %>">
+    <link rel="canonical" href="<%= canonicalUrl || 'https://data2metrics.com/business_compass' %>">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/logo/d2m_logo.png">
+    <link rel="icon" type="image/png" href="/logo/d2m_logo_256.png">
+    <meta property="og:title" content="<%= pageTitle || 'Business Compass | Data2Metrics' %>">
+    <meta property="og:description" content="<%= pageDescription || 'Business Compass helps SMEs track profit, control expenses, and get clear weekly insights.' %>">
+    <meta property="og:url" content="<%= canonicalUrl || 'https://data2metrics.com/business_compass' %>">
+    <meta property="og:site_name" content="Data2Metrics">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+        <script type="application/ld+json">
+            <%- JSON.stringify({
+                '@context': 'https://schema.org',
+                '@type': 'Service',
+                name: 'Business Compass',
+                serviceType: 'SME analytics and growth insights',
+                provider: {
+                    '@type': 'Organization',
+                    name: 'Data2Metrics',
+                    url: siteUrl || 'https://data2metrics.com'
+                },
+                areaServed: 'KE',
+                url: canonicalUrl || 'https://data2metrics.com/business_compass',
+                description: pageDescription || 'Business Compass helps SMEs track profit, control expenses, and get clear weekly insights.'
+            }) %>
+        </script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         html { scroll-behavior: smooth; }
@@ -136,7 +157,7 @@
     <div class="flex justify-between items-center p-6 max-w-6xl mx-auto">
         <div class="flex items-center gap-3">
             <a href="/" class="flex items-center gap-2">
-                <img src="/logo/d2m_logo.png" alt="Data2Metrics Logo" class="h-10 w-auto" style="max-height:40px;" />
+                <img src="/logo/d2m_logo_256.png" alt="Data2Metrics Logo" class="h-10 w-auto" style="max-height:40px;" width="256" height="256" loading="eager" decoding="async" fetchpriority="high" />
                 <span class="text-2xl font-bold tracking-tighter">Data<span class="text-lavender">2</span>Metrics</span>
             </a>
         </div>
@@ -223,8 +244,13 @@
 
 
 <!-- Why Business Compass: features and benefits -->
-<section class="max-w-7xl mx-auto px-6 mb-24 fade-in">
-    <div class="grid md:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
+<section class="max-w-7xl mx-auto px-6 mb-24">
+    <div class="md:flex md:items-end md:justify-between gap-8 mb-10">
+        <h2 class="text-3xl font-bold">Why Business Compass</h2>
+        <p class="text-gray-400 max-w-md mt-3 md:mt-0">The same clarity-and-action framework: simple visibility, controlled spending, and weekly guidance your team can execute.</p>
+    </div>
+
+    <div class="grid md:grid-cols-[1.1fr_0.9fr] gap-12 items-center fade-in">
         <!-- Feature Cards -->
         <div class="space-y-6">
             <div class="glass-card p-6 rounded-2xl flex items-center gap-4">
@@ -260,6 +286,10 @@
                 <li class="flex items-center gap-3"><span class="text-pink text-xl"><i class="fas fa-check-circle"></i></span> Affordable, transparent pricing</li>
             </ul>
         </div>
+    </div>
+
+    <div class="text-center mt-10 fade-in">
+        <a href="#report-section" class="btn-outline px-10 py-4 rounded-lg font-bold text-lg">Start with My Business Report</a>
     </div>
 </section>
 
@@ -719,6 +749,9 @@
 
     function runActivityFeed() {
         const feed = document.getElementById("activityFeed");
+        if (!feed) {
+            return;
+        }
 
         setInterval(() => {
             const item = document.createElement("div");
@@ -739,6 +772,10 @@
     const overlay = document.getElementById("thinkingOverlay");
     const text = document.getElementById("thinkingText");
     const bar = document.getElementById("progressBar");
+
+        if (!overlay || !text || !bar) {
+            return;
+        }
 
     overlay.classList.remove("hidden");
 
@@ -786,8 +823,13 @@ async function refreshPricingStatus() {
 
         const payload = await response.json();
         const plans = payload.plans || {};
+        const planCards = document.querySelectorAll('#planCards .glass-card');
 
-        document.querySelectorAll('#planCards .glass-card').forEach(card => {
+        if (!planCards.length) {
+            return;
+        }
+
+        planCards.forEach(card => {
             const planKey = card.getAttribute('data-plan');
             const planQuote = plans[planKey];
             const setupEl = card.querySelector('[data-setup-fee]');
@@ -854,6 +896,10 @@ function generateReport() {
     function runAnalysis() {
     const thinking = document.getElementById("thinking");
     const report = document.getElementById("report");
+
+        if (!thinking || !report) {
+            return;
+        }
 
     report.innerHTML = "";
     thinking.classList.remove("hidden");

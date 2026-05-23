@@ -42,6 +42,7 @@ jobs:
               fi
             done
             npm install
+            npm run build:css
             pm2 startOrReload ecosystem.config.js --only data2metrics --update-env
             sleep 2
             PM2_PID=$(pm2 pid data2metrics)
@@ -54,10 +55,45 @@ jobs:
             fi
             echo "--- LOCAL APP CHECKS ---"
             ss -ltnp 'sport = :3000' || true
+            EXPECTED_SITE_URL=${SITE_URL:-https://data2metrics.com}
             BUILD_RESPONSE=$(curl -fsS http://127.0.0.1:3000/__build)
             echo "${BUILD_RESPONSE}"
             echo "${BUILD_RESPONSE}" | grep -q "data2metrics-2026-05-23-admin-route-check"
             curl -fsS http://127.0.0.1:3000/admin/health
+            READINESS_RESPONSE=$(curl -fsS http://127.0.0.1:3000/__readiness)
+            echo "${READINESS_RESPONSE}"
+            echo "${READINESS_RESPONSE}" | grep -q '"ok":true'
+            echo "${READINESS_RESPONSE}" | grep -q '"hasTailwindCss":true'
+            echo "${READINESS_RESPONSE}" | grep -q '"hasOptimizedLogo":true'
+            ROBOTS_RESPONSE=$(curl -fsS http://127.0.0.1:3000/robots.txt)
+            echo "${ROBOTS_RESPONSE}"
+            echo "${ROBOTS_RESPONSE}" | grep -q "Sitemap:"
+            SITEMAP_RESPONSE=$(curl -fsS http://127.0.0.1:3000/sitemap.xml)
+            echo "${SITEMAP_RESPONSE}" | grep -q "<urlset"
+            echo "${SITEMAP_RESPONSE}" | grep -q "${EXPECTED_SITE_URL}"
+            HOME_HTML=$(curl -fsS http://127.0.0.1:3000/)
+            echo "${HOME_HTML}" | grep -qi "<link rel=\"canonical\" href=\"${EXPECTED_SITE_URL}\""
+            echo "${HOME_HTML}" | grep -qi 'application/ld+json'
+            COMPASS_HTML=$(curl -fsS http://127.0.0.1:3000/business_compass)
+            echo "${COMPASS_HTML}" | grep -qi "<link rel=\"canonical\" href=\"${EXPECTED_SITE_URL}/business_compass\""
+            echo "${COMPASS_HTML}" | grep -qi 'application/ld+json'
+            BLOG_HTML=$(curl -fsS http://127.0.0.1:3000/blog/why-your-dashboard-isnt-working)
+            echo "${BLOG_HTML}" | grep -qi "<link rel=\"canonical\" href=\"${EXPECTED_SITE_URL}/blog/why-your-dashboard-isnt-working\""
+            echo "${BLOG_HTML}" | grep -qi 'application/ld+json'
+            PROJECT_HTML=$(curl -fsS http://127.0.0.1:3000/project/business_compass)
+            echo "${PROJECT_HTML}" | grep -qi "<link rel=\"canonical\" href=\"${EXPECTED_SITE_URL}/project/business_compass\""
+            echo "${PROJECT_HTML}" | grep -qi 'application/ld+json'
+            CONSULTING_REDIRECT=$(curl -s -o /dev/null -w "%{http_code}" -L --max-redirs 0 http://127.0.0.1:3000/data-analytics-consultant-kenya || true)
+            if [ "${CONSULTING_REDIRECT}" != "301" ]; then
+              echo "ERROR: /data-analytics-consultant-kenya should redirect with HTTP 301, got ${CONSULTING_REDIRECT}"
+              exit 1
+            fi
+            CSS_BYTES=$(curl -fsS http://127.0.0.1:3000/css/tailwind.css | wc -c)
+            echo "Tailwind CSS bytes: ${CSS_BYTES}"
+            if [ "${CSS_BYTES}" -lt 5000 ]; then
+              echo "ERROR: Tailwind CSS output is unexpectedly small (${CSS_BYTES} bytes)."
+              exit 1
+            fi
             pm2 save
 
           

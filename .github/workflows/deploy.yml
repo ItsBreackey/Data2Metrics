@@ -43,7 +43,15 @@ jobs:
             done
             npm install --include=dev
             npm run build:css
-            pm2 startOrReload ecosystem.config.js --only data2metrics --update-env
+            pm2 delete data2metrics || true
+            ORPHAN_BUILD_RESPONSE=$(curl -fsS http://127.0.0.1:3000/__build || true)
+            ORPHAN_PID=$(echo "${ORPHAN_BUILD_RESPONSE}" | sed -n 's/.*"pid":\([0-9][0-9]*\).*/\1/p')
+            if [ -n "${ORPHAN_PID}" ]; then
+              echo "Stopping orphan Data2Metrics process on port 3000: ${ORPHAN_PID}"
+              kill "${ORPHAN_PID}" || true
+              sleep 1
+            fi
+            pm2 start ecosystem.config.js --only data2metrics --update-env
             sleep 2
             PM2_PID=$(pm2 pid data2metrics)
             echo "PM2 PID: ${PM2_PID}"
@@ -59,6 +67,13 @@ jobs:
             BUILD_RESPONSE=$(curl -fsS http://127.0.0.1:3000/__build)
             echo "${BUILD_RESPONSE}"
             echo "${BUILD_RESPONSE}" | grep -q "data2metrics-2026-05-23-admin-route-check"
+            BUILD_PID=$(echo "${BUILD_RESPONSE}" | sed -n 's/.*"pid":\([0-9][0-9]*\).*/\1/p')
+            if [ "${BUILD_PID}" != "${PM2_PID}" ]; then
+              echo "ERROR: /__build is served by PID ${BUILD_PID}, but PM2 PID is ${PM2_PID}"
+              pm2 ls
+              pm2 logs data2metrics --lines 100 --nostream || true
+              exit 1
+            fi
             curl -fsS http://127.0.0.1:3000/admin/health
             READINESS_RESPONSE=$(curl -fsS http://127.0.0.1:3000/__readiness)
             echo "${READINESS_RESPONSE}"

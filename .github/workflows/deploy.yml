@@ -48,7 +48,14 @@ jobs:
             ORPHAN_PID=$(echo "${ORPHAN_BUILD_RESPONSE}" | sed -n 's/.*"pid":\([0-9][0-9]*\).*/\1/p')
             if [ -n "${ORPHAN_PID}" ]; then
               echo "Stopping orphan Data2Metrics process on port 3000: ${ORPHAN_PID}"
-              kill "${ORPHAN_PID}" || true
+              if ! kill "${ORPHAN_PID}"; then
+                echo "Normal kill failed; trying passwordless sudo."
+                sudo -n kill "${ORPHAN_PID}" || {
+                  echo "ERROR: Could not stop orphan process ${ORPHAN_PID}."
+                  echo "Run this on the server, then rerun deploy: sudo kill ${ORPHAN_PID}"
+                  exit 1
+                }
+              fi
               sleep 1
             fi
             pm2 start ecosystem.config.js --only data2metrics --update-env

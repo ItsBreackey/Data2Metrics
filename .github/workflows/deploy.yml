@@ -41,7 +41,7 @@ jobs:
                 exit 1
               fi
             done
-            npm install
+            npm install --include=dev
             npm run build:css
             pm2 startOrReload ecosystem.config.js --only data2metrics --update-env
             sleep 2

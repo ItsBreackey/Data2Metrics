@@ -513,7 +513,7 @@
     <p class="text-gray-400 mb-6 max-w-md">Ready to see your business numbers clearly? Book a free demo or ask us anything below.</p>
     </div>
     <div class="glass-card p-8 rounded-2xl mt-4 text-left fade-in">
-        <form action="mailto:info@data2metrics.com" method="POST" enctype="text/plain" class="grid gap-6">
+        <form id="contact-form" class="grid gap-6">
             <div>
                 <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Name</label>
                 <input type="text" name="name" required class="w-full bg-transparent border-b border-gray-700 py-2 focus:border-pink outline-none transition text-white">
@@ -971,6 +971,29 @@ function showReport(r) {
     highlightPlanCard(r.plan);
     // Set up plan selection
     setupPlanSelection(r);
+}
+
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(contactForm);
+        const name = (formData.get('name') || '').toString().trim();
+        const email = (formData.get('email') || '').toString().trim();
+        const message = (formData.get('message') || '').toString().trim();
+
+        const subject = encodeURIComponent('Business Compass Demo Request');
+        const body = encodeURIComponent(
+`Name: ${name}
+Email: ${email}
+
+Message:
+${message}`
+        );
+
+        window.location.href = `mailto:info@data2metrics.com?subject=${subject}&body=${body}`;
+    });
 }
 
 function setupPlanSelection(r) {

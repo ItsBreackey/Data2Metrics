@@ -289,7 +289,7 @@
     </div>
 
     <div class="text-center mt-10 fade-in">
-        <a href="#report-section" class="btn-outline px-10 py-4 rounded-lg font-bold text-lg">Start with My Business Report</a>
+        <a href="#report-section" data-track="start-business-report" class="btn-outline px-10 py-4 rounded-lg font-bold text-lg">Start with My Business Report</a>
     </div>
 </section>
 
@@ -597,6 +597,30 @@
 </div>
 
 <script>
+
+    function trackConversion(eventName, params = {}) {
+        const payload = {
+            event: eventName,
+            page_path: window.location.pathname,
+            ...params
+        };
+
+        if (Array.isArray(window.dataLayer)) {
+            window.dataLayer.push(payload);
+        }
+
+        if (typeof window.gtag === 'function') {
+            window.gtag('event', eventName, params);
+        }
+    }
+
+    document.querySelectorAll('[data-track="start-business-report"]').forEach(link => {
+        link.addEventListener('click', () => {
+            trackConversion('start_business_report_click', {
+                cta_location: 'business_compass_features'
+            });
+        });
+    });
 
     function updateDashboard(rev, exp, profit) {
         document.getElementById("rev").innerHTML = "KES " + rev.toLocaleString();
@@ -975,6 +999,22 @@ function showReport(r) {
 
 const contactForm = document.getElementById('contact-form');
 if (contactForm) {
+    let contactFormStarted = false;
+
+    contactForm.querySelectorAll('input, textarea').forEach((field) => {
+        field.addEventListener('focus', () => {
+            if (contactFormStarted) {
+                return;
+            }
+
+            contactFormStarted = true;
+            trackConversion('contact_form_start', {
+                form_id: 'contact-form',
+                form_type: 'business_compass_contact'
+            });
+        }, { once: true });
+    });
+
     contactForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
@@ -991,6 +1031,11 @@ Email: ${email}
 Message:
 ${message}`
         );
+
+        trackConversion('contact_form_submit', {
+            form_id: 'contact-form',
+            form_type: 'business_compass_contact'
+        });
 
         window.location.href = `mailto:info@data2metrics.com?subject=${subject}&body=${body}`;
     });
@@ -1065,6 +1110,11 @@ ${discountLine}
 
 Please help me get started.`
         );
+
+        trackConversion('whatsapp_continue_click', {
+            source: 'business_decision_report',
+            selected_plan: quote.plan
+        });
 
         window.open(`https://wa.me/254703462665?text=${msg}`, "_blank");
     } catch (error) {

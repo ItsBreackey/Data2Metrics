@@ -394,7 +394,7 @@
             </div>
 
             <div class="text-center mt-10 fade-in">
-                <a href="#contact" class="btn-outline px-10 py-4 rounded-lg font-bold text-lg">Book Consultancy Call</a>
+                <a href="#contact" data-track="book-consultancy-call" class="btn-outline px-10 py-4 rounded-lg font-bold text-lg">Book Consultancy Call</a>
             </div>
         </div>
     </section>
@@ -642,6 +642,22 @@
     </footer>
 
     <script>
+        function trackConversion(eventName, params = {}) {
+            const payload = {
+                event: eventName,
+                page_path: window.location.pathname,
+                ...params
+            };
+
+            if (Array.isArray(window.dataLayer)) {
+                window.dataLayer.push(payload);
+            }
+
+            if (typeof window.gtag === 'function') {
+                window.gtag('event', eventName, params);
+            }
+        }
+
         // Fade-in animation for elements as they enter the viewport
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -656,6 +672,15 @@
         document.querySelectorAll('#mobile-menu a').forEach(link => {
             link.addEventListener('click', () => {
                 document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // Track primary consultancy conversion intent on the homepage.
+        document.querySelectorAll('[data-track="book-consultancy-call"]').forEach(link => {
+            link.addEventListener('click', () => {
+                trackConversion('book_consultancy_call_click', {
+                    cta_location: 'home_consulting_section'
+                });
             });
         });
 

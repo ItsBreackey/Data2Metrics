@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
@@ -440,6 +441,76 @@ app.post('/api/leads/report', (req, res) => {
   saveSalesState(state);
 
   res.json({ ok: true });
+});
+
+app.post('/api/contact', async (req, res) => {
+  const name = typeof req.body.name === 'string' ? req.body.name.trim() : '';
+  const email = typeof req.body.email === 'string' ? req.body.email.trim() : '';
+  const message = typeof req.body.message === 'string' ? req.body.message.trim() : '';
+  const source = typeof req.body.source === 'string' ? req.body.source.trim() : 'website';
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: 'Name, email, and message are required.' });
+  }
+
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!isValidEmail) {
+    return res.status(400).json({ error: 'Please provide a valid email address.' });
+  }
+
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = Number(process.env.SMTP_PORT || 587);
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+  const smtpSecure = String(process.env.SMTP_SECURE || '').toLowerCase() === 'true';
+
+  if (!smtpHost || !smtpUser || !smtpPass) {
+    return res.status(503).json({ error: 'Contact email is not configured yet. Please try WhatsApp for now.' });
+  }
+
+  const contactTo = (process.env.CONTACT_EMAIL_TO || 'brenda@data2metrics.com').trim();
+  const contactFrom = (process.env.CONTACT_EMAIL_FROM || `Data2Metrics Website <${smtpUser}>`).trim();
+
+  const transporter = nodemailer.createTransport({
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpSecure,
+    auth: {
+      user: smtpUser,
+      pass: smtpPass
+    }
+  });
+
+  const submittedAt = new Date().toISOString();
+
+  try {
+    await transporter.sendMail({
+      to: contactTo,
+      from: contactFrom,
+      replyTo: email,
+      subject: `New website message from ${name}`,
+      text: `Source: ${source}\nSubmitted: ${submittedAt}\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+    });
+
+    const state = loadSalesState();
+    state.leads.push({
+      id: `lead-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      type: 'contact',
+      status: 'new',
+      notes: '',
+      source,
+      name,
+      email,
+      message,
+      createdAt: submittedAt
+    });
+    saveSalesState(state);
+
+    return res.json({ ok: true });
+  } catch (error) {
+    console.error('Failed to send contact email', error);
+    return res.status(502).json({ error: 'Could not send your message right now. Please try again shortly.' });
+  }
 });
 
 app.post('/api/plan-selections', (req, res) => {

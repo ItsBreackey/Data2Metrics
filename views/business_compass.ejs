@@ -527,6 +527,7 @@
                 <textarea name="message" rows="4" required class="w-full bg-transparent border-b border-gray-700 py-2 focus:border-pink outline-none transition text-white resize-none"></textarea>
             </div>
                     <button class="btn w-full py-3 rounded font-bold">Send Message</button>
+                    <p id="contact-form-msg" class="text-xs text-lavender text-center hidden"></p>
         </form>
     </div>
     </div>
@@ -1015,7 +1016,7 @@ if (contactForm) {
         }, { once: true });
     });
 
-    contactForm.addEventListener('submit', function (event) {
+    contactForm.addEventListener('submit', async function (event) {
         event.preventDefault();
 
         const formData = new FormData(contactForm);
@@ -1023,21 +1024,43 @@ if (contactForm) {
         const email = (formData.get('email') || '').toString().trim();
         const message = (formData.get('message') || '').toString().trim();
 
-        const subject = encodeURIComponent('Business Compass Demo Request');
-        const body = encodeURIComponent(
-`Name: ${name}
-Email: ${email}
-
-Message:
-${message}`
-        );
+        const formMsg = document.getElementById('contact-form-msg');
+        if (formMsg) {
+            formMsg.classList.add('hidden');
+        }
 
         trackConversion('contact_form_submit', {
             form_id: 'contact-form',
             form_type: 'business_compass_contact'
         });
 
-        window.location.href = `mailto:brenda@data2metrics.com?subject=${subject}&body=${body}`;
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    message,
+                    source: 'business_compass_contact_form'
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit contact request');
+            }
+
+            if (formMsg) {
+                formMsg.textContent = 'Thanks! Your message has been sent.';
+                formMsg.classList.remove('hidden');
+            }
+            contactForm.reset();
+        } catch (error) {
+            if (formMsg) {
+                formMsg.textContent = 'Could not send right now. Please try again or use WhatsApp.';
+                formMsg.classList.remove('hidden');
+            }
+        }
     });
 }
 

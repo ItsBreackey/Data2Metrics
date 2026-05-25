@@ -740,11 +740,28 @@
 
         // Show a thank you message after contact form is submitted
         function handleContact(form) {
+            const formData = new FormData(form);
+            const name = (formData.get('name') || '').toString().trim();
+            const email = (formData.get('email') || '').toString().trim();
+            const message = (formData.get('message') || '').toString().trim();
+
+            const subject = encodeURIComponent('Website Contact Request');
+            const body = encodeURIComponent(
+`Name: ${name}
+Email: ${email}
+
+Message:
+${message}`
+            );
+
             const msg = document.getElementById('contact-msg');
             if (!msg) {
+                window.location.href = `mailto:brenda@data2metrics.com?subject=${subject}&body=${body}`;
                 form.reset();
                 return;
             }
+
+            window.location.href = `mailto:brenda@data2metrics.com?subject=${subject}&body=${body}`;
             msg.textContent = "Thanks! I'll get back to you soon.";
             msg.classList.remove('hidden');
             form.reset();

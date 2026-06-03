@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const app = express();
@@ -133,6 +134,7 @@ const DISCOUNT_LIMIT_PER_PLAN = 5;
 const DATA_DIR = path.join(__dirname, 'data');
 const SALES_STATE_FILE = path.join(DATA_DIR, 'sales-state.json');
 const LEAD_STATUSES = ['new', 'contacted', 'converted', 'closed'];
+const MAX_STORED_VISITS = 1000;
 
 function getFileLastModifiedIso(filePath) {
   try {
@@ -247,6 +249,13 @@ adminRouter.get('/health', (req, res) => {
 
 app.use('/admin', adminRouter);
 
+app.use((req, res, next) => {
+  if (shouldTrackVisit(req)) {
+    recordWebsiteVisit(req);
+  }
+  next();
+});
+
 function ensureDataFiles() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
@@ -258,7 +267,8 @@ function ensureDataFiles() {
         'Compass Pro': 0
       },
       leads: [],
-      paymentClaims: []
+      paymentClaims: [],
+      websiteVisits: []
     };
     fs.writeFileSync(SALES_STATE_FILE, JSON.stringify(initialState, null, 2));
   }
@@ -271,6 +281,7 @@ function loadSalesState() {
   parsed.discountsUsed = parsed.discountsUsed || {};
   parsed.leads = parsed.leads || [];
   parsed.paymentClaims = parsed.paymentClaims || [];
+  parsed.websiteVisits = parsed.websiteVisits || [];
 
   const legacyPlanMap = {};
 
@@ -340,6 +351,101 @@ function saveSalesState(state) {
   fs.writeFileSync(SALES_STATE_FILE, JSON.stringify(state, null, 2));
 }
 
+function getVisitorKey(req) {
+  const ip = getClientIp(req);
+  const userAgent = req.headers['user-agent'] || '';
+  return crypto
+    .createHash('sha256')
+    .update(`${ip}|${userAgent}`)
+    .digest('hex')
+    .slice(0, 16);
+}
+
+function shouldTrackVisit(req) {
+  if (req.method !== 'GET') return false;
+
+  const pathName = req.path || '';
+  if (!pathName || pathName === '/favicon.ico') return false;
+  if (pathName.startsWith('/admin')) return false;
+  if (pathName.startsWith('/api')) return false;
+  if (pathName.startsWith('/__')) return false;
+  if (pathName === '/robots.txt' || pathName === '/sitemap.xml') return false;
+
+  const extension = path.extname(pathName).toLowerCase();
+  if (extension && extension !== '.html') return false;
+
+  return true;
+}
+
+function recordWebsiteVisit(req) {
+  try {
+    const state = loadSalesState();
+    const pathName = req.originalUrl.split('?')[0] || req.path || '/';
+    state.websiteVisits.push({
+      id: `visit-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      path: pathName,
+      visitorKey: getVisitorKey(req),
+      referrer: req.get('referer') || '',
+      userAgent: req.get('user-agent') || '',
+      createdAt: new Date().toISOString()
+    });
+
+    if (state.websiteVisits.length > MAX_STORED_VISITS) {
+      state.websiteVisits = state.websiteVisits.slice(-MAX_STORED_VISITS);
+    }
+
+    saveSalesState(state);
+  } catch (error) {
+    console.error('Failed to record website visit', error);
+  }
+}
+
+function buildWebsiteTraffic(visits) {
+  const now = Date.now();
+  const dayMs = 24 * 60 * 60 * 1000;
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  const safeVisits = Array.isArray(visits) ? visits : [];
+  const todayMs = startOfToday.getTime();
+  const sevenDaysAgo = now - (7 * dayMs);
+  const thirtyDaysAgo = now - (30 * dayMs);
+  const uniqueToday = new Set();
+  const uniqueSevenDays = new Set();
+  const pageCounts = {};
+
+  safeVisits.forEach((visit) => {
+    const createdTime = Date.parse(visit.createdAt);
+    if (!Number.isFinite(createdTime)) return;
+
+    if (createdTime >= todayMs) {
+      uniqueToday.add(visit.visitorKey);
+    }
+
+    if (createdTime >= sevenDaysAgo) {
+      uniqueSevenDays.add(visit.visitorKey);
+    }
+
+    if (createdTime >= thirtyDaysAgo) {
+      const key = visit.path || '/';
+      pageCounts[key] = (pageCounts[key] || 0) + 1;
+    }
+  });
+
+  const topPages = Object.entries(pageCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([pagePath, count]) => ({ path: pagePath, count }));
+
+  return {
+    totalVisits: safeVisits.length,
+    todayUniqueVisitors: uniqueToday.size,
+    sevenDayUniqueVisitors: uniqueSevenDays.size,
+    topPages,
+    recentVisits: safeVisits.slice(-25).reverse()
+  };
+}
+
 function normalizePlan(planName) {
   if (!planName || typeof planName !== 'string') return null;
   return PLAN_ALIASES[planName.trim()] || null;
@@ -399,6 +505,7 @@ function buildAdminOverview(state) {
     planStats,
     leadSummary,
     leadStatusSummary,
+    websiteTraffic: buildWebsiteTraffic(state.websiteVisits),
     recentLeads: state.leads.slice(-25).reverse(),
     recentPaymentClaims: state.paymentClaims.slice(-25).reverse()
   };

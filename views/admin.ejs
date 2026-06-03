@@ -65,7 +65,7 @@
       </div>
     </header>
 
-    <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <section class="grid md:grid-cols-2 xl:grid-cols-5 gap-4">
       <div class="kpi-card rounded-xl p-5">
         <p class="text-xs text-gray-400 uppercase tracking-wider">Total Leads</p>
         <p id="kpiTotalLeads" class="text-3xl font-bold mt-2">0</p>
@@ -85,6 +85,59 @@
         <p class="text-xs text-gray-400 uppercase tracking-wider">Open Discount Slots</p>
         <p id="kpiOpenSlots" class="text-3xl font-bold mt-2 text-green-300">0</p>
         <span id="kpiOpenSlotsTrend" class="trend-chip">Discount utilization: 0%</span>
+      </div>
+      <div class="kpi-card rounded-xl p-5">
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Website Visits</p>
+        <p id="kpiWebsiteVisits" class="text-3xl font-bold mt-2 text-cyan-300">0</p>
+        <span id="kpiWebsiteVisitsTrend" class="trend-chip">Today: 0 unique</span>
+      </div>
+    </section>
+
+    <section class="grid lg:grid-cols-[0.9fr_1.1fr] gap-6">
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="text-xl font-bold mb-4">Top Pages</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-gray-300 border-b border-gray-700">
+                <th class="py-2">Page</th>
+                <th class="py-2">Visits</th>
+              </tr>
+            </thead>
+            <tbody id="topPagesBody">
+              <% (overview.websiteTraffic?.topPages || []).forEach((page) => { %>
+                <tr class="border-b border-gray-800">
+                  <td class="py-2"><%= page.path %></td>
+                  <td class="py-2"><%= page.count %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6">
+        <h2 class="text-xl font-bold mb-4">Recent Visits</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-gray-300 border-b border-gray-700">
+                <th class="py-2">Date</th>
+                <th class="py-2">Page</th>
+                <th class="py-2">Referrer</th>
+              </tr>
+            </thead>
+            <tbody id="recentVisitsBody">
+              <% (overview.websiteTraffic?.recentVisits || []).forEach((visit) => { %>
+                <tr class="border-b border-gray-800">
+                  <td class="py-2"><%= visit.createdAt || '-' %></td>
+                  <td class="py-2"><%= visit.path || '-' %></td>
+                  <td class="py-2"><%= visit.referrer || '-' %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -249,6 +302,10 @@
       const convertedLeads = Number(leadStatusSummary.converted || 0);
       const claimsCount = Number((overview.recentPaymentClaims || []).length);
       const reportLeads = Number(leadSummary.report || 0);
+      const traffic = overview.websiteTraffic || {};
+      const totalVisits = Number(traffic.totalVisits || 0);
+      const todayUniqueVisitors = Number(traffic.todayUniqueVisitors || 0);
+      const sevenDayUniqueVisitors = Number(traffic.sevenDayUniqueVisitors || 0);
 
       const planStats = Object.values(overview.planStats || {});
       const openSlots = planStats.reduce((sum, stat) => sum + Number(stat.remainingDiscountSlots || 0), 0);
@@ -280,6 +337,8 @@
       document.getElementById('kpiConvertedLeadsTrend').textContent = `Conversion rate: ${conversionRate}%`;
       document.getElementById('kpiClaimsTrend').textContent = `Claim-to-conversion: ${claimToConversion}%`;
       document.getElementById('kpiOpenSlotsTrend').textContent = `Discount utilization: ${utilization}%`;
+      document.getElementById('kpiWebsiteVisits').textContent = totalVisits;
+      document.getElementById('kpiWebsiteVisitsTrend').textContent = `Today: ${todayUniqueVisitors} unique | 7 days: ${sevenDayUniqueVisitors}`;
 
       const reportTone = reportShare >= 50 ? 'trend-chip--good' : reportShare >= 25 ? 'trend-chip--warn' : 'trend-chip--risk';
       const conversionTone = conversionRate >= 35 ? 'trend-chip--good' : conversionRate >= 15 ? 'trend-chip--warn' : 'trend-chip--risk';
@@ -290,6 +349,7 @@
       applyChipTone('kpiConvertedLeadsTrend', conversionTone);
       applyChipTone('kpiClaimsTrend', claimsTone);
       applyChipTone('kpiOpenSlotsTrend', utilizationTone);
+      applyChipTone('kpiWebsiteVisitsTrend', totalVisits > 0 ? 'trend-chip--good' : 'trend-chip--warn');
     }
 
     function buildLeadRow(lead) {
@@ -355,6 +415,23 @@
 
       const leadRows = (overview.recentLeads || []).map((lead) => buildLeadRow(lead)).join('');
       document.getElementById('leadsBody').innerHTML = leadRows;
+
+      const topPagesRows = ((overview.websiteTraffic || {}).topPages || []).map((page) => `
+        <tr class="border-b border-gray-800">
+          <td class="py-2">${escapeHtml(page.path || '-')}</td>
+          <td class="py-2">${Number(page.count || 0)}</td>
+        </tr>
+      `).join('');
+      document.getElementById('topPagesBody').innerHTML = topPagesRows || '<tr><td colspan="2" class="py-2 text-gray-400">No visits recorded yet.</td></tr>';
+
+      const recentVisitsRows = ((overview.websiteTraffic || {}).recentVisits || []).map((visit) => `
+        <tr class="border-b border-gray-800">
+          <td class="py-2">${escapeHtml(visit.createdAt || '-')}</td>
+          <td class="py-2">${escapeHtml(visit.path || '-')}</td>
+          <td class="py-2">${escapeHtml(visit.referrer || '-')}</td>
+        </tr>
+      `).join('');
+      document.getElementById('recentVisitsBody').innerHTML = recentVisitsRows || '<tr><td colspan="3" class="py-2 text-gray-400">No visits recorded yet.</td></tr>';
     }
 
     document.getElementById('refreshBtn').addEventListener('click', refreshOverview);
